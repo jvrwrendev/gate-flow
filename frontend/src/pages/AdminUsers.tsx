@@ -1,0 +1,49 @@
+import { useMemo, useState } from 'react'
+import { Plus, Search, Shield, UserCog } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { useApp } from '@/context/AppContext'
+import { useToast } from '@/components/ui/Toast'
+import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { Card, CardContent } from '@/components/ui/Card'
+import { DataTable } from '@/components/shared/DataTable'
+import { Dialog, DialogContent, DialogFooter } from '@/components/ui/Dialog'
+import { Field, Input, Select } from '@/components/ui/Field'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { PageHeader } from '@/components/shared/PageHeader'
+import type { AdminUser } from '@/types'
+
+const roles = ['Super Admin','System Administrator','Security Personnel','Gate Operator','Viewer'] as const
+const schema = z.object({ name: z.string().min(2), email: z.string().email(), role: z.string(), status: z.string() })
+type V = z.infer<typeof schema>
+export function AdminUsers() {
+  const { data, setData, audit } = useApp(); const { toast } = useToast()
+  const [search, setSearch] = useState(''); const [modal, setModal] = useState<'add'|'edit'|null>(null); const [selected, setSelected] = useState<AdminUser | null>(null); const [deleteId, setDeleteId] = useState<string | null>(null)
+  const form = useForm<V>({ resolver: zodResolver(schema), defaultValues: { name: '', email: '', role: 'Viewer', status: 'Active' } })
+  const filtered = useMemo(() => data.admins.filter(a => !search || a.name.toLowerCase().includes(search.toLowerCase()) || a.email.toLowerCase().includes(search.toLowerCase()) || a.role.toLowerCase().includes(search.toLowerCase())), [data.admins, search])
+  const openAdd = () => { form.reset({ name: '', email: '', role: 'Viewer', status: 'Active' }); setModal('add') }
+  const openEdit = (a: AdminUser) => { setSelected(a); form.reset({ name: a.name, email: a.email, role: a.role, status: a.status }); setModal('edit') }
+  const onSubmit = (values: V) => {
+    if (modal === 'add') { const record: AdminUser = { id: `ADM-${Date.now().toString().slice(-3)}`, name: values.name, email: values.email, role: values.role as AdminUser['role'], status: values.status as AdminUser['status'], lastLogin: new Date().toISOString() }; setData(prev => ({ ...prev, admins: [record, ...prev.admins] })); audit('Created admin user','Admin Users',record.name); toast('Admin user added','success',record.name) }
+    else if (selected) { setData(prev => ({ ...prev, admins: prev.admins.map(a => a.id === selected.id ? { ...a, name: values.name, email: values.email, role: values.role as AdminUser['role'], status: values.status as AdminUser['status'] } : a) })); audit('Updated admin user','Admin Users',values.name); toast('Admin user updated','success',values.name) }
+    setModal(null)
+  }
+  return <div className="space-y-5">
+    <PageHeader title="Admin Users" description="Manage dashboard administrators, roles, account status, and access levels." actions={<Button onClick={openAdd}><Plus className="h-4 w-4" />Add Admin</Button>} />
+    <Card><CardContent className="space-y-4"><div className="relative max-w-md"><Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><Input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search admins..." className="pl-9" /></div>
+      <DataTable data={filtered} columns={[
+        { key:'name', header:'Admin', render:a=><div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600"><UserCog className="h-4 w-4" /></div><div><p className="font-medium text-slate-900">{a.name}</p><p className="text-xs text-slate-500">{a.email}</p></div></div>, value:a=>a.name },
+        { key:'role', header:'Role', render:a=><Badge value={a.role} variant="blue" />, value:a=>a.role },
+        { key:'status', header:'Status', render:a=><Badge value={a.status} />, value:a=>a.status },
+        { key:'lastLogin', header:'Last Login', render:a=>new Date(a.lastLogin).toLocaleString('en-PH',{timeZone:'Asia/Manila',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}), value:a=>a.lastLogin },
+        { key:'actions', header:'Actions', sortable:false, render:a=><div className="flex gap-1"><Button size="icon" variant="ghost" onClick={()=>openEdit(a)}><EditIcon/></Button><Button size="icon" variant="ghost" onClick={()=>{setData(prev=>({...prev,admins:prev.admins.map(x=>x.id===a.id?{...x,status:x.status==='Active'?'Inactive':'Active'}:x)}));audit('Changed admin status','Admin Users',a.name);toast('Status updated','success',a.name)}}><Shield className="h-4 w-4" /></Button><Button size="icon" variant="ghost" onClick={()=>{setSelected(a);setDeleteId(a.id)}}><TrashIcon/></Button></div> },
+      ]} />
+    </CardContent></Card>
+    <Dialog open={modal==='add'||modal==='edit'} onOpenChange={()=>setModal(null)}><DialogContent title={modal==='add'?'Add Admin User':'Edit Admin User'}><form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6"><Field label="Name" error={form.formState.errors.name?.message}><Input {...form.register('name')} /></Field><Field label="Email" error={form.formState.errors.email?.message}><Input {...form.register('email')} type="email" /></Field><Field label="Role"><Select {...form.register('role')} options={roles.map(v=>({value:v,label:v}))} /></Field><Field label="Status"><Select {...form.register('status')} options={['Active','Inactive'].map(v=>({value:v,label:v}))} /></Field><DialogFooter><Button type="button" variant="outline" onClick={()=>setModal(null)}>Cancel</Button><Button type="submit">Save</Button></DialogFooter></form></DialogContent></Dialog>
+    <ConfirmDialog open={!!deleteId} onOpenChange={()=>setDeleteId(null)} title="Deactivate admin" description="This removes the simulated admin account." destructive confirmLabel="Delete" onConfirm={()=>{const a=data.admins.find(x=>x.id===deleteId); setData(prev=>({...prev,admins:prev.admins.filter(x=>x.id!==deleteId)})); audit('Deleted admin user','Admin Users',a?.name||''); toast('Admin deleted','success'); setDeleteId(null)}} />
+  </div>
+}
+function EditIcon(){return <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>}
+function TrashIcon(){return <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>}

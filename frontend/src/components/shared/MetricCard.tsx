@@ -1,0 +1,6 @@
+import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
+const colors = { blue: 'bg-blue-50 text-blue-600', emerald: 'bg-emerald-50 text-emerald-600', amber: 'bg-amber-50 text-amber-600', red: 'bg-red-50 text-red-600', slate: 'bg-slate-100 text-slate-600' }
+export function MetricCard({ label, value, helper, icon, tone = 'blue', trend, compact = false }: { label: string; value: string | number; helper?: string; icon: ReactNode; tone?: keyof typeof colors; trend?: string; compact?: boolean }) {
+  return <div className={cn('rounded-xl border border-slate-200 bg-white', compact ? 'p-3' : 'p-5')}><div className="flex items-start justify-between gap-2"><div className="min-w-0"><p className={cn('font-medium uppercase tracking-[0.08em] text-slate-500', compact ? 'text-[10px]' : 'text-[12px]')}>{label}</p><p className={cn('font-semibold tracking-tight text-slate-950', compact ? 'mt-1 text-lg' : 'mt-2 text-2xl')}>{value}</p>{helper && <p className={cn('text-slate-500', compact ? 'mt-1 text-[10px] leading-3' : 'mt-2 text-xs')}>{helper}</p>}</div><div className={cn('flex shrink-0 items-center justify-center rounded-lg', colors[tone], compact ? 'h-8 w-8' : 'h-10 w-10')}>{icon}</div></div>{trend && <div className={cn('border-t border-slate-100 pt-3 text-xs font-medium text-emerald-600', compact ? 'mt-2' : 'mt-3')}>{trend}</div>}</div>
+}

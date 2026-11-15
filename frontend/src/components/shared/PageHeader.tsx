@@ -1,0 +1,5 @@
+import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
+export function PageHeader({ title, description, actions, className }: { title: string; description?: string; actions?: ReactNode; className?: string }) {
+  return <div className={cn('mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between', className)}><div><h1 className="font-display text-[24px] font-extrabold tracking-tight text-slate-950">{title}</h1>{description && <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">{description}</p>}</div><div className="flex flex-wrap items-center gap-2">{actions}</div></div>
+}
