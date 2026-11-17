@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/Dialog'
 import { Field, Input, Select } from '@/components/ui/Field'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { VehicleImage } from '@/components/shared/VehicleImage'
+import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { vehicleTypes, vehicleColors } from '@/data/options'
 import type { Vehicle, VehicleColor, VehicleType } from '@/types'
@@ -60,7 +61,19 @@ export function Vehicles() {
         { key: 'actions', header: 'Actions', sortable: false, render: v => <div className="flex gap-1" onClick={e => e.stopPropagation()}><Button size="icon" variant="ghost" onClick={() => openEdit(v)}><Edit className="h-4 w-4" /></Button><Button size="icon" variant="ghost" onClick={() => toggleSuspend(v)}><ShieldOff className="h-4 w-4" /></Button><Button size="icon" variant="ghost" onClick={() => { setSelected(v); setDeleteId(v.id) }}><Trash2 className="h-4 w-4 text-red-600" /></Button></div> },
       ]} />
     </CardContent></Card>
-    <Dialog open={modal === 'view' && !!selected} onOpenChange={() => setModal(null)}><DialogContent title="Vehicle Details" description={selected?.plate}><div className="grid gap-4 p-6 sm:grid-cols-[150px_1fr]"><VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3]" /><div className="grid gap-3 sm:grid-cols-2">{selected && [['Owner', selected.ownerName],['Contact', selected.contact],['Type', selected.type],['Model', selected.model],['Color', selected.color],['Registered', selected.registrationDate],['Status', selected.status]].map(([k,v]) => <div key={k}><p className="text-[11px] font-semibold uppercase tracking-[.08em] text-slate-500">{k}</p><p className="mt-1 text-sm font-medium text-slate-900">{v}</p></div>)}</div></div></DialogContent></Dialog>
+    <FullScreenDetail open={modal === 'view' && !!selected} onClose={() => setModal(null)} title="Vehicle Details" description={selected?.plate}>
+      <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
+        <VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3] w-full" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {selected && [['Owner', selected.ownerName], ['Contact', selected.contact], ['Type', selected.type], ['Model', selected.model], ['Color', selected.color], ['Registered', selected.registrationDate], ['Status', selected.status]].map(([k, v]) => (
+            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
+              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </FullScreenDetail>
     <Dialog open={modal === 'add' || modal === 'edit'} onOpenChange={() => setModal(null)}><DialogContent title={modal === 'add' ? 'Add Vehicle' : 'Edit Vehicle'} description="Simulated vehicle record. No external validation service is used."><form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6"><Field label="Plate Number" error={form.formState.errors.plate?.message}><Input {...form.register('plate')} placeholder="ABC 1234" /></Field><Field label="Owner" error={form.formState.errors.ownerId?.message}><Select {...form.register('ownerId')} options={data.owners.map(o => ({ value: o.id, label: `${o.name} · ${o.phone}` }))} /></Field><div className="grid gap-4 sm:grid-cols-2"><Field label="Vehicle Type"><Select {...form.register('type')} options={vehicleTypes.map(v => ({ value: v, label: v }))} /></Field><Field label="Vehicle Color"><Select {...form.register('color')} options={vehicleColors.map(v => ({ value: v, label: v }))} /></Field></div><Field label="Brand / Model" error={form.formState.errors.model?.message}><Input {...form.register('model')} placeholder="Toyota Vios" /></Field><Field label="Authorization Status"><Select {...form.register('status')} options={[{value:'Authorized',label:'Authorized'},{value:'Pending',label:'Pending'},{value:'Suspended',label:'Suspended'},{value:'Denied',label:'Denied'}]} /></Field><DialogFooter><Button type="button" variant="outline" onClick={() => setModal(null)}>Cancel</Button><Button type="submit" loading={form.formState.isSubmitting}>{modal === 'add' ? 'Add Vehicle' : 'Save Changes'}</Button></DialogFooter></form></DialogContent></Dialog>
     <ConfirmDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)} title="Delete vehicle" description="This removes the simulated vehicle record. This action cannot be undone." destructive confirmLabel="Delete" onConfirm={() => { const v = data.vehicles.find(x => x.id === deleteId); setData(prev => ({ ...prev, vehicles: prev.vehicles.filter(x => x.id !== deleteId) })); audit('Deleted vehicle', 'Registered Vehicles', v?.plate || deleteId || ''); toast('Vehicle deleted', 'success'); setDeleteId(null) }} />
   </div>

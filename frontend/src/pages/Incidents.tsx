@@ -6,9 +6,10 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { DataTable } from '@/components/shared/DataTable'
-import { Dialog, DialogContent, DialogFooter } from '@/components/ui/Dialog'
+
 import { Field, Input, Select, Textarea } from '@/components/ui/Field'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
 import type { Incident } from '@/types'
 
 export function Incidents() {
@@ -35,10 +36,22 @@ export function Incidents() {
         { key:'actions', header:'Actions', sortable:false, render:i=><Button size="icon" variant="ghost" onClick={e=>{e.stopPropagation();setSelected(i);setRemarks(i.remarks)}}><Eye className="h-4 w-4" /></Button> },
       ]} />
     </CardContent></Card>
-    <Dialog open={!!selected} onOpenChange={()=>setSelected(null)}><DialogContent title="Incident Details" description={selected?.id}><div className="space-y-4 p-6">
-      {selected && [['Type',selected.type],['Severity',selected.severity],['Timestamp',new Date(selected.timestamp).toLocaleString('en-PH',{timeZone:'Asia/Manila'})],['Gate',gateName(selected.gateId)],['Status',selected.status],['Description',selected.description]].map(([k,v])=><div key={k}><p className="text-[11px] font-semibold uppercase tracking-[.08em] text-slate-500">{k}</p><p className="mt-1 text-sm font-medium text-slate-900">{v}</p></div>)}
-      <Field label="Admin remarks"><Textarea value={remarks} onChange={e=>setRemarks(e.target.value)} /></Field>
-      <DialogFooter><Button variant="outline" onClick={()=>setSelected(null)}>Close</Button><Button variant="secondary" onClick={()=>updateStatus(selected!.id,'Investigating')}>Mark Investigating</Button><Button variant="success" onClick={()=>updateStatus(selected!.id,'Resolved')}>Resolve</Button></DialogFooter>
-    </div></DialogContent></Dialog>
+    <FullScreenDetail open={!!selected} onClose={() => setSelected(null)} title="Incident Details" description={selected?.id}>
+      <div className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {selected && [['Type',selected.type],['Severity',selected.severity],['Timestamp',new Date(selected.timestamp).toLocaleString('en-PH',{timeZone:'Asia/Manila'})],['Gate',gateName(selected.gateId)],['Status',selected.status],['Description',selected.description]].map(([k,v]) => (
+            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
+              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
+            </div>
+          ))}
+        </div>
+        <Field label="Admin remarks"><Textarea value={remarks} onChange={e=>setRemarks(e.target.value)} /></Field>
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button variant="secondary" onClick={() => updateStatus(selected!.id, 'Investigating')}>Mark Investigating</Button>
+          <Button variant="success" onClick={() => updateStatus(selected!.id, 'Resolved')}>Resolve</Button>
+        </div>
+      </div>
+    </FullScreenDetail>
   </div>
 }

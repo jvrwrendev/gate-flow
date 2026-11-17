@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/Dialog'
 import { Field, Input, Select } from '@/components/ui/Field'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
 import type { Owner } from '@/types'
 
 const schema = z.object({ name: z.string().min(2), email: z.string().email(), phone: z.string().min(9), address: z.string().min(5), status: z.string() })
@@ -44,7 +45,16 @@ export function Owners() {
       ]} />
     </CardContent></Card>
     <Dialog open={modal==='add'||modal==='edit'} onOpenChange={()=>setModal(null)}><DialogContent title={modal==='add'?'Add Owner':'Edit Owner'}><form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6"><Field label="Full Name" error={form.formState.errors.name?.message}><Input {...form.register('name')} /></Field><Field label="Email" error={form.formState.errors.email?.message}><Input {...form.register('email')} type="email" /></Field><Field label="Phone" error={form.formState.errors.phone?.message}><Input {...form.register('phone')} /></Field><Field label="Address" error={form.formState.errors.address?.message}><Input {...form.register('address')} /></Field><Field label="Status"><Select {...form.register('status')} options={[{value:'Active',label:'Active'},{value:'Inactive',label:'Inactive'}]} /></Field><DialogFooter><Button type="button" variant="outline" onClick={()=>setModal(null)}>Cancel</Button><Button type="submit">Save</Button></DialogFooter></form></DialogContent></Dialog>
-    <Dialog open={modal==='view'&&!!selected} onOpenChange={()=>setModal(null)}><DialogContent title="Owner Details"><div className="space-y-4 p-6">{selected && [['Name',selected.name],['Email',selected.email],['Phone',selected.phone],['Address',selected.address],['Joined',selected.joined],['Status',selected.status],['Linked vehicles',linkedCount(selected.id)]].map(([k,v])=><div key={k}><p className="text-[11px] font-semibold uppercase tracking-[.08em] text-slate-500">{k}</p><p className="mt-1 text-sm font-medium text-slate-900">{v}</p></div>)}</div></DialogContent></Dialog>
+    <FullScreenDetail open={modal==='view'&&!!selected} onClose={()=>setModal(null)} title="Owner Details" description={selected?.name}>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {selected && [['Name',selected.name],['Email',selected.email],['Phone',selected.phone],['Address',selected.address],['Joined',selected.joined],['Status',selected.status],['Linked vehicles',linkedCount(selected.id)]].map(([k,v]) => (
+          <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
+            <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
+          </div>
+        ))}
+      </div>
+    </FullScreenDetail>
     <ConfirmDialog open={!!deleteId} onOpenChange={()=>setDeleteId(null)} title="Delete owner" description="This removes the simulated owner record." destructive confirmLabel="Delete" onConfirm={()=>{const o=data.owners.find(x=>x.id===deleteId); setData(prev=>({...prev,owners:prev.owners.filter(x=>x.id!==deleteId)})); audit('Deleted owner','Vehicle Owners',o?.name||''); toast('Owner deleted','success'); setDeleteId(null)}} />
   </div>
 }

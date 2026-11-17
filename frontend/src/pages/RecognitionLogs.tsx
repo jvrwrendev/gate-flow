@@ -6,9 +6,10 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { DataTable } from '@/components/shared/DataTable'
-import { Dialog, DialogContent } from '@/components/ui/Dialog'
+
 import { Input, Select } from '@/components/ui/Field'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
 import { VehicleImage } from '@/components/shared/VehicleImage'
 import { downloadCSV } from '@/lib/utils'
 import { vehicleTypes } from '@/data/options'
@@ -48,6 +49,17 @@ export function RecognitionLogs() {
         { key:'decision', header:'Decision', render:l=><Badge value={l.decision} /> },
       ]} />
     </CardContent></Card>
-    <Dialog open={!!selected} onOpenChange={()=>setSelected(null)}><DialogContent title="Recognition Record" description={selected?.id}><div className="grid gap-4 p-6 sm:grid-cols-[180px_1fr]"><VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3]" /><div className="grid gap-3 sm:grid-cols-2">{selected && [['Timestamp',new Date(selected.timestamp).toLocaleString('en-PH',{timeZone:'Asia/Manila'})],['Plate',selected.plate],['Type',selected.type],['Color',selected.color],['Confidence',`${selected.confidence.toFixed(1)}%`],['Camera',cameraName(selected.cameraId)],['Gate',gateName(selected.gateId)],['Decision',selected.decision],['Reason',selected.reason]].map(([k,v])=><div key={k}><p className="text-[11px] font-semibold uppercase tracking-[.08em] text-slate-500">{k}</p><p className="mt-1 text-sm font-medium text-slate-900">{v}</p></div>)}</div></div></DialogContent></Dialog>
-  </div>
+    <FullScreenDetail open={!!selected} onClose={() => setSelected(null)} title="Recognition Record" description={selected?.id}>
+      <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
+        <VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3] w-full" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {selected && [['Timestamp', new Date(selected.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila' })], ['Plate', selected.plate], ['Type', selected.type], ['Color', selected.color], ['Confidence', `${selected.confidence.toFixed(1)}%`], ['Camera', cameraName(selected.cameraId)], ['Gate', gateName(selected.gateId)], ['Decision', selected.decision], ['Reason', selected.reason]].map(([k, v]) => (
+            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
+              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </FullScreenDetail>  </div>
 }
