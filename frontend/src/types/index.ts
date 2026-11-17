@@ -45,7 +45,8 @@ export interface Incident {
   timestamp: string; gateId: string; description: string; status: 'Open' | 'Investigating' | 'Resolved'; remarks: string
 }
 export interface AdminUser {
-  id: string; name: string; email: string; role: 'Super Admin' | 'System Administrator' | 'Security Personnel' | 'Gate Operator' | 'Viewer'
+  id: string; name: string; email: string; contactNumber: string; password?: string
+  role: 'Super Admin' | 'System Administrator' | 'Security Personnel' | 'Gate Operator' | 'Viewer'
   status: 'Active' | 'Inactive'; lastLogin: string
 }
 export interface AuditLog {

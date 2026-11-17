@@ -1,33 +1,25 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Activity, AlertTriangle, CheckCircle2, Video } from 'lucide-react'
+import { useState } from 'react'
+import { Activity, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useApp } from '@/context/AppContext'
-import { useToast } from '@/components/ui/Toast'
 import { Badge } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { MetricCard } from '@/components/shared/MetricCard'
-import { Select } from '@/components/ui/Field'
 import { CameraPlaceholder } from '@/components/shared/VehicleImage'
 import { BarrierGateSimulator } from '@/components/dashboard/BarrierGateSimulator'
 import { trafficData, typeData, weeklyData } from '@/data/mock'
 
 export function Dashboard() {
   const { data } = useApp()
-  const { toast } = useToast()
   const [cameraId, setCameraId] = useState(data.cameras[0]?.id ?? '')
 
-  const camera = data.cameras.find(c => c.id === cameraId)
-  const cameraLogs = useMemo(() => data.recognitionLogs.filter(log => log.cameraId === cameraId), [data.recognitionLogs, cameraId])
+  const currentCameraIndex = data.cameras.findIndex(c => c.id === cameraId)
+  const camera = currentCameraIndex >= 0 ? data.cameras[currentCameraIndex] : data.cameras[0]
+  const isOnline = camera?.status === 'Online'
 
-  const simulateDetection = () => {
-    if (!cameraLogs.length) return
-    const next = cameraLogs[Math.floor(Math.random() * cameraLogs.length)]
-    toast(next.decision === 'DENIED' ? 'Denied detection simulated' : 'Detection simulated', 'info', next.plate)
-  }
-
-  const todayDenied = data.recognitionLogs.filter(log => log.decision === 'DENIED' && new Date(log.timestamp).toDateString() === new Date().toDateString()).length
+  const todayDenied = data.recognitionLogs.filter(
+    log => log.decision === 'DENIED' && new Date(log.timestamp).toDateString() === new Date().toDateString()
+  ).length
   const authorized = data.vehicles.filter(vehicle => vehicle.status === 'Authorized').length
   const pending = data.applications.filter(application => application.status === 'Pending').length
   const activeGates = data.gates.filter(gateItem => gateItem.status === 'Online').length
@@ -43,19 +35,38 @@ export function Dashboard() {
                 <CardTitle>Live Camera Monitoring</CardTitle>
                 <p className="mt-1 text-xs text-slate-500">Surveillance preview and latest detection</p>
               </div>
-              <Badge value={camera?.status || 'Offline'} variant={camera?.status === 'Online' ? 'success' : 'destructive'} />
+              <Badge value={camera?.status || 'Offline'} variant={isOnline ? 'success' : 'destructive'} />
             </CardHeader>
             <CardContent className="space-y-4">
-              <Select value={cameraId} onChange={event => setCameraId(event.target.value)} options={data.cameras.map(item => ({ value: item.id, label: `${item.name} · ${item.status}` }))} />
-              <div className="h-[220px] overflow-hidden rounded-xl">
-                <CameraPlaceholder title={camera?.name || 'Camera'} online={camera?.status === 'Online'} className="h-full w-full" />
-              </div>
+              {/* Widescreen Live Camera Feed Container */}
+              <div className="relative h-[240px] w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-sm sm:h-[260px]">
+                <CameraPlaceholder
+                  title={camera?.name || 'Camera'}
+                  online={isOnline}
+                  className="h-full w-full object-cover"
+                />
 
-              <div className="flex flex-wrap gap-2">
-                <Button size="sm" variant="outline" onClick={simulateDetection}><Video className="h-4 w-4" />Simulate Detection</Button>
-                <Link to="/monitoring" className="inline-flex"><Button size="sm">View Full Monitoring</Button></Link>
+
+
+                {/* Top-Right HUD Badge: Camera switcher */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!data.cameras.length) return
+                    const nextIndex = (currentCameraIndex + 1) % data.cameras.length
+                    setCameraId(data.cameras[nextIndex].id)
+                  }}
+                  aria-label="Switch camera"
+                  className="pointer-events-auto absolute right-3.5 top-3.5 z-20 inline-flex items-center rounded-md bg-black/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 shadow-md backdrop-blur-sm transition-colors hover:bg-black/90"
+                >
+                  Camera {data.cameras.length > 0 ? `${(currentCameraIndex >= 0 ? currentCameraIndex : 0) + 1}/${data.cameras.length}` : '1/2'}
+                </button>
+
+                {/* Bottom-Right HUD Badge: Location / Camera Name */}
+                <div className="pointer-events-none absolute bottom-3.5 right-3.5 z-10 inline-flex items-center rounded-md bg-black/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 shadow-md backdrop-blur-sm">
+                  {(camera as { location?: string })?.location || camera?.name || 'P6, Valencia / Ph'}
+                </div>
               </div>
-              <p className="text-[11px] leading-5 text-slate-400">Simulated surveillance preview. No camera stream, RTSP connection, or AI inference is active.</p>
             </CardContent>
           </Card>
 
@@ -68,7 +79,7 @@ export function Dashboard() {
               <Badge value="Live simulation" variant="blue" />
             </CardHeader>
             <CardContent>
-              <div className="h-64">
+              <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={trafficData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e8edf4" />
@@ -84,14 +95,16 @@ export function Dashboard() {
           </Card>
         </div>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="flex h-full flex-col gap-4">
+          <div className="grid shrink-0 grid-cols-2 gap-3">
             <MetricCard compact label="Today's Entries" value={data.gates.reduce((sum, gateItem) => sum + gateItem.entriesToday, 0)} helper="Entries today" icon={<Activity className="h-4 w-4" />} tone="blue" />
             <MetricCard compact label="Denied Today" value={todayDenied} helper="Rejected attempts" icon={<AlertTriangle className="h-4 w-4" />} tone="red" />
             <MetricCard compact label="Registered" value={data.vehicles.length} helper={`${authorized} authorized`} icon={<CarIcon />} tone="blue" />
             <MetricCard compact label="Authorized" value={authorized} helper="Active profiles" icon={<CheckCircle2 className="h-4 w-4" />} tone="emerald" />
           </div>
-          <BarrierGateSimulator />
+          <div className="min-h-0 flex-1">
+            <BarrierGateSimulator />
+          </div>
         </div>
       </div>
 

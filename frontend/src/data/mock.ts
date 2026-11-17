@@ -70,11 +70,11 @@ const applications = [
   { id: 'APP-1078', reference: 'VA-2026-1078', ownerId: 'OW-004', ownerName: 'Roberto Dela Peña', email: 'roberto.dela peña@email.ph', phone: '+63 926 711 0832', plate: 'DAH 1198', type: 'Pickup' as const, model: 'Toyota Hilux', color: 'Gray' as const, submitted: ago(52), status: 'Approved' as const, remarks: 'Approved for staff parking.', purpose: 'Employee parking access' },
 ]
 const admins = [
-  { id: 'ADM-01', name: 'Adrian Velasco', email: 'adrian.velasco@gatevision.ph', role: 'Super Admin' as const, status: 'Active' as const, lastLogin: ago(.5) },
-  { id: 'ADM-02', name: 'Sophia Reyes', email: 'sophia.reyes@gatevision.ph', role: 'System Administrator' as const, status: 'Active' as const, lastLogin: ago(3.1) },
-  { id: 'ADM-03', name: 'Daniel Navarro', email: 'daniel.navarro@gatevision.ph', role: 'Security Personnel' as const, status: 'Active' as const, lastLogin: ago(1.2) },
-  { id: 'ADM-04', name: 'Grace Flores', email: 'grace.flores@gatevision.ph', role: 'Gate Operator' as const, status: 'Active' as const, lastLogin: ago(7.4) },
-  { id: 'ADM-05', name: 'Marco Aquino', email: 'marco.aquino@gatevision.ph', role: 'Viewer' as const, status: 'Inactive' as const, lastLogin: ago(480) },
+  { id: 'ADM-01', name: 'Adrian Velasco', email: 'adrian.velasco@gatevision.ph', contactNumber: '+63 917 100 2001', password: 'AdminPass123!', role: 'Super Admin' as const, status: 'Active' as const, lastLogin: ago(.5) },
+  { id: 'ADM-02', name: 'Sophia Reyes', email: 'sophia.reyes@gatevision.ph', contactNumber: '+63 917 100 2002', password: 'AdminPass123!', role: 'System Administrator' as const, status: 'Active' as const, lastLogin: ago(3.1) },
+  { id: 'ADM-03', name: 'Daniel Navarro', email: 'daniel.navarro@gatevision.ph', contactNumber: '+63 917 100 2003', password: 'AdminPass123!', role: 'Security Personnel' as const, status: 'Active' as const, lastLogin: ago(1.2) },
+  { id: 'ADM-04', name: 'Grace Flores', email: 'grace.flores@gatevision.ph', contactNumber: '+63 917 100 2004', password: 'AdminPass123!', role: 'Gate Operator' as const, status: 'Active' as const, lastLogin: ago(7.4) },
+  { id: 'ADM-05', name: 'Marco Aquino', email: 'marco.aquino@gatevision.ph', contactNumber: '+63 917 100 2005', password: 'AdminPass123!', role: 'Viewer' as const, status: 'Inactive' as const, lastLogin: ago(480) },
 ]
 const auditLogs = [
   { id: 'AUD-8018', timestamp: ago(.2), admin: 'Adrian Velasco', action: 'Updated vehicle', module: 'Registered Vehicles', details: 'Updated authorization status for NBC 1234', ipAddress: '192.168.10.18' },

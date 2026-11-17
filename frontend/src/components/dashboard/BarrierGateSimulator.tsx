@@ -5,7 +5,7 @@ import { useToast } from '@/components/ui/Toast'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Select } from '@/components/ui/Field'
+
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { cn } from '@/lib/utils'
 
@@ -14,7 +14,7 @@ type Transition = 'idle' | 'opening' | 'closing'
 export function BarrierGateSimulator() {
   const { data, setData, audit } = useApp()
   const { toast } = useToast()
-  const [selectedGateId, setSelectedGateId] = useState(data.gates[0]?.id ?? '')
+  const [selectedGateId, setSelectedGateId] = useState(data.gates.some(gate => gate.id === 'GT-01') ? 'GT-01' : (data.gates[0]?.id ?? ''))
   const [transition, setTransition] = useState<Transition>('idle')
   const [confirm, setConfirm] = useState<'open' | 'close' | 'manual' | null>(null)
   const timerRef = useRef<number | null>(null)
@@ -23,10 +23,11 @@ export function BarrierGateSimulator() {
   const isOnline = selectedGate?.status === 'Online'
   const canManualEntry = data.admins.some(admin => admin.status === 'Active' && ['Super Admin', 'System Administrator', 'Gate Operator'].includes(admin.role))
   const displayStatus = transition === 'opening' ? 'OPENING' : transition === 'closing' ? 'CLOSING' : selectedGate?.barrier ?? 'CLOSED'
+  const armOpen = displayStatus === 'OPEN' || displayStatus === 'OPENING'
 
   useEffect(() => {
     if (!data.gates.some(gate => gate.id === selectedGateId)) {
-      setSelectedGateId(data.gates[0]?.id ?? '')
+      setSelectedGateId(data.gates.some(gate => gate.id === 'GT-01') ? 'GT-01' : (data.gates[0]?.id ?? ''))
     }
   }, [data.gates, selectedGateId])
 
@@ -88,7 +89,7 @@ export function BarrierGateSimulator() {
   const statusVariant = displayStatus === 'OPEN' ? 'success' : displayStatus === 'CLOSED' ? 'secondary' : 'warning'
 
   return (
-    <Card>
+    <Card className="flex h-full flex-col">
       <CardHeader>
         <div>
           <CardTitle>Barrier Gate Simulator</CardTitle>
@@ -96,27 +97,67 @@ export function BarrierGateSimulator() {
         </div>
         <Badge value={displayStatus} variant={statusVariant} />
       </CardHeader>
-      <CardContent className="space-y-4">
-        <Select value={selectedGateId} onChange={event => setSelectedGateId(event.target.value)} options={data.gates.map(gate => ({ value: gate.id, label: `${gate.id} · ${gate.name}` }))} />
+      <CardContent className="flex flex-1 flex-col space-y-4">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
+          Controlling: <span className="font-medium text-slate-900">{selectedGate?.name ?? 'No gate selected'} ({selectedGate?.id ?? '—'})</span>
+        </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <div className="relative mx-auto h-44 w-full max-w-[260px] overflow-hidden rounded-lg border border-slate-200 bg-white">
-            <div className="absolute bottom-4 left-1/2 h-28 w-1.5 -translate-x-1/2 rounded-full bg-slate-700" />
-            <div className={cn('absolute bottom-4 left-1/2 h-2 w-28 origin-left rounded-full bg-slate-700 transition-transform duration-500', displayStatus === 'OPEN' && '-rotate-90')} />
-            <div className="absolute bottom-2 left-1/2 h-8 w-8 -translate-x-1/2 rounded-full border-4 border-slate-300 bg-white" />
-            <div className="absolute bottom-0 left-1/2 h-3 w-24 -translate-x-1/2 rounded-sm bg-slate-300" />
-            <div className="absolute left-4 top-4 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-600">{selectedGate?.name ?? 'No gate selected'}</div>
+          <div className="relative mx-auto min-h-[288px] w-full max-w-[300px] flex-1 overflow-hidden rounded-lg border border-slate-200 bg-white">
+            <div className="absolute bottom-0 left-3 h-44 w-12 rounded-t-lg border border-slate-300 bg-slate-200">
+              <div className="absolute inset-x-2 top-3 space-y-1">
+                <div className="h-1 rounded bg-slate-400/70" />
+                <div className="h-1 rounded bg-slate-400/70" />
+                <div className="h-1 rounded bg-slate-400/70" />
+              </div>
+              <div className="absolute bottom-0 left-1/2 h-32 w-1.5 -translate-x-1/2 rounded-full bg-slate-500" />
+            </div>
+            <div className="absolute bottom-0 left-0 h-3 w-full bg-slate-300" />
+            <div
+              className={cn(
+                'absolute bottom-[11px] left-[46px] h-3 w-[210px] origin-left rounded-full border border-slate-300 bg-white transition-transform duration-500 ease-out',
+                armOpen && '-rotate-90'
+              )}
+            >
+              <div
+                className="h-full w-full rounded-full"
+                style={{
+                  backgroundImage: 'repeating-linear-gradient(135deg, #dc2626 0px, #dc2626 12px, #ffffff 12px, #ffffff 24px)',
+                }}
+              />
+              <div className="absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border border-slate-300 bg-slate-700" />
+            </div>
+            <div className="absolute bottom-[3px] left-[34px] h-8 w-8 -translate-x-1/2 rounded-full border-4 border-slate-300 bg-white" />
+            <div className="absolute left-4 top-4 rounded-md bg-white/80 px-2 py-1 text-[11px] font-medium text-slate-600">{selectedGate?.name ?? 'No gate selected'}</div>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <Button size="sm" variant="outline" disabled={!isOnline || transition !== 'idle' || selectedGate?.barrier === 'OPEN'} onClick={() => setConfirm('open')}><DoorOpen className="h-4 w-4" />Open</Button>
-          <Button size="sm" variant="outline" disabled={!isOnline || transition !== 'idle' || selectedGate?.barrier === 'CLOSED'} onClick={() => setConfirm('close')}><DoorClosed className="h-4 w-4" />Close</Button>
-        </div>
-        <Button className="w-full" disabled={!isOnline || transition !== 'idle' || !canManualEntry || selectedGate?.barrier !== 'CLOSED'} onClick={() => setConfirm('manual')}><ShieldCheck className="h-4 w-4" />Manual Entry</Button>
-
-        <div className="rounded-lg border border-amber-100 bg-amber-50 p-3 text-xs leading-5 text-amber-800">
-          {canManualEntry ? 'Authorized administrator action. Simulated control only: no physical barrier, controller, or hardware connection is used.' : 'Manual entry requires an active authorized administrator account. Simulated control only: no physical hardware is connected.'}
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={!isOnline || transition !== 'idle'}
+            onClick={() => setConfirm(selectedGate?.barrier === 'OPEN' ? 'close' : 'open')}
+          >
+            {transition === 'opening' ? (
+              <>
+                <DoorOpen className="h-4 w-4" /> Opening
+              </>
+            ) : transition === 'closing' ? (
+              <>
+                <DoorClosed className="h-4 w-4" /> Closing
+              </>
+            ) : selectedGate?.barrier === 'OPEN' ? (
+              <>
+                <DoorClosed className="h-4 w-4" /> Close
+              </>
+            ) : (
+              <>
+                <DoorOpen className="h-4 w-4" /> Open
+              </>
+            )}
+          </Button>
+          <Button className="w-full" size="sm" disabled={!isOnline || transition !== 'idle' || !canManualEntry || selectedGate?.barrier !== 'CLOSED'} onClick={() => setConfirm('manual')}><ShieldCheck className="h-4 w-4" />Manual Entry</Button>
         </div>
       </CardContent>
 
