@@ -15,6 +15,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { CameraPlaceholder } from '@/components/shared/VehicleImage'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import type { Camera as CameraType } from '@/types'
 
 const schema = z.object({ name: z.string().min(2), location: z.string().min(2), model: z.string().min(2), type: z.string(), gateId: z.string().min(1), protocol: z.string(), ipAddress: z.string().min(7), status: z.string() })
@@ -56,17 +57,31 @@ export function Cameras() {
       <div className="grid gap-4 sm:grid-cols-2"><Field label="IP Address" error={form.formState.errors.ipAddress?.message}><Input {...form.register('ipAddress')} /></Field><Field label="Status"><Select {...form.register('status')} options={['Online','Offline'].map(v=>({value:v,label:v}))} /></Field></div>
       <DialogFooter><Button type="button" variant="outline" onClick={()=>setModal(null)}>Cancel</Button><Button type="submit">Save Camera</Button></DialogFooter>
     </form></DialogContent></Dialog>
-    <FullScreenDetail open={modal==='view'&&!!selected} onClose={()=>setModal(null)} title="Camera Details" description={selected?.id}>
-      <div className="space-y-6">
-        <CameraPlaceholder title={selected?.name||'Camera'} online={selected?.status==='Online'} className="aspect-video w-full max-w-3xl" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {selected && [['ID',selected.id],['Name',selected.name],['Location',selected.location],['Model',selected.model],['Type',selected.type],['Protocol',selected.protocol],['Gate',selected.gateId],['IP Address',selected.ipAddress],['Status',selected.status],['Last Connection',new Date(selected.lastConnection).toLocaleString('en-PH',{timeZone:'Asia/Manila'})]].map(([k,v]) => (
-            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
-              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
-            </div>
-          ))}
-        </div>
+    <FullScreenDetail
+      open={modal==='view'&&!!selected}
+      onClose={()=>setModal(null)}
+      title="Camera Details"
+      description={selected?.id}
+      status={selected && <Badge value={selected.status} />}
+    >
+      <div className="space-y-5">
+        <CameraPlaceholder title={selected?.name||'Camera'} online={selected?.status==='Online'} className="aspect-video w-full" />
+        <DetailSection title="Camera Information">
+          {selected && (
+            <DetailGrid>
+              <DetailField label="Camera ID" value={selected.id} mono />
+              <DetailField label="Name" value={selected.name} />
+              <DetailField label="Location" value={selected.location} />
+              <DetailField label="Model" value={selected.model} />
+              <DetailField label="Type" value={selected.type} />
+              <DetailField label="Protocol" value={selected.protocol} />
+              <DetailField label="Assigned Gate" value={selected.gateId} />
+              <DetailField label="IP Address" value={selected.ipAddress} mono />
+              <DetailField label="Status" value={<Badge value={selected.status} />} />
+              <DetailField label="Last Connection" value={new Date(selected.lastConnection).toLocaleString('en-PH',{timeZone:'Asia/Manila'})} />
+            </DetailGrid>
+          )}
+        </DetailSection>
       </div>
     </FullScreenDetail>
     <ConfirmDialog open={!!deleteId} onOpenChange={()=>setDeleteId(null)} title="Delete camera" description="This removes the simulated camera record." destructive confirmLabel="Delete" onConfirm={()=>{const c=data.cameras.find(x=>x.id===deleteId); setData(prev=>({...prev,cameras:prev.cameras.filter(x=>x.id!==deleteId)})); audit('Deleted camera','Camera Management',c?.name||''); toast('Camera deleted','success'); setDeleteId(null)}} />

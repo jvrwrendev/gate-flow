@@ -5,7 +5,7 @@ import { useApp } from '@/context/AppContext'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { MetricCard } from '@/components/shared/MetricCard'
-import { CameraPlaceholder } from '@/components/shared/VehicleImage'
+import { CameraSimulation } from '@/components/shared/CameraSimulation'
 import { BarrierGateSimulator } from '@/components/dashboard/BarrierGateSimulator'
 import { trafficData, typeData, weeklyData } from '@/data/mock'
 
@@ -23,12 +23,12 @@ export function Dashboard() {
   const authorized = data.vehicles.filter(vehicle => vehicle.status === 'Authorized').length
   const pending = data.applications.filter(application => application.status === 'Pending').length
   const activeGates = data.gates.filter(gateItem => gateItem.status === 'Online').length
-  const recent = data.recognitionLogs.slice(0, 8)
+  const recent = data.recognitionLogs.slice(0, 5)
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-6 xl:grid-cols-[7fr_3fr]">
-        <div className="space-y-5">
+    <div className="space-y-4">
+      <div className="grid gap-4 xl:grid-cols-[7fr_3fr]">
+        <div className="space-y-4">
           <Card>
             <CardHeader>
               <div>
@@ -37,16 +37,15 @@ export function Dashboard() {
               </div>
               <Badge value={camera?.status || 'Offline'} variant={isOnline ? 'success' : 'destructive'} />
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               {/* Widescreen Live Camera Feed Container */}
-              <div className="relative h-[240px] w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-sm sm:h-[260px]">
-                <CameraPlaceholder
+              <div className="relative h-[180px] w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-sm xl:h-[200px]">
+                <CameraSimulation
                   title={camera?.name || 'Camera'}
-                  online={isOnline}
-                  className="h-full w-full object-cover"
+                  framed={false}
+                  showCaption={false}
+                  className="h-full w-full"
                 />
-
-
 
                 {/* Top-Right HUD Badge: Camera switcher */}
                 <button
@@ -79,7 +78,7 @@ export function Dashboard() {
               <Badge value="Live simulation" variant="blue" />
             </CardHeader>
             <CardContent>
-              <div className="h-80">
+              <div className="h-56 xl:h-60">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={trafficData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e8edf4" />
@@ -95,8 +94,8 @@ export function Dashboard() {
           </Card>
         </div>
 
-        <div className="flex h-full flex-col gap-4">
-          <div className="grid shrink-0 grid-cols-2 gap-3">
+        <div className="flex h-full flex-col gap-3">
+          <div className="grid shrink-0 grid-cols-2 gap-2">
             <MetricCard compact label="Today's Entries" value={data.gates.reduce((sum, gateItem) => sum + gateItem.entriesToday, 0)} helper="Entries today" icon={<Activity className="h-4 w-4" />} tone="blue" />
             <MetricCard compact label="Denied Today" value={todayDenied} helper="Rejected attempts" icon={<AlertTriangle className="h-4 w-4" />} tone="red" />
             <MetricCard compact label="Registered" value={data.vehicles.length} helper={`${authorized} authorized`} icon={<CarIcon />} tone="blue" />
@@ -108,11 +107,11 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-4 xl:grid-cols-2">
         <Card>
           <CardHeader><CardTitle>Authorized vs. Denied Access</CardTitle></CardHeader>
           <CardContent>
-            <div className="h-64">
+            <div className="h-48 xl:h-52">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={weeklyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e8edf4" />
@@ -130,8 +129,8 @@ export function Dashboard() {
         <Card>
           <CardHeader><CardTitle>Vehicle Classification Breakdown</CardTitle></CardHeader>
           <CardContent>
-            <div className="flex flex-col items-center gap-4 md:flex-row">
-              <div className="h-64 w-full md:w-64">
+            <div className="flex flex-col items-center gap-3 md:flex-row">
+              <div className="h-48 w-full md:w-52 xl:h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={typeData} dataKey="value" nameKey="name" innerRadius={52} outerRadius={86}>
@@ -141,7 +140,7 @@ export function Dashboard() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="grid flex-1 grid-cols-2 gap-2">
+              <div className="grid flex-1 grid-cols-2 gap-x-2 gap-y-1.5">
                 {typeData.map(item => (
                   <div key={item.name} className="flex items-center gap-2 text-sm">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ background: item.fill }} />
@@ -155,28 +154,28 @@ export function Dashboard() {
         </Card>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[2fr_1fr]">
+      <div className="grid gap-4 xl:grid-cols-[2fr_1fr]">
         <Card>
           <CardHeader><CardTitle>Recent Access Activity</CardTitle></CardHeader>
           <CardContent className="p-0">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50/80 text-[11px] uppercase tracking-[0.08em] text-slate-500">
                 <tr>
-                  <th className="px-5 py-3">Time</th>
-                  <th className="px-5 py-3">Plate</th>
-                  <th className="px-5 py-3">Type</th>
-                  <th className="px-5 py-3">Camera</th>
-                  <th className="px-5 py-3">Decision</th>
+                  <th className="px-4 py-2">Time</th>
+                  <th className="px-4 py-2">Plate</th>
+                  <th className="px-4 py-2">Type</th>
+                  <th className="px-4 py-2">Camera</th>
+                  <th className="px-4 py-2">Decision</th>
                 </tr>
               </thead>
               <tbody>
                 {recent.map(record => (
                   <tr key={record.id} className="border-t border-slate-100">
-                    <td className="px-5 py-3 text-slate-500">{new Date(record.timestamp).toLocaleTimeString('en-PH', { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit' })}</td>
-                    <td className="px-5 py-3 font-semibold text-slate-900">{record.plate}</td>
-                    <td className="px-5 py-3">{record.type}</td>
-                    <td className="px-5 py-3 text-slate-500">{record.cameraId}</td>
-                    <td className="px-5 py-3"><Badge value={record.decision} /></td>
+                    <td className="px-4 py-2 text-slate-500">{new Date(record.timestamp).toLocaleTimeString('en-PH', { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit' })}</td>
+                    <td className="px-4 py-2 font-semibold text-slate-900">{record.plate}</td>
+                    <td className="px-4 py-2">{record.type}</td>
+                    <td className="px-4 py-2 text-slate-500">{record.cameraId}</td>
+                    <td className="px-4 py-2"><Badge value={record.decision} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -184,14 +183,14 @@ export function Dashboard() {
           </CardContent>
         </Card>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Card>
             <CardHeader><CardTitle>System Health</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
+            <CardContent className="space-y-3">
+              <div className="space-y-1.5">
                 <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-slate-500">Barrier Gates</p>
                 {data.gates.map(gateItem => (
-                  <div key={gateItem.id} className="flex items-center justify-between gap-3 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2">
+                  <div key={gateItem.id} className="flex items-center justify-between gap-3 rounded-lg border border-slate-100 bg-slate-50 px-3 py-1.5">
                     <p className="truncate text-sm font-medium text-slate-900">{gateItem.name}</p>
                     <div className="flex shrink-0 items-center gap-2">
                       <Badge value={gateItem.status} />
@@ -200,7 +199,7 @@ export function Dashboard() {
                   </div>
                 ))}
               </div>
-              <div className="space-y-2 border-t border-slate-100 pt-4">
+              <div className="space-y-1.5 border-t border-slate-100 pt-3">
                 <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-slate-500">Cameras</p>
                 {data.cameras.map(cameraItem => (
                   <div key={cameraItem.id} className="flex items-center justify-between gap-3">
@@ -209,7 +208,7 @@ export function Dashboard() {
                   </div>
                 ))}
               </div>
-              <div className="space-y-2 border-t border-slate-100 pt-4">
+              <div className="space-y-1.5 border-t border-slate-100 pt-3">
                 <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-slate-500">AI Models</p>
                 {data.models.filter(model => model.status === 'Active').map(model => (
                   <div key={model.id} className="flex items-center justify-between gap-3">
@@ -223,14 +222,14 @@ export function Dashboard() {
 
           <Card>
             <CardHeader><CardTitle>Operations Summary</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg border border-amber-100 bg-amber-50 p-3">
+            <CardContent className="grid grid-cols-2 gap-2">
+              <div className="rounded-lg border border-amber-100 bg-amber-50 p-2.5">
                 <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-amber-700">Pending Applications</p>
-                <p className="mt-1 font-display text-2xl font-extrabold text-amber-900">{pending}</p>
+                <p className="mt-1 font-display text-xl font-extrabold text-amber-900">{pending}</p>
               </div>
-              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-2.5">
                 <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-600">Active Barrier Gates</p>
-                <p className="mt-1 font-display text-2xl font-extrabold text-slate-900">{activeGates}/{data.gates.length}</p>
+                <p className="mt-1 font-display text-xl font-extrabold text-slate-900">{activeGates}/{data.gates.length}</p>
               </div>
             </CardContent>
           </Card>

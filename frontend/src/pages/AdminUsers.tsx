@@ -14,6 +14,7 @@ import { Field, Input, Select } from '@/components/ui/Field'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import type { AdminUser } from '@/types'
 
 const roles = ['Super Admin','System Administrator','Security Personnel','Gate Operator','Viewer'] as const
@@ -43,17 +44,29 @@ export function AdminUsers() {
         { key:'actions', header:'Actions', sortable:false, render:a=><div className="flex gap-1" onClick={e=>e.stopPropagation()}><Button size="icon" variant="ghost" onClick={()=>openEdit(a)}><EditIcon/></Button><Button size="icon" variant="ghost" onClick={()=>{setData(prev=>({...prev,admins:prev.admins.map(x=>x.id===a.id?{...x,status:x.status==='Active'?'Inactive':'Active'}:x)}));audit('Changed admin status','Admin Users',a.name);toast('Status updated','success',a.name)}}><Shield className="h-4 w-4" /></Button><Button size="icon" variant="ghost" onClick={()=>{setSelected(a);setDeleteId(a.id)}}><TrashIcon/></Button></div> },
       ]} />
     </CardContent></Card>
-    <Dialog open={modal==='add'||modal==='edit'} onOpenChange={()=>setModal(null)}><DialogContent title={modal==='add'?'Add Admin User':'Edit Admin User'}><form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6"><Field label="Full Name" error={form.formState.errors.name?.message}><Input {...form.register('name')} placeholder="John Doe" /></Field><Field label="Email" error={form.formState.errors.email?.message}><Input {...form.register('email')} type="email" placeholder="johndoe@gmail.com" /></Field><Field label="Contact Number" error={form.formState.errors.contactNumber?.message}><Input {...form.register('contactNumber')} placeholder="+63 917 123 4567" /></Field><Field label="Password" error={form.formState.errors.password?.message} hint={modal==='edit' ? 'Leave blank to keep the current password.' : 'Minimum 6 characters.'}><Input {...form.register('password')} type="password" placeholder={modal==='edit' ? 'Leave blank to keep current password' : 'Enter password'} /></Field><Field label="Role"><Select {...form.register('role')} options={roles.map(v=>({value:v,label:v}))} /></Field><Field label="Status"><Select {...form.register('status')} options={['Active','Inactive'].map(v=>({value:v,label:v}))} /></Field><DialogFooter><Button type="button" variant="outline" onClick={()=>setModal(null)}>Cancel</Button><Button type="submit">Save</Button></DialogFooter></form></DialogContent></Dialog>
-    <FullScreenDetail open={detailsOpen && !!selected} onClose={() => setDetailsOpen(false)} title="Admin User Details" description={selected?.id}>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {selected && [['Admin ID', selected.id], ['Full Name', selected.name], ['Email', selected.email], ['Contact Number', selected.contactNumber], ['Role', selected.role], ['Status', selected.status], ['Last Login', new Date(selected.lastLogin).toLocaleString('en-PH', { timeZone: 'Asia/Manila', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })], ['Password', selected.password ? 'Configured' : 'Not set']].map(([label, value]) => (
-          <div key={label} className="rounded-xl border border-slate-200 bg-white p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{label}</p>
-            <p className="mt-1 text-sm font-medium text-slate-900">{value}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-4 text-xs text-slate-500">Password values are never displayed for security.</p>
+    <Dialog open={modal==='add'||modal==='edit'} onOpenChange={()=>setModal(null)}><DialogContent title={modal==='add'?'Add Admin User':'Edit Admin User'} className="max-w-xl"><form onSubmit={form.handleSubmit(onSubmit)}><div className="space-y-4 p-6"><Field layout="inline" label="Full Name" error={form.formState.errors.name?.message}><Input {...form.register('name')} placeholder="John Doe" /></Field><Field layout="inline" label="Email" error={form.formState.errors.email?.message}><Input {...form.register('email')} type="email" placeholder="johndoe@gmail.com" /></Field><Field layout="inline" label="Contact Number" error={form.formState.errors.contactNumber?.message}><Input {...form.register('contactNumber')} placeholder="+63 917 123 4567" /></Field><Field layout="inline" label="Password" error={form.formState.errors.password?.message} hint={modal==='edit' ? 'Leave blank to keep the current password.' : 'Minimum 6 characters.'}><Input {...form.register('password')} type="password" placeholder={modal==='edit' ? 'Leave blank to keep current password' : 'Enter password'} /></Field><Field layout="inline" label="Role"><Select {...form.register('role')} options={roles.map(v=>({value:v,label:v}))} /></Field><Field layout="inline" label="Status"><Select {...form.register('status')} options={['Active','Inactive'].map(v=>({value:v,label:v}))} /></Field></div><DialogFooter><Button type="button" variant="outline" onClick={()=>setModal(null)}>Cancel</Button><Button type="submit">Save</Button></DialogFooter></form></DialogContent></Dialog>
+    <FullScreenDetail
+      open={detailsOpen && !!selected}
+      onClose={() => setDetailsOpen(false)}
+      title="Admin User Details"
+      description={selected?.id}
+      status={selected && <Badge value={selected.status} />}
+    >
+      {selected && (
+        <DetailSection title="Account Information">
+          <DetailGrid>
+            <DetailField label="Admin ID" value={selected.id} mono />
+            <DetailField label="Full Name" value={selected.name} />
+            <DetailField label="Email" value={selected.email} />
+            <DetailField label="Contact Number" value={selected.contactNumber} />
+            <DetailField label="Role" value={<Badge value={selected.role} variant="blue" />} />
+            <DetailField label="Status" value={<Badge value={selected.status} />} />
+            <DetailField label="Last Login" value={new Date(selected.lastLogin).toLocaleString('en-PH', { timeZone: 'Asia/Manila', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })} />
+            <DetailField label="Password" value={selected.password ? 'Configured' : 'Not set'} />
+          </DetailGrid>
+          <p className="pt-3 text-xs text-slate-500">Password values are never displayed for security.</p>
+        </DetailSection>
+      )}
     </FullScreenDetail>
     <ConfirmDialog open={!!deleteId} onOpenChange={()=>setDeleteId(null)} title="Deactivate admin" description="This removes the simulated admin account." destructive confirmLabel="Delete" onConfirm={()=>{const a=data.admins.find(x=>x.id===deleteId); setData(prev=>({...prev,admins:prev.admins.filter(x=>x.id!==deleteId)})); audit('Deleted admin user','Admin Users',a?.name||''); toast('Admin deleted','success'); setDeleteId(null)}} />
   </div>

@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/Dialog'
 import { Field, Input, Select } from '@/components/ui/Field'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import type { AIModel } from '@/types'
 
 const categories = ['Vehicle Detection','License Plate Recognition','Vehicle Classification','Vehicle Color Recognition'] as const
@@ -28,15 +29,29 @@ export function AIModels() {
       <p className="text-[11px] text-slate-400">Metrics are mock data for demonstration only.</p>
     </CardContent></Card>)}</div>
     <Dialog open={uploadOpen} onOpenChange={setUploadOpen}><DialogContent title="Upload Model Package"><div className="space-y-4 p-6"><Field label="Model Name"><Input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} /></Field><Field label="Category"><Select value={form.category} onChange={e=>setForm({...form,category:e.target.value as any})} options={categories.map(v=>({value:v,label:v}))} /></Field><Field label="Version"><Input value={form.version} onChange={e=>setForm({...form,version:e.target.value})} /></Field><Field label="Model File (simulated)"><input ref={fileRef} type="file" className="form-input" onChange={e=>setFileName(e.target.files?.[0]?.name || '')} /><p className="mt-1 text-xs text-slate-500">{fileName || 'No file selected. Upload is simulated and no file is processed.'}</p></Field><DialogFooter><Button variant="outline" onClick={()=>setUploadOpen(false)}>Cancel</Button><Button onClick={upload}><FileUp className="h-4 w-4" />Upload</Button></DialogFooter></div></DialogContent></Dialog>
-    <FullScreenDetail open={!!details} onClose={() => setDetails(null)} title="Model Details" description={details?.id}>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {details && [['ID', details.id], ['Name', details.name], ['Category', details.category], ['Version', details.version], ['Status', details.status], ['Accuracy', `${details.accuracy}%`], ['Metric', details.metricLabel], ['Size', details.size], ['Updated', details.lastUpdated], ['Description', details.description]].map(([k, v]) => (
-          <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
-            <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
-          </div>
-        ))}
-      </div>
+    <FullScreenDetail
+      open={!!details}
+      onClose={() => setDetails(null)}
+      title="Model Details"
+      description={details?.id}
+      status={details && <Badge value={details.status} />}
+    >
+      {details && (
+        <DetailSection title="Model Information">
+          <DetailGrid>
+            <DetailField label="Model ID" value={details.id} mono />
+            <DetailField label="Name" value={details.name} />
+            <DetailField label="Category" value={details.category} />
+            <DetailField label="Version" value={details.version} />
+            <DetailField label="Status" value={<Badge value={details.status} />} />
+            <DetailField label="Accuracy" value={`${details.accuracy}%`} />
+            <DetailField label={details.metricLabel} value={`${details.accuracy}%`} />
+            <DetailField label="Size" value={details.size} />
+            <DetailField label="Last Updated" value={details.lastUpdated} />
+            <DetailField label="Description" value={details.description} className="sm:col-span-2" />
+          </DetailGrid>
+        </DetailSection>
+      )}
     </FullScreenDetail>    <Dialog open={!!testModel} onOpenChange={()=>setTestModel(null)}><DialogContent title="Test Model (Simulated)" description={testModel?.name}><div className="space-y-4 p-6"><div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-800">This test uses mock sample data. No real inference is executed.</div><div className="grid gap-3 sm:grid-cols-2 text-sm">{[['Sample Plate','NBC 1234'],['Sample Type','SUV'],['Sample Color','White'],['Result Confidence','94.2%'],['Decision','AUTHORIZED']].map(([k,v])=><div key={k} className="rounded-lg border border-slate-100 bg-slate-50 p-3"><p className="text-[11px] font-semibold uppercase tracking-[.08em] text-slate-500">{k}</p><p className="mt-1 font-medium text-slate-900">{v}</p></div>)}</div><DialogFooter><Button onClick={()=>{toast('Model test completed (simulated)','success',testModel?.name);setTestModel(null)}}>Complete Test</Button></DialogFooter></div></DialogContent></Dialog>
   </div>
 }

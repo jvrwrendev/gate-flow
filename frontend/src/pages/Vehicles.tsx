@@ -14,6 +14,7 @@ import { Field, Input, Select } from '@/components/ui/Field'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { VehicleImage } from '@/components/shared/VehicleImage'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { vehicleTypes, vehicleColors } from '@/data/options'
 import type { Vehicle, VehicleColor, VehicleType } from '@/types'
@@ -61,16 +62,39 @@ export function Vehicles() {
         { key: 'actions', header: 'Actions', sortable: false, render: v => <div className="flex gap-1" onClick={e => e.stopPropagation()}><Button size="icon" variant="ghost" onClick={() => openEdit(v)}><Edit className="h-4 w-4" /></Button><Button size="icon" variant="ghost" onClick={() => toggleSuspend(v)}><ShieldOff className="h-4 w-4" /></Button><Button size="icon" variant="ghost" onClick={() => { setSelected(v); setDeleteId(v.id) }}><Trash2 className="h-4 w-4 text-red-600" /></Button></div> },
       ]} />
     </CardContent></Card>
-    <FullScreenDetail open={modal === 'view' && !!selected} onClose={() => setModal(null)} title="Vehicle Details" description={selected?.plate}>
-      <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
-        <VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3] w-full" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {selected && [['Owner', selected.ownerName], ['Contact', selected.contact], ['Type', selected.type], ['Model', selected.model], ['Color', selected.color], ['Registered', selected.registrationDate], ['Status', selected.status]].map(([k, v]) => (
-            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
-              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
-            </div>
-          ))}
+    <FullScreenDetail
+      open={modal === 'view' && !!selected}
+      onClose={() => setModal(null)}
+      title="Vehicle Details"
+      description={selected?.plate}
+      status={selected && <Badge value={selected.status} />}
+    >
+      <div className="grid gap-6 md:grid-cols-[220px_1fr]">
+        <div className="space-y-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Vehicle Preview</p>
+          <VehicleImage type={selected?.type} color={selected?.color} neutral className="aspect-[4/3] w-full" />
+        </div>
+        <div className="space-y-5">
+          <DetailSection title="Vehicle Information">
+            {selected && (
+              <DetailGrid>
+                <DetailField label="Plate Number" value={selected.plate} mono />
+                <DetailField label="Vehicle Type" value={selected.type} />
+                <DetailField label="Model" value={selected.model} />
+                <DetailField label="Color" value={selected.color} />
+                <DetailField label="Authorization" value={<Badge value={selected.status} />} />
+                <DetailField label="Registered" value={selected.registrationDate} />
+              </DetailGrid>
+            )}
+          </DetailSection>
+          <DetailSection title="Ownership &amp; Contact">
+            {selected && (
+              <DetailGrid>
+                <DetailField label="Owner" value={selected.ownerName} />
+                <DetailField label="Contact Number" value={selected.contact} />
+              </DetailGrid>
+            )}
+          </DetailSection>
         </div>
       </div>
     </FullScreenDetail>

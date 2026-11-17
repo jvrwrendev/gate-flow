@@ -15,6 +15,7 @@ import { Tabs } from '@/components/ui/Tabs'
 import { VehicleImage } from '@/components/shared/VehicleImage'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import { vehicleTypes, vehicleColors } from '@/data/options'
 import type { Application } from '@/types'
 
@@ -49,17 +50,35 @@ export function Applications() {
         { key:'actions', header:'Actions', sortable:false, render:a=><div className="flex gap-1" onClick={e=>e.stopPropagation()}>{a.status==='Pending' && <><Button size="sm" variant="success" onClick={()=>setConfirm({id:a.id,action:'approve'})}><CheckCircle2 className="h-3.5 w-3.5" />Approve</Button><Button size="sm" variant="destructive" onClick={()=>setConfirm({id:a.id,action:'reject'})}><XCircle className="h-3.5 w-3.5" />Reject</Button></>}<Button size="icon" variant="ghost" onClick={()=>{setSelected(a);setViewOpen(true)}}><Eye className="h-4 w-4" /></Button></div> },
       ]} />
     </CardContent></Card>
-    <FullScreenDetail open={viewOpen && !!selected} onClose={() => setViewOpen(false)} title="Application Details" description={selected?.reference}>
-      <div className="grid gap-6 lg:grid-cols-[180px_1fr]">
-        <VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3] w-full" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {selected && [['Owner',selected.ownerName],['Email',selected.email],['Phone',selected.phone],['Plate',selected.plate],['Type',selected.type],['Model',selected.model],['Color',selected.color],['Purpose',selected.purpose],['Submitted',new Date(selected.submitted).toLocaleString('en-PH',{timeZone:'Asia/Manila'})],['Status',selected.status],['Remarks',selected.remarks||'No remarks']].map(([k,v]) => (
-            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
-              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
-            </div>
-          ))}
+    <FullScreenDetail
+      open={viewOpen && !!selected}
+      onClose={() => setViewOpen(false)}
+      title="Application Details"
+      description={selected?.reference}
+      status={selected && <Badge value={selected.status} />}
+    >
+      <div className="grid gap-6 md:grid-cols-[180px_1fr]">
+        <div className="space-y-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Vehicle Preview</p>
+          <VehicleImage type={selected?.type} color={selected?.color} neutral className="aspect-[4/3] w-full" />
         </div>
+        <DetailSection title="Applicant Information">
+          {selected && (
+            <DetailGrid>
+              <DetailField label="Owner" value={selected.ownerName} />
+              <DetailField label="Plate Number" value={selected.plate} mono />
+              <DetailField label="Email" value={selected.email} />
+              <DetailField label="Phone" value={selected.phone} />
+              <DetailField label="Vehicle Type" value={selected.type} />
+              <DetailField label="Model" value={selected.model} />
+              <DetailField label="Color" value={selected.color} />
+              <DetailField label="Purpose" value={selected.purpose} />
+              <DetailField label="Submitted" value={new Date(selected.submitted).toLocaleString('en-PH',{timeZone:'Asia/Manila'})} />
+              <DetailField label="Status" value={<Badge value={selected.status} />} />
+              <DetailField label="Remarks" value={selected.remarks || 'No remarks'} className="sm:col-span-2" />
+            </DetailGrid>
+          )}
+        </DetailSection>
       </div>
     </FullScreenDetail>
     <Dialog open={addOpen} onOpenChange={setAddOpen}><DialogContent title="New Vehicle Application"><form onSubmit={form.handleSubmit(submitAdd)} className="space-y-4 p-6"><div className="grid gap-4 sm:grid-cols-2"><Field label="Owner Name" error={form.formState.errors.ownerName?.message}><Input {...form.register('ownerName')} /></Field><Field label="Email" error={form.formState.errors.email?.message}><Input {...form.register('email')} type="email" /></Field><Field label="Phone" error={form.formState.errors.phone?.message}><Input {...form.register('phone')} /></Field><Field label="Plate" error={form.formState.errors.plate?.message}><Input {...form.register('plate')} /></Field><Field label="Vehicle Type"><Select {...form.register('type')} options={vehicleTypes.map(v=>({value:v,label:v}))} /></Field><Field label="Color"><Select {...form.register('color')} options={vehicleColors.map(v=>({value:v,label:v}))} /></Field></div><Field label="Brand / Model" error={form.formState.errors.model?.message}><Input {...form.register('model')} /></Field><Field label="Purpose"><Input {...form.register('purpose')} /></Field><Field label="Remarks"><Textarea {...form.register('remarks')} /></Field><DialogFooter><Button type="button" variant="outline" onClick={()=>setAddOpen(false)}>Cancel</Button><Button type="submit">Submit Application</Button></DialogFooter></form></DialogContent></Dialog>

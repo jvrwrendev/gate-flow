@@ -10,6 +10,7 @@ import { DataTable } from '@/components/shared/DataTable'
 import { Field, Input, Select, Textarea } from '@/components/ui/Field'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import type { Incident } from '@/types'
 
 export function Incidents() {
@@ -36,20 +37,32 @@ export function Incidents() {
         { key:'actions', header:'Actions', sortable:false, render:i=><Button size="icon" variant="ghost" onClick={e=>{e.stopPropagation();setSelected(i);setRemarks(i.remarks)}}><Eye className="h-4 w-4" /></Button> },
       ]} />
     </CardContent></Card>
-    <FullScreenDetail open={!!selected} onClose={() => setSelected(null)} title="Incident Details" description={selected?.id}>
-      <div className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2">
-          {selected && [['Type',selected.type],['Severity',selected.severity],['Timestamp',new Date(selected.timestamp).toLocaleString('en-PH',{timeZone:'Asia/Manila'})],['Gate',gateName(selected.gateId)],['Status',selected.status],['Description',selected.description]].map(([k,v]) => (
-            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
-              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
-            </div>
-          ))}
-        </div>
-        <Field label="Admin remarks"><Textarea value={remarks} onChange={e=>setRemarks(e.target.value)} /></Field>
-        <div className="flex flex-wrap justify-end gap-2">
-          <Button variant="secondary" onClick={() => updateStatus(selected!.id, 'Investigating')}>Mark Investigating</Button>
-          <Button variant="success" onClick={() => updateStatus(selected!.id, 'Resolved')}>Resolve</Button>
+    <FullScreenDetail
+      open={!!selected}
+      onClose={() => setSelected(null)}
+      title="Incident Details"
+      description={selected?.id}
+      status={selected && <Badge value={selected.status} />}
+    >
+      <div className="space-y-5">
+        <DetailSection title="Incident Information">
+          {selected && (
+            <DetailGrid>
+              <DetailField label="Incident Type" value={selected.type} />
+              <DetailField label="Severity" value={selected.severity} />
+              <DetailField label="Timestamp" value={new Date(selected.timestamp).toLocaleString('en-PH',{timeZone:'Asia/Manila'})} />
+              <DetailField label="Gate" value={gateName(selected.gateId)} />
+              <DetailField label="Status" value={<Badge value={selected.status} />} />
+              <DetailField label="Description" value={selected.description} className="sm:col-span-2" />
+            </DetailGrid>
+          )}
+        </DetailSection>
+        <div className="border-t border-slate-100 pt-4">
+          <Field label="Admin remarks"><Textarea value={remarks} onChange={e=>setRemarks(e.target.value)} /></Field>
+          <div className="mt-4 flex flex-wrap justify-end gap-2">
+            <Button variant="secondary" onClick={() => updateStatus(selected!.id, 'Investigating')}>Mark Investigating</Button>
+            <Button variant="success" onClick={() => updateStatus(selected!.id, 'Resolved')}>Resolve</Button>
+          </div>
         </div>
       </div>
     </FullScreenDetail>

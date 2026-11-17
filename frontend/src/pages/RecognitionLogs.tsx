@@ -10,6 +10,7 @@ import { DataTable } from '@/components/shared/DataTable'
 import { Input, Select } from '@/components/ui/Field'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailField, DetailGrid, DetailSection } from '@/components/shared/DetailField'
 import { VehicleImage } from '@/components/shared/VehicleImage'
 import { downloadCSV } from '@/lib/utils'
 import { vehicleTypes } from '@/data/options'
@@ -49,17 +50,35 @@ export function RecognitionLogs() {
         { key:'decision', header:'Decision', render:l=><Badge value={l.decision} /> },
       ]} />
     </CardContent></Card>
-    <FullScreenDetail open={!!selected} onClose={() => setSelected(null)} title="Recognition Record" description={selected?.id}>
-      <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
-        <VehicleImage type={selected?.type} color={selected?.color} className="aspect-[4/3] w-full" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {selected && [['Timestamp', new Date(selected.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila' })], ['Plate', selected.plate], ['Type', selected.type], ['Color', selected.color], ['Confidence', `${selected.confidence.toFixed(1)}%`], ['Camera', cameraName(selected.cameraId)], ['Gate', gateName(selected.gateId)], ['Decision', selected.decision], ['Reason', selected.reason]].map(([k, v]) => (
-            <div key={k} className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{k}</p>
-              <p className="mt-1 text-sm font-medium text-slate-900">{v}</p>
+    <FullScreenDetail
+      open={!!selected}
+      onClose={() => setSelected(null)}
+      title="Recognition Record"
+      description={selected ? `Record ID: ${selected.id}` : undefined}
+      status={selected && <Badge value={selected.decision} />}
+    >
+      {selected && (
+        <div className="grid gap-6 md:grid-cols-[220px_1fr]">
+          <div className="space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Vehicle Preview</p>
+            <div className="aspect-[4/3] overflow-hidden rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <VehicleImage type={selected.type} color={selected.color} neutral className="h-full w-full border-0" />
             </div>
-          ))}
+          </div>
+          <DetailSection title="Recognition Details">
+            <DetailGrid>
+              <DetailField label="Plate Number" value={selected.plate} mono />
+              <DetailField label="Access Decision" value={<Badge value={selected.decision} />} />
+              <DetailField label="Confidence Score" value={`${selected.confidence.toFixed(1)}%`} />
+              <DetailField label="Timestamp" value={new Date(selected.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila' })} />
+              <DetailField label="Vehicle Type" value={selected.type} />
+              <DetailField label="Vehicle Color" value={selected.color} />
+              <DetailField label="Camera" value={cameraName(selected.cameraId)} />
+              <DetailField label="Gate" value={gateName(selected.gateId)} />
+              <DetailField label="Reason / Remarks" value={selected.reason} className="sm:col-span-2" />
+            </DetailGrid>
+          </DetailSection>
         </div>
-      </div>
+      )}
     </FullScreenDetail>  </div>
 }

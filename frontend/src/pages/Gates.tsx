@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { FullScreenDetail } from '@/components/shared/FullScreenDetail'
+import { DetailSection } from '@/components/shared/DetailField'
 import type { Gate } from '@/types'
 
 export function Gates() {
@@ -32,25 +33,32 @@ export function Gates() {
         <div className="rounded-lg border border-amber-100 bg-amber-50 p-3 text-xs leading-5 text-amber-800">Simulated control only. No physical barrier, controller, or ESP32 connection is used.</div>
       </CardContent></Card>)}
     </div>
-    <FullScreenDetail open={historyOpen && !!selected} onClose={() => setHistoryOpen(false)} title={`${selected?.name} Activity History`} description={selected?.id}>
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-[11px] uppercase tracking-[0.08em] text-slate-500">
-            <tr><th className="px-5 py-3">Time</th><th className="px-5 py-3">Plate</th><th className="px-5 py-3">Decision</th></tr>
-          </thead>
-          <tbody>
-            {selectedHistory.length === 0 ? (
-              <tr><td colSpan={3} className="px-5 py-8 text-center text-slate-500">No activity</td></tr>
-            ) : selectedHistory.map(r => (
-              <tr key={r.id} className="border-t border-slate-100">
-                <td className="px-5 py-3 text-slate-500">{new Date(r.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
-                <td className="px-5 py-3 font-semibold">{r.plate}</td>
-                <td className="px-5 py-3"><Badge value={r.decision} /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <FullScreenDetail
+      open={historyOpen && !!selected}
+      onClose={() => setHistoryOpen(false)}
+      title={`${selected?.name} Activity History`}
+      description={selected?.id}
+    >
+      <DetailSection title={`Recent access events (${selectedHistory.length})`}>
+        <div className="overflow-hidden rounded-md border border-slate-200">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-slate-50 text-[11px] uppercase tracking-[0.08em] text-slate-500">
+              <tr><th className="px-4 py-2.5">Time</th><th className="px-4 py-2.5">Plate</th><th className="px-4 py-2.5">Decision</th></tr>
+            </thead>
+            <tbody>
+              {selectedHistory.length === 0 ? (
+                <tr><td colSpan={3} className="px-4 py-10 text-center text-slate-500">No activity recorded for this gate.</td></tr>
+              ) : selectedHistory.map(r => (
+                <tr key={r.id} className="border-t border-slate-100">
+                  <td className="px-4 py-2.5 text-slate-500">{new Date(r.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
+                  <td className="px-4 py-2.5 font-mono font-semibold text-slate-900">{r.plate}</td>
+                  <td className="px-4 py-2.5"><Badge value={r.decision} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </DetailSection>
     </FullScreenDetail>    <ConfirmDialog open={!!confirm} onOpenChange={()=>setConfirm(null)} title={`${confirm?.action==='open'?'Open':'Close'} barrier`} description={`This simulates a ${confirm?.action} command for ${confirm?.gate.name}. No physical hardware will move.`} confirmLabel={confirm?.action==='open'?'Open Barrier':'Close Barrier'} onConfirm={()=>{if(confirm){updateGate(confirm.gate.id,{barrier:confirm.action==='open'?'OPEN':'CLOSED'},`${confirm.action==='open'?'Opened':'Closed'} ${confirm.gate.name} (simulated)`)}setConfirm(null)}} />
   </div>
 }
