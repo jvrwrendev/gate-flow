@@ -2,6 +2,25 @@ export type Status = 'Active' | 'Inactive' | 'Online' | 'Offline'
 export type VehicleType = 'Sedan' | 'SUV' | 'Pickup' | 'Van' | 'Motorcycle' | 'Tricycle' | 'Bus' | 'Truck'
 export type VehicleColor = 'White' | 'Black' | 'Silver' | 'Gray' | 'Red' | 'Blue' | 'Green' | 'Brown' | 'Other'
 export type AccessDecision = 'AUTHORIZED' | 'DENIED' | 'NEEDS REVIEW'
+export type UserRole = 'Super Admin' | 'System Admin' | 'Security Personnel' | 'Gate Operator' | 'Viewer'
+export type Permission =
+  | 'dashboard:view'
+  | 'monitoring:view'
+  | 'vehicles:view' | 'vehicles:manage'
+  | 'applications:view' | 'applications:manage'
+  | 'owners:view' | 'owners:manage'
+  | 'gates:view' | 'gates:manage' | 'gateControl:operate'
+  | 'cameras:view' | 'cameras:manage'
+  | 'accessRules:view' | 'accessRules:manage'
+  | 'models:view' | 'models:manage'
+  | 'recognitionLogs:view'
+  | 'reports:view'
+  | 'incidents:view' | 'incidents:manage' | 'incidents:report'
+  | 'auditLogs:view'
+  | 'users:view' | 'users:manage' | 'users:assignRoles'
+  | 'roles:view' | 'roles:manage'
+  | 'settings:view' | 'settings:manage'
+  | 'profile:view'
 
 export interface Vehicle {
   id: string; plate: string; ownerId: string; ownerName: string; contact: string
@@ -46,11 +65,12 @@ export interface Incident {
 }
 export interface AdminUser {
   id: string; name: string; email: string; contactNumber: string; password?: string
-  role: 'Super Admin' | 'System Administrator' | 'Security Personnel' | 'Gate Operator' | 'Viewer'
-  status: 'Active' | 'Inactive'; lastLogin: string
+  role: UserRole
+  status: 'Active' | 'Inactive'; lastLogin: string; createdAt: string; forcePasswordChange?: boolean
 }
 export interface AuditLog {
   id: string; timestamp: string; admin: string; action: string; module: string; details: string; ipAddress: string
+  actorId?: string; actorRole?: UserRole; result?: 'Success' | 'Failed'; targetId?: string
 }
 export interface SystemSettings {
   platformName: string; timezone: string; dateFormat: string; timeFormat: '12-hour' | '24-hour'
@@ -64,5 +84,6 @@ export interface AppData {
   vehicles: Vehicle[]; owners: Owner[]; applications: Application[]; gates: Gate[]; cameras: Camera[]
   accessRules: AccessRule[]; recognitionLogs: RecognitionLog[]; models: AIModel[]; incidents: Incident[]
   admins: AdminUser[]; auditLogs: AuditLog[]; notifications: AppNotification[]; settings: SystemSettings
+  rolePermissions: Record<UserRole, Permission[]>
 }
 export interface SelectOption { value: string; label: string }

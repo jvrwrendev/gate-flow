@@ -70,21 +70,28 @@ const applications = [
   { id: 'APP-1078', reference: 'VA-2026-1078', ownerId: 'OW-004', ownerName: 'Roberto Dela Peña', email: 'roberto.dela peña@email.ph', phone: '+63 926 711 0832', plate: 'DAH 1198', type: 'Pickup' as const, model: 'Toyota Hilux', color: 'Gray' as const, submitted: ago(52), status: 'Approved' as const, remarks: 'Approved for staff parking.', purpose: 'Employee parking access' },
 ]
 const admins = [
-  { id: 'ADM-01', name: 'Adrian Velasco', email: 'adrian.velasco@gatevision.ph', contactNumber: '+63 917 100 2001', password: 'AdminPass123!', role: 'Super Admin' as const, status: 'Active' as const, lastLogin: ago(.5) },
-  { id: 'ADM-02', name: 'Sophia Reyes', email: 'sophia.reyes@gatevision.ph', contactNumber: '+63 917 100 2002', password: 'AdminPass123!', role: 'System Administrator' as const, status: 'Active' as const, lastLogin: ago(3.1) },
-  { id: 'ADM-03', name: 'Daniel Navarro', email: 'daniel.navarro@gatevision.ph', contactNumber: '+63 917 100 2003', password: 'AdminPass123!', role: 'Security Personnel' as const, status: 'Active' as const, lastLogin: ago(1.2) },
-  { id: 'ADM-04', name: 'Grace Flores', email: 'grace.flores@gatevision.ph', contactNumber: '+63 917 100 2004', password: 'AdminPass123!', role: 'Gate Operator' as const, status: 'Active' as const, lastLogin: ago(7.4) },
-  { id: 'ADM-05', name: 'Marco Aquino', email: 'marco.aquino@gatevision.ph', contactNumber: '+63 917 100 2005', password: 'AdminPass123!', role: 'Viewer' as const, status: 'Inactive' as const, lastLogin: ago(480) },
+  { id: 'ADM-01', name: 'Adrian Velasco', email: 'adrian.velasco@gatevision.ph', contactNumber: '+63 917 100 2001', password: 'AdminPass123!', role: 'Super Admin' as const, status: 'Active' as const, lastLogin: ago(.5), createdAt: '2025-01-10T08:00:00.000Z' },
+  { id: 'ADM-02', name: 'Sophia Reyes', email: 'sophia.reyes@gatevision.ph', contactNumber: '+63 917 100 2002', password: 'AdminPass123!', role: 'System Admin' as const, status: 'Active' as const, lastLogin: ago(3.1), createdAt: '2025-03-14T09:15:00.000Z' },
+  { id: 'ADM-03', name: 'Daniel Navarro', email: 'daniel.navarro@gatevision.ph', contactNumber: '+63 917 100 2003', password: 'AdminPass123!', role: 'Security Personnel' as const, status: 'Active' as const, lastLogin: ago(1.2), createdAt: '2025-06-02T07:30:00.000Z' },
+  { id: 'ADM-04', name: 'Grace Flores', email: 'grace.flores@gatevision.ph', contactNumber: '+63 917 100 2004', password: 'AdminPass123!', role: 'Gate Operator' as const, status: 'Active' as const, lastLogin: ago(7.4), createdAt: '2025-07-20T10:45:00.000Z' },
+  { id: 'ADM-05', name: 'Marco Aquino', email: 'marco.aquino@gatevision.ph', contactNumber: '+63 917 100 2005', password: 'AdminPass123!', role: 'Viewer' as const, status: 'Inactive' as const, lastLogin: ago(480), createdAt: '2025-09-05T11:00:00.000Z' },
 ]
 const auditLogs = [
-  { id: 'AUD-8018', timestamp: ago(.2), admin: 'Adrian Velasco', action: 'Updated vehicle', module: 'Registered Vehicles', details: 'Updated authorization status for NBC 1234', ipAddress: '192.168.10.18' },
-  { id: 'AUD-8017', timestamp: ago(1.1), admin: 'Daniel Navarro', action: 'Acknowledged incident', module: 'Security Incidents', details: 'Changed INC-2040 to Investigating', ipAddress: '192.168.10.32' },
-  { id: 'AUD-8016', timestamp: ago(2.3), admin: 'Grace Flores', action: 'Manual barrier open', module: 'Barrier Gates', details: 'Opened Main Entrance · simulated control', ipAddress: '192.168.10.45' },
-  { id: 'AUD-8015', timestamp: ago(4.2), admin: 'Sophia Reyes', action: 'Updated configuration', module: 'AI Configuration', details: 'Set recognition threshold to 85%', ipAddress: '192.168.10.21' },
-  { id: 'AUD-8014', timestamp: ago(7.8), admin: 'Adrian Velasco', action: 'Approved application', module: 'Vehicle Applications', details: 'Approved VA-2026-1080', ipAddress: '192.168.10.18' },
+  { id: 'AUD-8018', timestamp: ago(.2), admin: 'Adrian Velasco', actorId: 'ADM-01', actorRole: 'Super Admin' as const, action: 'Updated vehicle', module: 'Registered Vehicles', details: 'Updated authorization status for NBC 1234', ipAddress: '192.168.10.18', result: 'Success' as const },
+  { id: 'AUD-8017', timestamp: ago(1.1), admin: 'Daniel Navarro', actorId: 'ADM-03', actorRole: 'Security Personnel' as const, action: 'Acknowledged incident', module: 'Security Incidents', details: 'Changed INC-2040 to Investigating', ipAddress: '192.168.10.32', result: 'Success' as const },
+  { id: 'AUD-8016', timestamp: ago(2.3), admin: 'Grace Flores', actorId: 'ADM-04', actorRole: 'Gate Operator' as const, action: 'Manual barrier open', module: 'Barrier Gates', details: 'Opened Main Entrance · simulated control', ipAddress: '192.168.10.45', result: 'Success' as const },
+  { id: 'AUD-8015', timestamp: ago(4.2), admin: 'Sophia Reyes', actorId: 'ADM-02', actorRole: 'System Admin' as const, action: 'Updated configuration', module: 'AI Configuration', details: 'Set recognition threshold to 85%', ipAddress: '192.168.10.21', result: 'Success' as const },
+  { id: 'AUD-8014', timestamp: ago(7.8), admin: 'Adrian Velasco', actorId: 'ADM-01', actorRole: 'Super Admin' as const, action: 'Approved application', module: 'Vehicle Applications', details: 'Approved VA-2026-1080', ipAddress: '192.168.10.18', result: 'Success' as const },
 ]
 
 export const mockData: AppData = {
+  rolePermissions: structuredClone({
+    'Super Admin': ['dashboard:view','monitoring:view','vehicles:view','vehicles:manage','applications:view','applications:manage','owners:view','owners:manage','gates:view','gates:manage','gateControl:operate','cameras:view','cameras:manage','accessRules:view','accessRules:manage','models:view','models:manage','recognitionLogs:view','reports:view','incidents:view','incidents:manage','incidents:report','auditLogs:view','users:view','users:manage','users:assignRoles','roles:view','roles:manage','settings:view','settings:manage','profile:view'],
+    'System Admin': ['dashboard:view','monitoring:view','vehicles:view','vehicles:manage','applications:view','applications:manage','owners:view','owners:manage','gates:view','gates:manage','gateControl:operate','cameras:view','cameras:manage','accessRules:view','accessRules:manage','models:view','models:manage','recognitionLogs:view','reports:view','incidents:view','incidents:manage','auditLogs:view','users:view','users:manage','roles:view','settings:view','settings:manage','profile:view'],
+    'Security Personnel': ['dashboard:view','monitoring:view','vehicles:view','applications:view','owners:view','gates:view','gateControl:operate','cameras:view','accessRules:view','models:view','recognitionLogs:view','reports:view','incidents:view','incidents:manage','profile:view'],
+    'Gate Operator': ['dashboard:view','monitoring:view','vehicles:view','applications:view','owners:view','gates:view','gateControl:operate','cameras:view','accessRules:view','models:view','recognitionLogs:view','reports:view','incidents:view','incidents:report','profile:view'],
+    'Viewer': ['dashboard:view','monitoring:view','vehicles:view','applications:view','owners:view','gates:view','cameras:view','accessRules:view','models:view','recognitionLogs:view','reports:view','incidents:view','profile:view'],
+  }),
   vehicles: allVehicles, owners, applications, gates, cameras,
   accessRules: [
     { id: 'AR-001', name: 'Main entrance resident access', vehicleId: 'VH-001', gateId: 'GT-01', days: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], startTime: '00:00', endTime: '23:59', expires: day(210), active: true, autoApproval: true },

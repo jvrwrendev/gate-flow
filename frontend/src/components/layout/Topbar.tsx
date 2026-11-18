@@ -3,25 +3,32 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Bell, ChevronDown, LogOut, Menu, PanelLeft, Search, Settings, UserCircle } from 'lucide-react'
 import { Dropdown, DropdownItem, DropdownLabel, DropdownSeparator } from '@/components/ui/Dropdown'
 import { useApp } from '@/context/AppContext'
-
+import { usePermissions } from '@/hooks/usePermissions'
 
 const titles: Record<string, string> = {
-  '/dashboard': 'Dashboard', '/monitoring': 'Live Monitoring', '/vehicles': 'Registered Vehicles', '/applications': 'Vehicle Applications', '/owners': 'Vehicle Owners', '/gates': 'Barrier Gates', '/cameras': 'Camera Management', '/access-rules': 'Access Rules', '/ai/models': 'AI Models', '/ai/logs': 'Recognition Logs', '/ai/configuration': 'AI Configuration', '/reports': 'Entry History', '/security/incidents': 'Security Incidents', '/security/audit': 'Audit Logs', '/system/admins': 'Admin Users', '/system/settings': 'System Settings', '/profile': 'Profile',
+  '/dashboard': 'Dashboard', '/monitoring': 'Live Monitoring', '/vehicles': 'Registered Vehicles', '/applications': 'Vehicle Applications', '/owners': 'Vehicle Owners', '/gates': 'Barrier Gates', '/cameras': 'Camera Management', '/access-rules': 'Access Rules', '/ai/models': 'AI Models', '/ai/logs': 'Recognition Logs', '/ai/configuration': 'AI Configuration', '/reports': 'Entry History', '/security/incidents': 'Security Incidents', '/security/audit': 'Audit Logs', '/system/admins': 'User Management', '/system/roles': 'Roles & Permissions', '/system/settings': 'System Settings', '/profile': 'Profile',
 }
-export function Topbar({ onMenu, onToggleSidebar, sidebarCollapsed }: { onMenu: () => void; onToggleSidebar: () => void; sidebarCollapsed: boolean }) {
+
+function initials(name?: string) {
+  if (!name) return 'U'
+  return name.split(' ').filter(Boolean).slice(0, 2).map(p => p[0]?.toUpperCase() || '').join('')
+}
+
+export function Topbar({ onMenu, onToggleSidebar, sidebarCollapsed, onLogoutRequest }: { onMenu: () => void; onToggleSidebar: () => void; sidebarCollapsed: boolean; onLogoutRequest?: () => void }) {
   const location = useLocation(); const navigate = useNavigate(); const { data, setData } = useApp()
+  const { user, hasPermission } = usePermissions()
   const [query, setQuery] = useState(''); const [open, setOpen] = useState(false)
   const crumbs = useMemo(() => titles[location.pathname] || 'GateVision', [location.pathname])
   const searchResults = useMemo(() => {
     if (query.trim().length < 2) return []
     const q = query.toLowerCase()
     return [
-      ...data.vehicles.filter(v => v.plate.toLowerCase().includes(q) || v.ownerName.toLowerCase().includes(q)).slice(0, 5).map(v => ({ label: `${v.plate} · ${v.ownerName}`, path: '/vehicles', type: 'Vehicle' })),
-      ...data.applications.filter(a => a.reference.toLowerCase().includes(q) || a.plate.toLowerCase().includes(q)).slice(0, 3).map(a => ({ label: `${a.reference} · ${a.plate}`, path: '/applications', type: 'Application' })),
-      ...data.gates.filter(g => g.name.toLowerCase().includes(q)).slice(0, 3).map(g => ({ label: g.name, path: '/gates', type: 'Gate' })),
-      ...data.cameras.filter(c => c.name.toLowerCase().includes(q)).slice(0, 3).map(c => ({ label: c.name, path: '/cameras', type: 'Camera' })),
+      ...(hasPermission('vehicles:view') ? data.vehicles.filter(v => v.plate.toLowerCase().includes(q) || v.ownerName.toLowerCase().includes(q)).slice(0, 5).map(v => ({ label: `${v.plate} · ${v.ownerName}`, path: '/vehicles', type: 'Vehicle' })) : []),
+      ...(hasPermission('applications:view') ? data.applications.filter(a => a.reference.toLowerCase().includes(q) || a.plate.toLowerCase().includes(q)).slice(0, 3).map(a => ({ label: `${a.reference} · ${a.plate}`, path: '/applications', type: 'Application' })) : []),
+      ...(hasPermission('gates:view') ? data.gates.filter(g => g.name.toLowerCase().includes(q)).slice(0, 3).map(g => ({ label: g.name, path: '/gates', type: 'Gate' })) : []),
+      ...(hasPermission('cameras:view') ? data.cameras.filter(c => c.name.toLowerCase().includes(q)).slice(0, 3).map(c => ({ label: c.name, path: '/cameras', type: 'Camera' })) : []),
     ]
-  }, [data, query])
+  }, [data, query, hasPermission])
   useEffect(() => { setOpen(searchResults.length > 0) }, [searchResults])
   const markAllRead = () => setData(prev => ({ ...prev, notifications: prev.notifications.map(n => ({ ...n, read: true })) }))
   return <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-slate-200 bg-white px-4 sm:px-6">
@@ -37,12 +44,12 @@ export function Topbar({ onMenu, onToggleSidebar, sidebarCollapsed }: { onMenu: 
         <DropdownSeparator />
         <DropdownItem onClick={markAllRead}>Mark all as read</DropdownItem>
       </Dropdown>
-      <Dropdown trigger={<button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"><div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">AV</div><span className="hidden sm:inline">Adrian</span><ChevronDown className="h-4 w-4 text-slate-400" /></button>}>
-        <DropdownLabel>Account</DropdownLabel>
+      <Dropdown trigger={<button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"><div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">{initials(user?.name)}</div><span className="hidden sm:inline">{user?.name?.split(' ')[0] || 'User'}</span><ChevronDown className="h-4 w-4 text-slate-400" /></button>}>
+        <DropdownLabel><span className="block text-sm font-medium text-slate-900">{user?.name}</span><span className="block text-xs font-normal normal-case tracking-normal text-slate-500">{user?.role}</span></DropdownLabel>
         <DropdownItem onClick={() => navigate('/profile')}><UserCircle className="h-4 w-4" /> Profile</DropdownItem>
-        <DropdownItem onClick={() => navigate('/system/settings')}><Settings className="h-4 w-4" /> Settings</DropdownItem>
+        {hasPermission('settings:view') && <DropdownItem onClick={() => navigate('/system/settings')}><Settings className="h-4 w-4" /> Settings</DropdownItem>}
         <DropdownSeparator />
-        <DropdownItem destructive onClick={() => navigate('/logout')}><LogOut className="h-4 w-4" /> Logout</DropdownItem>
+        <DropdownItem destructive onClick={() => onLogoutRequest?.()}><LogOut className="h-4 w-4" /> Logout</DropdownItem>
       </Dropdown>
     </div>
   </header>

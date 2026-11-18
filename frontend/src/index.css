@@ -23,3 +23,24 @@
 .sidebar-scroll::-webkit-scrollbar-thumb { background: #354052; border-radius: 8px; }
 .recharts-cartesian-axis-tick-value { font-size: 11px; fill: #8490a3; }
 .recharts-default-tooltip { border-radius: 8px !important; border: 1px solid #e2e8f0 !important; box-shadow: 0 4px 12px rgba(15,23,42,.08) !important; }
+
+/* Hide scrollbars while preserving scrolling */
+html,
+body,
+#root,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar,
+.scrollbar-thin::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar,
+*::-webkit-scrollbar-thumb,
+.scrollbar-thin::-webkit-scrollbar-thumb,
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}

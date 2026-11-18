@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Field, Input } from '@/components/ui/Field'
+import { REMEMBER_KEY, setSession } from '@/auth/session'
 
 const schema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -19,16 +20,13 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>
 
-const DEMO_EMAIL = 'admin@gatevision.local'
-const DEMO_PASSWORD = 'password123'
-
 export function Login() {
   const navigate = useNavigate()
-  const { audit } = useApp()
+  const { data, setData, audit } = useApp()
   const { toast } = useToast()
   const [showPassword, setShowPassword] = useState(false)
 
-  const rememberedEmail = typeof window !== 'undefined' ? localStorage.getItem('gatevision.rememberedEmail') : null
+  const rememberedEmail = typeof window !== 'undefined' ? localStorage.getItem(REMEMBER_KEY) : null
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -40,28 +38,35 @@ export function Login() {
   })
 
   const onSubmit = async (values: FormValues) => {
-    await new Promise(resolve => window.setTimeout(resolve, 700))
+    await new Promise(resolve => window.setTimeout(resolve, 500))
+    const email = values.email.trim().toLowerCase()
+    const user = data.admins.find(a => a.email.toLowerCase() === email)
 
-    if (values.email !== DEMO_EMAIL || values.password !== DEMO_PASSWORD) {
-      toast('Invalid credentials', 'error', 'Use the demo credentials shown below.')
+    if (!user || (user.password && user.password !== values.password)) {
+      audit('Failed login attempt', 'Authentication', `Failed login for ${values.email}`, 'Failed')
+      toast('Invalid credentials', 'error', 'Check your email and password.')
       return
     }
 
-    localStorage.setItem('gatevision.session', JSON.stringify({
-      email: values.email,
-      name: 'Adrian Velasco',
-      role: 'Super Admin',
-      loggedInAt: new Date().toISOString(),
-    }))
-
-    if (values.remember) {
-      localStorage.setItem('gatevision.rememberedEmail', values.email)
-    } else {
-      localStorage.removeItem('gatevision.rememberedEmail')
+    if (user.status !== 'Active') {
+      audit('Blocked login (inactive account)', 'Authentication', `${user.email} attempted login`, 'Failed', user.id)
+      toast('Account inactive', 'error', 'Contact an administrator to activate your account.')
+      return
     }
 
-    audit('Login (simulated)', 'Authentication', values.email)
-    toast('Welcome back', 'success', 'Simulated administrator session started.')
+    const now = new Date().toISOString()
+    setData(prev => ({
+      ...prev,
+      admins: prev.admins.map(a => a.id === user.id ? { ...a, lastLogin: now } : a),
+    }))
+
+    setSession({ id: user.id, name: user.name, email: user.email, role: user.role, status: user.status }, values.remember)
+
+    if (values.remember) localStorage.setItem(REMEMBER_KEY, user.email)
+    else localStorage.removeItem(REMEMBER_KEY)
+
+    audit('Successful login', 'Authentication', `${user.name} signed in`, 'Success', user.id)
+    toast('Welcome back', 'success', `${user.name} signed in successfully.`)
     navigate('/dashboard', { replace: true })
   }
 
@@ -92,11 +97,10 @@ export function Login() {
 
           <div className="relative z-10 space-y-4">
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-300">Demo credentials</p>
-              <div className="mt-3 space-y-1 text-sm">
-                <p><span className="text-slate-400">Email:</span> {DEMO_EMAIL}</p>
-                <p><span className="text-slate-400">Password:</span> {DEMO_PASSWORD}</p>
-              </div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-300">Mock authentication</p>
+              <p className="mt-2 text-sm text-slate-300">
+                Sign in with a user account from User Management. Frontend-only RBAC is enabled for this environment.
+              </p>
             </div>
             <p className="text-xs text-slate-400">
               Simulated authentication only. No backend, identity provider, or secure session is used.
@@ -135,7 +139,7 @@ export function Login() {
                         {...form.register('email')}
                         type="email"
                         autoComplete="email"
-                        placeholder="johndoe@gmail.com"
+                        placeholder="johndoe@gatevision.ph"
                         className="pl-9"
                       />
                     </div>
@@ -173,7 +177,7 @@ export function Login() {
                     </label>
                     <button
                       type="button"
-                      onClick={() => toast('Password reset simulated', 'info', 'No email service is connected.')}
+                      onClick={() => toast('Password reset simulated', 'info', 'Contact an administrator to reset your password.')}
                       className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
                     >
                       Forgot password?
@@ -185,12 +189,6 @@ export function Login() {
                   </Button>
                 </form>
 
-                <div className="mt-6 rounded-lg border border-slate-100 bg-slate-50 p-4 lg:hidden">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Demo credentials</p>
-                  <p className="mt-2 text-sm text-slate-700">{DEMO_EMAIL}</p>
-                  <p className="text-sm text-slate-700">{DEMO_PASSWORD}</p>
-                </div>
-
                 <p className="mt-6 text-center text-xs text-slate-500">
                   Simulated login for the admin dashboard. No real authentication is performed.
                 </p>
@@ -198,7 +196,7 @@ export function Login() {
             </Card>
 
             <div className="mt-4 flex justify-center">
-              <Badge value="Mock authentication" variant="secondary" />
+              <Badge value="Mock RBAC" variant="secondary" />
             </div>
           </div>
         </main>

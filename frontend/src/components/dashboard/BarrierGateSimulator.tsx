@@ -5,9 +5,9 @@ import { useToast } from '@/components/ui/Toast'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { cn } from '@/lib/utils'
+import { usePermissions } from '@/hooks/usePermissions'
 
 type Transition = 'idle' | 'opening' | 'closing'
 
@@ -20,8 +20,10 @@ export function BarrierGateSimulator() {
   const timerRef = useRef<number | null>(null)
 
   const selectedGate = data.gates.find(gate => gate.id === selectedGateId) ?? data.gates[0]
+  const { user: currentUser, hasPermission } = usePermissions()
   const isOnline = selectedGate?.status === 'Online'
-  const canManualEntry = data.admins.some(admin => admin.status === 'Active' && ['Super Admin', 'System Administrator', 'Gate Operator'].includes(admin.role))
+  const canOperateGate = hasPermission('gateControl:operate')
+  const canManualEntry = canOperateGate
   const displayStatus = transition === 'opening' ? 'OPENING' : transition === 'closing' ? 'CLOSING' : selectedGate?.barrier ?? 'CLOSED'
   const armOpen = displayStatus === 'OPEN' || displayStatus === 'OPENING'
 
@@ -38,7 +40,7 @@ export function BarrierGateSimulator() {
   }, [])
 
   const runTransition = (target: 'OPEN' | 'CLOSED', action: string) => {
-    if (!selectedGate || !isOnline || transition !== 'idle') return
+    if (!selectedGate || !isOnline || transition !== 'idle' || !canOperateGate) return
     const gateId = selectedGate.id
     setTransition(target === 'OPEN' ? 'opening' : 'closing')
     const timer = window.setTimeout(() => {
@@ -46,7 +48,7 @@ export function BarrierGateSimulator() {
         ...prev,
         gates: prev.gates.map(gate => gate.id === gateId ? { ...gate, barrier: target, lastActivity: new Date().toISOString() } : gate),
       }))
-      audit(action, 'Barrier Gates', gateId)
+      audit(action, 'Barrier Gates', `${gateId} by ${currentUser?.name || 'Unknown user'}`, 'Success', gateId)
       toast(target === 'OPEN' ? 'Barrier opened' : 'Barrier closed', 'success', gateId)
       setTransition('idle')
       timerRef.current = null
@@ -71,7 +73,10 @@ export function BarrierGateSimulator() {
   }
 
   const manualEntry = () => {
-    if (!canManualEntry) return
+    if (!canManualEntry) {
+      toast('Permission denied', 'error', 'You are not authorized to operate this gate.')
+      return
+    }
     if (selectedGate?.barrier !== 'CLOSED') {
       toast('Barrier is already open', 'info', selectedGate?.id)
       return
@@ -136,7 +141,7 @@ export function BarrierGateSimulator() {
           <Button
             size="sm"
             variant="outline"
-            disabled={!isOnline || transition !== 'idle'}
+            disabled={!isOnline || transition !== 'idle' || !canOperateGate}
             onClick={() => setConfirm(selectedGate?.barrier === 'OPEN' ? 'close' : 'open')}
           >
             {transition === 'opening' ? (
