@@ -8,42 +8,46 @@ module.exports = {
     extend: {
       colors: {
         background: '#ffffff',
-        foreground: '#0a0a0a',
+        foreground: '#102a2d',
         primary: {
-          DEFAULT: '#111827',
+          DEFAULT: '#0f766e',
           foreground: '#ffffff',
         },
         secondary: {
-          DEFAULT: '#f5f5f5',
-          foreground: '#171717',
+          DEFAULT: '#f0fdfa',
+          foreground: '#134e4a',
         },
         muted: {
-          DEFAULT: '#f5f5f5',
-          foreground: '#737373',
+          DEFAULT: '#f4f7f7',
+          foreground: '#5f7a7a',
         },
         accent: {
-          DEFAULT: '#f5f5f5',
-          foreground: '#171717',
+          DEFAULT: '#ccfbf1',
+          foreground: '#134e4a',
         },
         destructive: {
-          DEFAULT: '#ef4444',
+          DEFAULT: '#dc2626',
           foreground: '#ffffff',
         },
         success: {
-          DEFAULT: '#22c55e',
+          DEFAULT: '#16a34a',
           foreground: '#ffffff',
         },
         warning: {
-          DEFAULT: '#f59e0b',
+          DEFAULT: '#d97706',
           foreground: '#ffffff',
         },
         info: {
-          DEFAULT: '#3b82f6',
+          DEFAULT: '#0284c7',
           foreground: '#ffffff',
         },
-        border: '#e5e5e5',
-        input: '#e5e5e5',
-        ring: '#a3a3a3',
+        border: '#e6ecec',
+        input: '#d9e3e3',
+        ring: '#0f766e',
+        card: {
+          DEFAULT: '#ffffff',
+          foreground: '#102a2d',
+        },
       },
       borderRadius: {
         DEFAULT: '0.625rem',

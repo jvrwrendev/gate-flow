@@ -54,7 +54,7 @@ export function AvatarPlaceholder({ size = 'md', className }: Omit<AvatarProps, 
         className
       )}
     >
-      <User size={size === 'lg' ? 32 : size === 'md' ? 20 : 16} color="#737373" />
+      <User size={size === 'lg' ? 32 : size === 'md' ? 20 : 16} color="#5f7a7a" />
     </StyledView>
   );
 }

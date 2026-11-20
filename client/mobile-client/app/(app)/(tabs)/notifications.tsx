@@ -3,6 +3,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { StyledView, StyledText } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H2 } from '@/src/components/ui/typography';
+import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
@@ -64,9 +65,14 @@ export default function NotificationsScreen() {
 
   return (
     <Screen scroll>
-      <StyledView className="gap-4 px-4 pt-6">
-        <StyledView className="flex-row items-center justify-between">
-          <H2>Notifications</H2>
+      <StyledView className="gap-5 px-5 pt-4">
+        <StyledView className="flex-row items-start justify-between">
+          <StyledView className="flex-1 pr-3">
+            <H2>Notifications</H2>
+            <StyledText className="mt-1 text-sm text-muted-foreground">
+              Stay updated on approvals and gate activity
+            </StyledText>
+          </StyledView>
           {unreadCount > 0 ? (
             <Button variant="ghost" size="sm" onPress={markAllRead}>
               Mark all read
@@ -76,12 +82,12 @@ export default function NotificationsScreen() {
 
         {list.length === 0 ? (
           <EmptyState
-            icon={<Bell size={24} color="#737373" />}
+            icon={<Bell size={24} color="#5f7a7a" />}
             title="No notifications"
             description="Approval alerts, entry/exit updates, and security notices will appear here."
           />
         ) : (
-          <StyledView className="rounded-xl border border-border bg-background p-4">
+          <Card className="p-4">
             {list.map((notification) => (
               <NotificationItem
                 key={notification.id}
@@ -89,7 +95,7 @@ export default function NotificationsScreen() {
                 onPress={() => markRead(notification.id)}
               />
             ))}
-          </StyledView>
+          </Card>
         )}
       </StyledView>
     </Screen>

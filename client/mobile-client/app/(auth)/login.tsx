@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller, type Control } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { StyledView, StyledText, StyledScrollView } from '@/src/components/ui/core';
+import { Eye, EyeOff, Shield, AlertCircle } from 'lucide-react-native';
+import { StyledView, StyledText, StyledScrollView, StyledPressable } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2, Muted } from '@/src/components/ui/typography';
+import { H1, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
 import { useAuth } from '@/src/context/AuthContext';
 import { loginSchema, type LoginSchema } from '@/src/lib/schemas';
-import { Shield } from 'lucide-react-native';
+import { cn } from '@/src/lib/utils';
 
 export default function LoginScreen() {
   const { login, isLoading } = useAuth();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     control,
@@ -37,93 +39,131 @@ export default function LoginScreen() {
   };
 
   return (
-    <Screen scroll className="justify-center px-6">
+    <Screen scroll className="bg-background">
       <StyledScrollView
         className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingVertical: 32 }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingVertical: 40 }}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <StyledView className="items-center gap-2">
-          <StyledView className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
-            <Shield size={32} color="#111827" />
-          </StyledView>
-          <H2 className="text-center">Welcome back</H2>
-          <Muted className="text-center">Sign in to manage your gate access</Muted>
-        </StyledView>
-
-        <StyledView className="mt-10 gap-4">
-          <FormField label="Email" error={errors.email?.message}>
-            <ControllerInput
-              control={control}
-              name="email"
-              placeholder="you@example.com"
-              autoCapitalize="none"
-              keyboardType="email-address"
-            />
-          </FormField>
-
-          <FormField label="Password" error={errors.password?.message}>
-            <ControllerInput
-              control={control}
-              name="password"
-              placeholder="••••••••"
-              secureTextEntry
-            />
-          </FormField>
-
-          {error ? (
-            <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
-          ) : null}
-
-          <Button loading={isLoading} onPress={() => handleSubmit(onSubmit)()}>
-            Sign in
-          </Button>
-
+        <StyledView className="w-full max-w-[420px] self-center px-6">
           <StyledView className="items-center">
-            <Link href="/forgot-password" asChild>
-              <StyledText className="text-sm text-primary underline">
-                Forgot password?
-              </StyledText>
+            <StyledView className="h-14 w-14 items-center justify-center rounded-2xl border border-border bg-secondary">
+              <Shield size={26} color="#111827" strokeWidth={1.75} />
+            </StyledView>
+            <H1 className="mt-6 text-center text-[28px] leading-tight">Welcome back</H1>
+            <Muted className="mt-2 text-center text-[15px] leading-relaxed">
+              Sign in to manage your gate access
+            </Muted>
+          </StyledView>
+
+          <StyledView className="mt-10 gap-5">
+            {error ? (
+              <StyledView className="flex-row items-start gap-2.5 rounded-lg border border-destructive/20 bg-destructive/5 px-3.5 py-3">
+                <AlertCircle size={18} color="#ef4444" style={{ marginTop: 1 }} />
+                <StyledText className="flex-1 text-sm leading-snug text-foreground">
+                  {error}
+                </StyledText>
+              </StyledView>
+            ) : null}
+
+            <FormField label="Email" error={errors.email?.message}>
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    placeholder="name@example.com"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
+                    autoComplete="email"
+                    invalid={!!errors.email}
+                    returnKeyType="next"
+                  />
+                )}
+              />
+            </FormField>
+
+            <FormField label="Password" error={errors.password?.message}>
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <StyledView className="relative justify-center">
+                    <Input
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      placeholder="Enter your password"
+                      secureTextEntry={!showPassword}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="password"
+                      autoComplete="password"
+                      invalid={!!errors.password}
+                      returnKeyType="done"
+                      onSubmitEditing={() => handleSubmit(onSubmit)()}
+                      className="pr-11"
+                    />
+                    <StyledPressable
+                      onPress={() => setShowPassword((v) => !v)}
+                      accessibilityRole="button"
+                      accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+                      hitSlop={8}
+                      className="absolute right-0 h-11 w-11 items-center justify-center"
+                    >
+                      {showPassword ? (
+                        <EyeOff size={18} color="#737373" />
+                      ) : (
+                        <Eye size={18} color="#737373" />
+                      )}
+                    </StyledPressable>
+                  </StyledView>
+                )}
+              />
+            </FormField>
+
+            <StyledView className="items-end">
+              <Link href="/forgot-password" asChild>
+                <StyledPressable accessibilityRole="link" hitSlop={6}>
+                  <StyledText className="text-sm font-medium text-foreground">
+                    Forgot password?
+                  </StyledText>
+                </StyledPressable>
+              </Link>
+            </StyledView>
+
+            <Button
+              size="lg"
+              loading={isLoading}
+              onPress={() => handleSubmit(onSubmit)()}
+              className="mt-1 w-full"
+            >
+              Sign in
+            </Button>
+          </StyledView>
+
+          <StyledView className="mt-8 flex-row items-center justify-center gap-1.5">
+            <Muted className="text-sm">Don’t have an account?</Muted>
+            <Link href="/register" asChild>
+              <StyledPressable accessibilityRole="link" hitSlop={6}>
+                <StyledText className="text-sm font-medium text-foreground">Sign up</StyledText>
+              </StyledPressable>
             </Link>
           </StyledView>
-        </StyledView>
 
-        <StyledView className="mt-8 flex-row justify-center gap-1">
-          <Muted>Don’t have an account?</Muted>
-          <Link href="/register" asChild>
-            <StyledText className="text-sm font-medium text-primary underline">
-              Sign up
+          <StyledView className="mt-10 items-center">
+            <StyledText className="text-center text-xs text-muted-foreground">
+              Demo access: <StyledText className="text-xs font-medium text-foreground">demo@gateguard.app</StyledText> · <StyledText className="text-xs font-medium text-foreground">password</StyledText>
             </StyledText>
-          </Link>
-        </StyledView>
-
-        <StyledView className="mt-8 rounded-lg bg-muted p-3">
-          <Muted className="text-center text-xs">
-            Demo account: demo@gateguard.app / password
-          </Muted>
+          </StyledView>
         </StyledView>
       </StyledScrollView>
     </Screen>
-  );
-}
-
-import { Control, Controller } from 'react-hook-form';
-
-function ControllerInput({
-  control,
-  name,
-  ...props
-}: {
-  control: Control<LoginSchema>;
-  name: keyof LoginSchema;
-} & React.ComponentPropsWithoutRef<typeof Input>) {
-  return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <Input onBlur={onBlur} onChangeText={onChange} value={value} {...props} />
-      )}
-    />
   );
 }

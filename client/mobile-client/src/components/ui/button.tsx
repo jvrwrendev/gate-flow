@@ -3,21 +3,21 @@ import { StyledPressable, StyledText, StyledActivityIndicator } from './core';
 import { cn } from '@/src/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md font-medium active:opacity-80 transition-opacity',
+  'inline-flex flex-row items-center justify-center rounded-xl font-medium active:opacity-90',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground',
-        outline: 'border border-input bg-background text-foreground',
-        ghost: 'text-foreground',
-        destructive: 'bg-destructive text-destructive-foreground',
-        link: 'text-primary underline-offset-4 underline',
+        default: 'bg-primary',
+        secondary: 'bg-secondary',
+        outline: 'border border-border bg-background',
+        ghost: 'bg-transparent',
+        destructive: 'bg-destructive',
+        link: 'bg-transparent underline-offset-4 underline',
       },
       size: {
         default: 'h-11 px-4 py-2',
-        sm: 'h-9 px-3 text-sm',
-        lg: 'h-12 px-6 text-base',
+        sm: 'h-9 px-3',
+        lg: 'h-12 px-5',
         icon: 'h-10 w-10',
       },
     },

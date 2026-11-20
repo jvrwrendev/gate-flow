@@ -9,13 +9,13 @@ export function Screen({ className, scroll, children, ...props }: ScreenProps) {
   const content = scroll ? (
     <StyledScrollView
       className="flex-1"
-      contentContainerStyle={{ paddingBottom: 32 }}
+      contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
     >
       {children}
     </StyledScrollView>
   ) : (
-    <StyledView className="flex-1">{children}</StyledView>
+    <StyledView className="flex-1 pb-24">{children}</StyledView>
   );
 
   return (

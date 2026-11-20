@@ -11,13 +11,13 @@ interface AccessLogItemProps {
 export function AccessLogItem({ log }: AccessLogItemProps) {
   const DirectionIcon = log.direction === 'ENTRY' ? LogIn : LogOut;
   return (
-    <StyledView className="flex-row items-start gap-3 border-b border-border py-3 last:border-b-0">
-      <StyledView className="mt-0.5 rounded-full bg-muted p-2">
-        <DirectionIcon size={16} color="#171717" />
+    <StyledView className="flex-row items-start gap-3 border-b border-border py-3.5 last:border-b-0">
+      <StyledView className="mt-0.5 h-9 w-9 items-center justify-center rounded-xl bg-secondary">
+        <DirectionIcon size={17} color="#0f766e" strokeWidth={2} />
       </StyledView>
       <StyledView className="flex-1 gap-0.5">
-        <StyledView className="flex-row items-center justify-between">
-          <StyledText className="text-sm font-semibold text-foreground">
+        <StyledView className="flex-row items-center justify-between gap-2">
+          <StyledText className="flex-1 text-sm font-semibold text-foreground">
             {log.direction === 'ENTRY' ? 'Entry' : 'Exit'} · {log.plateNumber}
           </StyledText>
           <StatusPill status={log.result} />

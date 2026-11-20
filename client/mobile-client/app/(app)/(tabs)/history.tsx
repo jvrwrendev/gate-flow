@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { StyledView, StyledText, StyledScrollView, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
 import { H2 } from '@/src/components/ui/typography';
+import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
@@ -55,8 +56,13 @@ export default function HistoryScreen() {
 
   return (
     <Screen scroll>
-      <StyledView className="gap-4 px-4 pt-6">
-        <H2>Access History</H2>
+      <StyledView className="gap-5 px-5 pt-4">
+        <StyledView>
+          <H2>Access History</H2>
+          <StyledText className="mt-1 text-sm text-muted-foreground">
+            Track vehicle entries and exits
+          </StyledText>
+        </StyledView>
 
         <StyledView className="flex-row gap-2">
           {filters.map((f) => {
@@ -66,9 +72,7 @@ export default function HistoryScreen() {
                 key={f.value}
                 onPress={() => setFilter(f.value)}
                 className={`rounded-full border px-4 py-2 ${
-                  active
-                    ? 'border-primary bg-primary'
-                    : 'border-border bg-background'
+                  active ? 'border-primary bg-primary' : 'border-border bg-white'
                 }`}
               >
                 <StyledText
@@ -85,16 +89,16 @@ export default function HistoryScreen() {
 
         {filtered.length === 0 ? (
           <EmptyState
-            icon={<History size={24} color="#737373" />}
+            icon={<History size={24} color="#5f7a7a" />}
             title="No records found"
             description="Access activity matching this filter will appear here."
           />
         ) : (
-          <StyledView className="rounded-xl border border-border bg-background p-4">
+          <Card className="p-4">
             {filtered.map((log) => (
               <AccessLogItem key={log.id} log={log} />
             ))}
-          </StyledView>
+          </Card>
         )}
       </StyledView>
     </Screen>

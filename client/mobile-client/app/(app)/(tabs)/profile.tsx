@@ -25,10 +25,10 @@ export default function ProfileScreen() {
 
   return (
     <Screen scroll>
-      <StyledView className="gap-6 px-4 pt-6">
+      <StyledView className="gap-6 px-5 pt-4">
         <H2>Profile</H2>
 
-        <StyledView className="items-center gap-3">
+        <Card className="items-center gap-3 py-6">
           <Avatar name={user?.name ?? 'User'} size="lg" />
           <StyledView className="items-center">
             <StyledText className="text-xl font-semibold text-foreground">
@@ -37,22 +37,22 @@ export default function ProfileScreen() {
             <Muted>{user?.email}</Muted>
             {user?.unit ? <Muted>Unit {user.unit}</Muted> : null}
           </StyledView>
-        </StyledView>
+        </Card>
 
         <Card>
-          <CardContent className="gap-1">
+          <CardContent className="gap-0 p-0">
             <MenuItem
-              icon={<User size={20} color="#111827" />}
+              icon={<User size={20} color="#0f766e" />}
               label="Personal information"
               onPress={() => router.push('/settings/personal-info')}
             />
             <MenuItem
-              icon={<Bell size={20} color="#111827" />}
+              icon={<Bell size={20} color="#0f766e" />}
               label="Notification preferences"
               onPress={() => router.push('/settings/notifications')}
             />
             <MenuItem
-              icon={<Shield size={20} color="#111827" />}
+              icon={<Shield size={20} color="#0f766e" />}
               label="Security & access"
               onPress={() => {}}
               disabled
@@ -61,7 +61,7 @@ export default function ProfileScreen() {
         </Card>
 
         <Button variant="outline" onPress={handleLogout}>
-          <LogOut size={18} color="#111827" />
+          <LogOut size={18} color="#0f766e" />
           <StyledText className="ml-2 text-sm font-medium text-foreground">Log out</StyledText>
         </Button>
 
@@ -86,15 +86,15 @@ function MenuItem({
     <StyledPressable
       onPress={onPress}
       disabled={disabled}
-      className={`flex-row items-center justify-between border-b border-border py-3 last:border-b-0 ${
+      className={`flex-row items-center justify-between border-b border-border px-4 py-3.5 last:border-b-0 ${
         disabled ? 'opacity-50' : ''
       }`}
     >
       <StyledView className="flex-row items-center gap-3">
-        <StyledView className="rounded-full bg-secondary p-2">{icon}</StyledView>
+        <StyledView className="h-10 w-10 items-center justify-center rounded-xl bg-secondary">{icon}</StyledView>
         <StyledText className="text-sm font-medium text-foreground">{label}</StyledText>
       </StyledView>
-      <ChevronRight size={18} color="#737373" />
+      <ChevronRight size={18} color="#5f7a7a" />
     </StyledPressable>
   );
 }

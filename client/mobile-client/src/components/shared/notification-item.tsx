@@ -20,16 +20,16 @@ export function NotificationItem({ notification, onPress }: NotificationItemProp
   return (
     <StyledPressable onPress={onPress}>
       <StyledView
-        className={`flex-row items-start gap-3 border-b border-border py-3 last:border-b-0 ${
-          notification.read ? 'opacity-80' : ''
+        className={`flex-row items-start gap-3 border-b border-border py-3.5 last:border-b-0 ${
+          notification.read ? 'opacity-75' : ''
         }`}
       >
-        <StyledView className="mt-0.5 rounded-full bg-muted p-2">
-          <Icon size={16} color="#171717" />
+        <StyledView className="mt-0.5 h-9 w-9 items-center justify-center rounded-xl bg-secondary">
+          <Icon size={17} color="#0f766e" strokeWidth={2} />
         </StyledView>
         <StyledView className="flex-1 gap-0.5">
-          <StyledView className="flex-row items-center justify-between">
-            <StyledText className="text-sm font-semibold text-foreground">
+          <StyledView className="flex-row items-center justify-between gap-2">
+            <StyledText className="flex-1 text-sm font-semibold text-foreground">
               {notification.title}
             </StyledText>
             {!notification.read ? (
@@ -39,7 +39,7 @@ export function NotificationItem({ notification, onPress }: NotificationItemProp
           <StyledText className="text-sm leading-snug text-muted-foreground">
             {notification.body}
           </StyledText>
-          <StyledText className="text-xs text-muted-foreground">
+          <StyledText className="mt-0.5 text-xs text-muted-foreground">
             {formatRelative(notification.timestamp)}
           </StyledText>
         </StyledView>
