@@ -116,13 +116,6 @@ export default function DashboardScreen() {
               className="h-11 w-11 items-center justify-center rounded-full border border-border bg-white"
               accessibilityRole="button"
               accessibilityLabel="Notifications"
-              style={{
-                shadowColor: '#0f172a',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.04,
-                shadowRadius: 6,
-                elevation: 1,
-              }}
             >
               <Bell size={20} color="#134e4a" />
               {unreadCount > 0 ? (
@@ -138,11 +131,11 @@ export default function DashboardScreen() {
         <Card
           className="overflow-hidden border-0 bg-primary p-0"
           style={{
-            shadowColor: '#0f766e',
-            shadowOffset: { width: 0, height: 10 },
-            shadowOpacity: 0.18,
-            shadowRadius: 20,
-            elevation: 6,
+            shadowColor: 'transparent',
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0,
+            shadowRadius: 0,
+            elevation: 0,
           }}
         >
           <StyledView className="p-5">
@@ -267,11 +260,13 @@ export default function DashboardScreen() {
               description="Vehicle entries and exits will appear here."
             />
           ) : (
-            <Card className="p-4">
+            <StyledView className="gap-3">
               {logs.slice(0, 5).map((log) => (
-                <AccessLogItem key={log.id} log={log} />
+                <Card key={log.id} className="p-4">
+                  <AccessLogItem log={log} variant="card" />
+                </Card>
               ))}
-            </Card>
+            </StyledView>
           )}
         </StyledView>
       </StyledView>
@@ -337,13 +332,6 @@ function CompactAction({
       onPress={onPress}
       className="flex-1 flex-row items-center justify-center gap-2 rounded-2xl border border-border bg-white px-3 py-3.5"
       accessibilityRole="button"
-      style={{
-        shadowColor: '#0f172a',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.03,
-        shadowRadius: 6,
-        elevation: 1,
-      }}
     >
       <StyledView className="h-8 w-8 items-center justify-center rounded-full bg-secondary">
         {icon}

@@ -94,11 +94,13 @@ export default function HistoryScreen() {
             description="Access activity matching this filter will appear here."
           />
         ) : (
-          <Card className="p-4">
+          <StyledView className="gap-3">
             {filtered.map((log) => (
-              <AccessLogItem key={log.id} log={log} />
+              <Card key={log.id} className="p-4">
+                <AccessLogItem log={log} variant="card" />
+              </Card>
             ))}
-          </Card>
+          </StyledView>
         )}
       </StyledView>
     </Screen>

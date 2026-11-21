@@ -9,7 +9,11 @@ export default function SettingsLayout() {
       }}
     >
       <Stack.Screen name="personal-info" />
+      <Stack.Screen name="change-password" />
       <Stack.Screen name="notifications" />
+      <Stack.Screen name="privacy-policy" />
+      <Stack.Screen name="terms" />
+      <Stack.Screen name="about" />
     </Stack>
   );
 }

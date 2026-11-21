@@ -11,6 +11,7 @@ import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
 import { useAuth } from '@/src/context/AuthContext';
 import { ChevronLeft, Check } from 'lucide-react-native';
+import { Card } from '@/src/components/ui/card';
 
 const schema = z.object({
   name: z.string().min(2, 'Name is required.'),
@@ -51,41 +52,46 @@ export default function PersonalInfoScreen() {
         contentContainerStyle={{ paddingBottom: 32 }}
         keyboardShouldPersistTaps="handled"
       >
-        <StyledView className="px-4 pt-6">
+        <StyledView className="gap-5 px-5 pt-4">
           <StyledPressable
             onPress={() => router.back()}
-            className="mb-4 flex-row items-center gap-1 self-start"
+            className="flex-row items-center gap-1 self-start"
           >
-            <ChevronLeft size={20} color="#111827" />
+            <ChevronLeft size={20} color="#0f766e" />
             <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
           </StyledPressable>
 
-          <H2 className="mb-6">Personal information</H2>
+          <StyledView>
+            <H2>Personal information</H2>
+            <StyledText className="mt-1 text-sm text-muted-foreground">
+              View and update your profile details.
+            </StyledText>
+          </StyledView>
 
-          <StyledView className="gap-4">
+          <Card className="gap-4 p-4">
             <FormField label="Full name" error={errors.name?.message}>
-              <ControlledInput control={control} name="name" />
+              <ControlledInput control={control} name="name" invalid={!!errors.name} />
             </FormField>
 
             <FormField label="Phone" error={errors.phone?.message}>
-              <ControlledInput control={control} name="phone" keyboardType="phone-pad" />
+              <ControlledInput control={control} name="phone" keyboardType="phone-pad" invalid={!!errors.phone} />
             </FormField>
 
             <FormField label="Unit (optional)" error={errors.unit?.message}>
-              <ControlledInput control={control} name="unit" />
+              <ControlledInput control={control} name="unit" invalid={!!errors.unit} />
             </FormField>
 
             {saved ? (
-              <StyledView className="flex-row items-center justify-center gap-2">
-                <Check size={16} color="#22c55e" />
-                <StyledText className="text-sm text-success">Saved successfully</StyledText>
+              <StyledView className="flex-row items-center justify-center gap-2 rounded-xl border border-success/20 bg-success/10 py-2.5">
+                <Check size={16} color="#16a34a" />
+                <StyledText className="text-sm font-medium text-foreground">Saved successfully</StyledText>
               </StyledView>
             ) : null}
 
             <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
               Save changes
             </Button>
-          </StyledView>
+          </Card>
         </StyledView>
       </StyledScrollView>
     </Screen>

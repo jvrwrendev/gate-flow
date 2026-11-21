@@ -87,15 +87,17 @@ export default function NotificationsScreen() {
             description="Approval alerts, entry/exit updates, and security notices will appear here."
           />
         ) : (
-          <Card className="p-4">
+          <StyledView className="gap-3">
             {list.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                onPress={() => markRead(notification.id)}
-              />
+              <Card key={notification.id} className="p-4">
+                <NotificationItem
+                  notification={notification}
+                  onPress={() => markRead(notification.id)}
+                  variant="card"
+                />
+              </Card>
             ))}
-          </Card>
+          </StyledView>
         )}
       </StyledView>
     </Screen>

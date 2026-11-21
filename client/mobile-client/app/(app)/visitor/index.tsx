@@ -14,7 +14,7 @@ import { useAsyncData } from '@/src/hooks/useAsyncData';
 import * as visitorsService from '@/src/services/visitors.mock';
 import type { VisitorPass } from '@/src/types';
 import { formatDateTime } from '@/src/lib/formatters';
-import { Plus, Users, ChevronRight } from 'lucide-react-native';
+import { Plus, Users, ChevronRight, ChevronLeft } from 'lucide-react-native';
 
 export default function VisitorPassesScreen() {
   const { user } = useAuth();
@@ -50,9 +50,24 @@ export default function VisitorPassesScreen() {
 
   return (
     <Screen scroll>
-      <StyledView className="gap-4 px-4 pt-6">
-        <StyledView className="flex-row items-center justify-between">
-          <H2>Visitor Access</H2>
+      <StyledView className="gap-5 px-5 pt-4">
+        <StyledPressable
+          onPress={() => router.back()}
+          className="flex-row items-center gap-1 self-start"
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+        >
+          <ChevronLeft size={20} color="#0f766e" />
+          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
+        </StyledPressable>
+
+        <StyledView className="flex-row items-start justify-between">
+          <StyledView className="flex-1 pr-3">
+            <H2>Visitor Access</H2>
+            <StyledText className="mt-1 text-sm text-muted-foreground">
+              Request and manage temporary visitor passes
+            </StyledText>
+          </StyledView>
           <Button size="sm" onPress={() => router.push('/visitor/new')}>
             <Plus size={16} color="#ffffff" />
             <StyledText className="ml-1 text-sm font-medium text-primary-foreground">
@@ -63,7 +78,7 @@ export default function VisitorPassesScreen() {
 
         {list.length === 0 ? (
           <EmptyState
-            icon={<Users size={24} color="#737373" />}
+            icon={<Users size={24} color="#5f7a7a" />}
             title="No visitor passes"
             description="Request a temporary pass for guests and deliveries."
             actionLabel="Request pass"
@@ -90,7 +105,7 @@ export default function VisitorPassesScreen() {
                         {formatDateTime(pass.scheduledEnd)}
                       </StyledText>
                     </StyledView>
-                    <ChevronRight size={20} color="#737373" />
+                    <ChevronRight size={20} color="#5f7a7a" />
                   </CardContent>
                 </StyledPressable>
               </Card>

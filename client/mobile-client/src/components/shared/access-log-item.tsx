@@ -6,33 +6,48 @@ import type { AccessLog } from '@/src/types';
 
 interface AccessLogItemProps {
   log: AccessLog;
+  variant?: 'row' | 'card';
 }
 
-export function AccessLogItem({ log }: AccessLogItemProps) {
+export function AccessLogItem({ log, variant = 'row' }: AccessLogItemProps) {
   const DirectionIcon = log.direction === 'ENTRY' ? LogIn : LogOut;
+  const isEntry = log.direction === 'ENTRY';
+  const isRow = variant === 'row';
+
   return (
-    <StyledView className="flex-row items-start gap-3 border-b border-border py-3.5 last:border-b-0">
-      <StyledView className="mt-0.5 h-9 w-9 items-center justify-center rounded-xl bg-secondary">
-        <DirectionIcon size={17} color="#0f766e" strokeWidth={2} />
+    <StyledView
+      className={
+        isRow
+          ? 'flex-row items-start gap-3 border-b border-border py-4 last:border-b-0'
+          : 'flex-row items-start gap-3'
+      }
+    >
+      <StyledView className="mt-0.5 h-10 w-10 items-center justify-center rounded-xl bg-secondary">
+        <DirectionIcon size={18} color="#0f766e" strokeWidth={2.1} />
       </StyledView>
-      <StyledView className="flex-1 gap-0.5">
-        <StyledView className="flex-row items-center justify-between gap-2">
-          <StyledText className="flex-1 text-sm font-semibold text-foreground">
-            {log.direction === 'ENTRY' ? 'Entry' : 'Exit'} · {log.plateNumber}
-          </StyledText>
+
+      <StyledView className="flex-1">
+        <StyledView className="flex-row items-start justify-between gap-3">
+          <StyledView className="flex-1">
+            <StyledText className="text-sm font-semibold text-foreground">
+              {log.plateNumber}
+            </StyledText>
+            <StyledText className="mt-0.5 text-xs font-medium text-primary">
+              {isEntry ? 'Vehicle entry' : 'Vehicle exit'}
+            </StyledText>
+          </StyledView>
           <StatusPill status={log.result} />
         </StyledView>
-        <StyledText className="text-xs text-muted-foreground">
-          {log.gate}
-        </StyledText>
-        <StyledText className="text-xs text-muted-foreground">
-          {formatDateTime(log.timestamp)}
-        </StyledText>
-        {log.notes ? (
-          <StyledText className="mt-1 text-xs text-muted-foreground">
-            {log.notes}
+
+        <StyledView className="mt-2 gap-1">
+          <StyledText className="text-xs text-muted-foreground">{log.gate}</StyledText>
+          <StyledText className="text-xs font-medium text-foreground/80">
+            {formatDateTime(log.timestamp)}
           </StyledText>
-        ) : null}
+          {log.notes ? (
+            <StyledText className="text-xs text-muted-foreground">{log.notes}</StyledText>
+          ) : null}
+        </StyledView>
       </StyledView>
     </StyledView>
   );

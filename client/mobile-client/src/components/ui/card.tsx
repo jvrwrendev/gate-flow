@@ -1,20 +1,30 @@
 import { StyledView } from './core';
 import { cn } from '@/src/lib/utils';
 
-interface CardProps extends React.ComponentPropsWithoutRef<typeof StyledView> {}
+interface CardProps extends React.ComponentPropsWithoutRef<typeof StyledView> {
+  elevated?: boolean;
+}
 
-export function Card({ className, style, ...props }: CardProps) {
+export function Card({ className, style, elevated = false, ...props }: CardProps) {
   return (
     <StyledView
       className={cn('rounded-2xl border border-border bg-card p-4', className)}
       style={[
-        {
-          shadowColor: '#0f172a',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.04,
-          shadowRadius: 8,
-          elevation: 2,
-        },
+        elevated
+          ? {
+              shadowColor: '#0f172a',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.06,
+              shadowRadius: 12,
+              elevation: 2,
+            }
+          : {
+              shadowColor: 'transparent',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 0,
+              shadowRadius: 0,
+              elevation: 0,
+            },
         style,
       ]}
       {...props}
