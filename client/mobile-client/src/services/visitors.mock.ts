@@ -42,6 +42,7 @@ export async function createVisitorPass(
     purpose: payload.purpose.trim(),
     vehiclePlate: payload.vehiclePlate?.trim().toUpperCase(),
     vehicleType: payload.vehicleType,
+    vehiclePhotoUrl: payload.vehiclePhotoUrl || undefined,
     scheduledStart: start.toISOString(),
     scheduledEnd: end.toISOString(),
     status: 'PENDING',

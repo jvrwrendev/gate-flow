@@ -11,7 +11,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { StyledText } from '@/src/components/ui/core';
-import { LayoutDashboard, Car, History, Bell, User } from 'lucide-react-native';
+import { LayoutDashboard, CarFront, History, Bell, User } from 'lucide-react-native';
 
 const ACTIVE_BG = '#0f766e';
 const INACTIVE_ICON = '#5f7a7a';
@@ -19,7 +19,7 @@ const ACTIVE_FG = '#ffffff';
 
 const ICONS: Record<string, typeof LayoutDashboard> = {
   index: LayoutDashboard,
-  vehicles: Car,
+  vehicles: CarFront,
   history: History,
   notifications: Bell,
   profile: User,
@@ -79,7 +79,14 @@ function TabItem({
     };
   });
 
-  const Icon = ICONS[routeName] ?? LayoutDashboard;
+  const normalizedRoute = routeName.toLowerCase();
+  const iconKey =
+    ICONS[routeName]
+      ? routeName
+      : normalizedRoute.includes('vehicle')
+        ? 'vehicles'
+        : routeName;
+  const Icon = ICONS[iconKey] ?? LayoutDashboard;
 
   return (
     <Animated.View style={[styles.itemContainer, containerStyle]}>

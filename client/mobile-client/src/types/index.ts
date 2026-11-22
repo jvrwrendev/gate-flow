@@ -57,6 +57,7 @@ export interface VisitorPass {
   purpose: string;
   vehiclePlate?: string;
   vehicleType?: VehicleType;
+  vehiclePhotoUrl?: string;
   scheduledStart: string;
   scheduledEnd: string;
   status: PassStatus;
@@ -120,6 +121,7 @@ export type CreateVisitorPassPayload = {
   purpose: string;
   vehiclePlate?: string;
   vehicleType?: VehicleType;
+  vehiclePhotoUrl?: string;
   scheduledStart: string;
   scheduledEnd: string;
   notes?: string;

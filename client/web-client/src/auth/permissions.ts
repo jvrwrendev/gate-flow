@@ -4,29 +4,29 @@ export const ALL_ROLES: UserRole[] = ['Super Admin', 'System Admin', 'Security P
 
 export const DEFAULT_ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   'Super Admin': [
-    'dashboard:view', 'monitoring:view', 'vehicles:view', 'vehicles:manage', 'applications:view', 'applications:manage',
+    'dashboard:view', 'monitoring:view', 'vehicles:view', 'vehicles:manage', 'applications:view', 'applications:manage', 'visitorApplications:view', 'visitorApplications:manage',
     'owners:view', 'owners:manage', 'gates:view', 'gates:manage', 'gateControl:operate', 'cameras:view', 'cameras:manage',
     'accessRules:view', 'accessRules:manage', 'models:view', 'models:manage', 'recognitionLogs:view', 'reports:view',
     'incidents:view', 'incidents:manage', 'incidents:report', 'auditLogs:view', 'users:view', 'users:manage', 'users:assignRoles',
     'roles:view', 'roles:manage', 'settings:view', 'settings:manage', 'profile:view',
   ],
   'System Admin': [
-    'dashboard:view', 'monitoring:view', 'vehicles:view', 'vehicles:manage', 'applications:view', 'applications:manage',
+    'dashboard:view', 'monitoring:view', 'vehicles:view', 'vehicles:manage', 'applications:view', 'applications:manage', 'visitorApplications:view', 'visitorApplications:manage',
     'owners:view', 'owners:manage', 'gates:view', 'gates:manage', 'gateControl:operate', 'cameras:view', 'cameras:manage',
     'accessRules:view', 'accessRules:manage', 'models:view', 'models:manage', 'recognitionLogs:view', 'reports:view',
     'incidents:view', 'incidents:manage', 'auditLogs:view', 'users:view', 'users:manage', 'roles:view',
     'settings:view', 'settings:manage', 'profile:view',
   ],
   'Security Personnel': [
-    'dashboard:view', 'monitoring:view', 'vehicles:view', 'applications:view', 'owners:view', 'gates:view', 'gateControl:operate',
+    'dashboard:view', 'monitoring:view', 'vehicles:view', 'applications:view', 'visitorApplications:view', 'owners:view', 'gates:view', 'gateControl:operate',
     'cameras:view', 'accessRules:view', 'models:view', 'recognitionLogs:view', 'reports:view', 'incidents:view', 'incidents:manage', 'profile:view',
   ],
   'Gate Operator': [
-    'dashboard:view', 'monitoring:view', 'vehicles:view', 'applications:view', 'owners:view', 'gates:view', 'gateControl:operate',
+    'dashboard:view', 'monitoring:view', 'vehicles:view', 'applications:view', 'visitorApplications:view', 'owners:view', 'gates:view', 'gateControl:operate',
     'cameras:view', 'accessRules:view', 'models:view', 'recognitionLogs:view', 'reports:view', 'incidents:view', 'incidents:report', 'profile:view',
   ],
   'Viewer': [
-    'dashboard:view', 'monitoring:view', 'vehicles:view', 'applications:view', 'owners:view', 'gates:view', 'cameras:view',
+    'dashboard:view', 'monitoring:view', 'vehicles:view', 'applications:view', 'visitorApplications:view', 'owners:view', 'gates:view', 'cameras:view',
     'accessRules:view', 'models:view', 'recognitionLogs:view', 'reports:view', 'incidents:view', 'profile:view',
   ],
 }

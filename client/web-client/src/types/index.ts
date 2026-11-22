@@ -8,6 +8,7 @@ export type Permission =
   | 'monitoring:view'
   | 'vehicles:view' | 'vehicles:manage'
   | 'applications:view' | 'applications:manage'
+  | 'visitorApplications:view' | 'visitorApplications:manage'
   | 'owners:view' | 'owners:manage'
   | 'gates:view' | 'gates:manage' | 'gateControl:operate'
   | 'cameras:view' | 'cameras:manage'
@@ -35,6 +36,51 @@ export interface Application {
   id: string; reference: string; ownerId: string; ownerName: string; email: string; phone: string
   plate: string; type: VehicleType; model: string; color: VehicleColor; submitted: string
   status: 'Pending' | 'Approved' | 'Rejected'; remarks: string; purpose: string
+}
+
+export type VisitorApplicationStatus = 'Pending' | 'Under Review' | 'Approved' | 'Rejected' | 'Completed' | 'Expired'
+
+export interface VisitorApplicationTimelineEvent {
+  id: string
+  status: VisitorApplicationStatus | 'Submitted'
+  label: string
+  description: string
+  timestamp: string
+  actor: string
+}
+
+export interface VisitorApplication {
+  id: string
+  reference: string
+  passReference?: string
+  visitorName: string
+  visitorEmail?: string
+  visitorPhone?: string
+  requestedById: string
+  requestedByName: string
+  requestedByEmail: string
+  vehiclePlate: string
+  vehicleType: VehicleType
+  vehicleModel?: string
+  vehicleColor?: VehicleColor
+  purpose: string
+  visitStart: string
+  visitEnd: string
+  submittedAt: string
+  reviewedAt?: string
+  approvedAt?: string
+  rejectedAt?: string
+  completedAt?: string
+  expiredAt?: string
+  status: VisitorApplicationStatus
+  remarks: string
+  rejectionReason?: string
+  qrCodeValue?: string
+  gateAccess: 'QR' | 'Plate' | 'QR + Plate'
+  entryRecordedAt?: string
+  exitRecordedAt?: string
+  currentlyInside?: boolean
+  timeline: VisitorApplicationTimelineEvent[]
 }
 export interface Gate {
   id: string; name: string; location: string; cameraId: string; controllerId: string
@@ -81,7 +127,7 @@ export interface AppNotification {
   id: string; title: string; description: string; timestamp: string; read: boolean; severity: 'info' | 'warning' | 'critical'
 }
 export interface AppData {
-  vehicles: Vehicle[]; owners: Owner[]; applications: Application[]; gates: Gate[]; cameras: Camera[]
+  vehicles: Vehicle[]; owners: Owner[]; applications: Application[]; visitorApplications: VisitorApplication[]; gates: Gate[]; cameras: Camera[]
   accessRules: AccessRule[]; recognitionLogs: RecognitionLog[]; models: AIModel[]; incidents: Incident[]
   admins: AdminUser[]; auditLogs: AuditLog[]; notifications: AppNotification[]; settings: SystemSettings
   rolePermissions: Record<UserRole, Permission[]>

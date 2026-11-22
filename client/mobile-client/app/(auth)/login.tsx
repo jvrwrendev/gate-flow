@@ -11,6 +11,7 @@ import { H1, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { useAuth } from '@/src/context/AuthContext';
 import { loginSchema, type LoginSchema } from '@/src/lib/schemas';
 import { cn } from '@/src/lib/utils';
@@ -45,7 +46,27 @@ export default function LoginScreen() {
       scroll
       className="bg-background"
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ flexGrow: 1, paddingTop: 24, paddingBottom: 40 }}
+      contentContainerStyle={{ flexGrow: 1, paddingTop: 24, paddingBottom: 24 }}
+      footer={
+        <BottomActionBar>
+          <Button
+            size="lg"
+            loading={isLoading}
+            onPress={() => handleSubmit(onSubmit)()}
+            className="w-full"
+          >
+            Sign in
+          </Button>
+          <StyledView className="mt-3 flex-row items-center justify-center gap-1.5">
+            <Muted className="text-sm">Don’t have an account?</Muted>
+            <Link href="/register" asChild>
+              <StyledPressable accessibilityRole="link" hitSlop={6}>
+                <StyledText className="text-sm font-medium text-foreground">Sign up</StyledText>
+              </StyledPressable>
+            </Link>
+          </StyledView>
+        </BottomActionBar>
+      }
     >
       <StyledView className="w-full max-w-[420px] flex-1 self-center px-6">
         <StyledPressable
@@ -152,24 +173,6 @@ export default function LoginScreen() {
                 </StyledPressable>
               </Link>
             </StyledView>
-
-            <Button
-              size="lg"
-              loading={isLoading}
-              onPress={() => handleSubmit(onSubmit)()}
-              className="mt-1 w-full"
-            >
-              Sign in
-            </Button>
-          </StyledView>
-
-          <StyledView className="mt-8 flex-row items-center justify-center gap-1.5">
-            <Muted className="text-sm">Don’t have an account?</Muted>
-            <Link href="/register" asChild>
-              <StyledPressable accessibilityRole="link" hitSlop={6}>
-                <StyledText className="text-sm font-medium text-foreground">Sign up</StyledText>
-              </StyledPressable>
-            </Link>
           </StyledView>
 
           <StyledView className="mt-10 items-center">

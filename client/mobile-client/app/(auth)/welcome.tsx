@@ -15,6 +15,7 @@ import {
 } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 
 const PRIMARY = '#0F766E';
 
@@ -40,7 +41,41 @@ export default function WelcomeScreen() {
   const router = useRouter();
 
   return (
-    <Screen scroll className="bg-[#F8FAF9]">
+    <Screen
+      scroll
+      className="bg-[#F8FAF9]"
+      footer={
+        <BottomActionBar className="bg-[#F8FAF9]">
+          <Button
+            size="lg"
+            className="h-14 w-full rounded-xl bg-[#0F766E]"
+            onPress={() => router.push('/(auth)/login')}
+          >
+            <StyledView className="flex-row items-center gap-2">
+              <StyledText className="text-[15px] font-semibold text-white">
+                Get Started
+              </StyledText>
+              <ArrowRight size={18} color="#FFFFFF" />
+            </StyledView>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="lg"
+            className="mt-3 h-14 w-full rounded-xl border-[#C5D9D3] bg-transparent"
+            onPress={() => router.push('/(auth)/register')}
+          >
+            <StyledText className="text-[15px] font-semibold text-[#0F766E]">
+              Create Account
+            </StyledText>
+          </Button>
+
+          <StyledText className="mt-4 text-center text-xs text-slate-400">
+            Secure and reliable community access
+          </StyledText>
+        </BottomActionBar>
+      }
+    >
       <StyledView className="min-h-full flex-1 px-6 pb-8 pt-10">
         <StyledView className="w-full max-w-[420px] flex-1 self-center">
 
@@ -125,37 +160,6 @@ export default function WelcomeScreen() {
                 </StyledView>
               );
             })}
-          </StyledView>
-
-          {/* Authentication Actions */}
-          <StyledView className="mt-auto pt-12">
-            <Button
-              size="lg"
-              className="h-14 w-full rounded-xl bg-[#0F766E]"
-              onPress={() => router.push('/(auth)/login')}
-            >
-              <StyledView className="flex-row items-center gap-2">
-                <StyledText className="text-[15px] font-semibold text-white">
-                  Get Started
-                </StyledText>
-                <ArrowRight size={18} color="#FFFFFF" />
-              </StyledView>
-            </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
-              className="mt-3 h-14 w-full rounded-xl border-[#C5D9D3] bg-transparent"
-              onPress={() => router.push('/(auth)/register')}
-            >
-              <StyledText className="text-[15px] font-semibold text-[#0F766E]">
-                Create Account
-              </StyledText>
-            </Button>
-
-            <StyledText className="mt-6 text-center text-xs text-slate-400">
-              Secure and reliable community access
-            </StyledText>
           </StyledView>
         </StyledView>
       </StyledView>

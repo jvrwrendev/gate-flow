@@ -10,6 +10,7 @@ import { H2, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { Card } from '@/src/components/ui/card';
 
 const schema = z
@@ -62,7 +63,16 @@ export default function ChangePasswordScreen() {
   };
 
   return (
-    <Screen scroll>
+    <Screen
+      scroll
+      footer={
+        <BottomActionBar>
+          <Button className="w-full" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+            Update password
+          </Button>
+        </BottomActionBar>
+      }
+    >
       <StyledView className="gap-5 px-5 pt-4">
         <StyledPressable
           onPress={() => router.back()}
@@ -123,10 +133,6 @@ export default function ChangePasswordScreen() {
           <Muted className="text-xs">
             Use at least 8 characters, including an uppercase letter and a number.
           </Muted>
-
-          <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()} className="mt-1">
-            Update password
-          </Button>
         </Card>
       </StyledView>
     </Screen>

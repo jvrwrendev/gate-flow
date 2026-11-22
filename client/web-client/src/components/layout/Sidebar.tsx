@@ -22,6 +22,7 @@ const groups: NavGroup[] = [
     items: [
       { name: 'Registered Vehicles', path: '/vehicles', icon: 'Car', permission: 'vehicles:view' },
       { name: 'Vehicle Applications', path: '/applications', icon: 'FileText', permission: 'applications:view' },
+      { name: 'Visitor Applications', path: '/visitor-applications', icon: 'ClipboardCheck', permission: 'visitorApplications:view' },
       { name: 'Vehicle Owners', path: '/owners', icon: 'Users', permission: 'owners:view' },
     ],
   },

@@ -10,6 +10,8 @@ import { Vehicles } from '@/pages/Vehicles'
 import { VehicleDetails } from '@/pages/VehicleDetails'
 import { Applications } from '@/pages/Applications'
 import { ApplicationDetails } from '@/pages/ApplicationDetails'
+import { VisitorApplications } from '@/pages/VisitorApplications'
+import { VisitorApplicationDetails } from '@/pages/VisitorApplicationDetails'
 import { Owners } from '@/pages/Owners'
 import { OwnerDetails } from '@/pages/OwnerDetails'
 import { Gates } from '@/pages/Gates'
@@ -51,6 +53,8 @@ export default function App() {
         <Route path="/vehicles/:id" element={<RequirePermission permission="vehicles:view"><VehicleDetails /></RequirePermission>} />
         <Route path="/applications" element={<RequirePermission permission="applications:view"><Applications /></RequirePermission>} />
         <Route path="/applications/:id" element={<RequirePermission permission="applications:view"><ApplicationDetails /></RequirePermission>} />
+        <Route path="/visitor-applications" element={<RequirePermission permission="visitorApplications:view"><VisitorApplications /></RequirePermission>} />
+        <Route path="/visitor-applications/:id" element={<RequirePermission permission="visitorApplications:view"><VisitorApplicationDetails /></RequirePermission>} />
         <Route path="/owners" element={<RequirePermission permission="owners:view"><Owners /></RequirePermission>} />
         <Route path="/owners/:id" element={<RequirePermission permission="owners:view"><OwnerDetails /></RequirePermission>} />
         <Route path="/gates" element={<RequirePermission permission="gates:view"><Gates /></RequirePermission>} />

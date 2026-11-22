@@ -9,6 +9,7 @@ import { H2 } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { useAuth } from '@/src/context/AuthContext';
 import { ChevronLeft, Check } from 'lucide-react-native';
 import { Card } from '@/src/components/ui/card';
@@ -46,7 +47,17 @@ export default function PersonalInfoScreen() {
   };
 
   return (
-    <Screen scroll keyboardShouldPersistTaps="handled">
+    <Screen
+      scroll
+      keyboardShouldPersistTaps="handled"
+      footer={
+        <BottomActionBar>
+          <Button className="w-full" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+            Save changes
+          </Button>
+        </BottomActionBar>
+      }
+    >
       <StyledView className="gap-5 px-5 pt-4">
         <StyledPressable
           onPress={() => router.back()}
@@ -82,10 +93,6 @@ export default function PersonalInfoScreen() {
               <StyledText className="text-sm font-medium text-foreground">Saved successfully</StyledText>
             </StyledView>
           ) : null}
-
-          <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-            Save changes
-          </Button>
         </Card>
       </StyledView>
     </Screen>

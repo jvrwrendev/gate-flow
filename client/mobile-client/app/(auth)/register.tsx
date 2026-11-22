@@ -8,6 +8,7 @@ import { H2, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { useAuth } from '@/src/context/AuthContext';
 import { registerSchema, type RegisterSchema } from '@/src/lib/schemas';
 import { UserPlus } from 'lucide-react-native';
@@ -40,7 +41,22 @@ export default function RegisterScreen() {
       scroll
       className="px-6"
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ paddingTop: 32, paddingBottom: 40 }}
+      contentContainerStyle={{ paddingTop: 32, paddingBottom: 24 }}
+      footer={
+        <BottomActionBar>
+          <Button className="w-full" loading={isLoading} onPress={() => handleSubmit(onSubmit)()}>
+            Sign up
+          </Button>
+          <StyledView className="mt-3 flex-row justify-center gap-1">
+            <Muted>Already have an account?</Muted>
+            <Link href="/login" asChild>
+              <StyledText className="text-sm font-medium text-primary underline">
+                Sign in
+              </StyledText>
+            </Link>
+          </StyledView>
+        </BottomActionBar>
+      }
     >
       <StyledView className="items-center gap-2 pt-8">
         <StyledView className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
@@ -99,19 +115,6 @@ export default function RegisterScreen() {
         {error ? (
           <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
         ) : null}
-
-        <Button loading={isLoading} onPress={() => handleSubmit(onSubmit)()}>
-          Sign up
-        </Button>
-      </StyledView>
-
-      <StyledView className="mt-8 flex-row justify-center gap-1">
-        <Muted>Already have an account?</Muted>
-        <Link href="/login" asChild>
-          <StyledText className="text-sm font-medium text-primary underline">
-            Sign in
-          </StyledText>
-        </Link>
       </StyledView>
     </Screen>
   );

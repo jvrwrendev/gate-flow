@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Activity, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useApp } from '@/context/AppContext'
@@ -11,6 +12,7 @@ import { trafficData, typeData, weeklyData } from '@/data/mock'
 
 export function Dashboard() {
   const { data } = useApp()
+  const navigate = useNavigate()
   const [cameraId, setCameraId] = useState(data.cameras[0]?.id ?? '')
 
   const currentCameraIndex = data.cameras.findIndex(c => c.id === cameraId)
@@ -24,6 +26,12 @@ export function Dashboard() {
   const pending = data.applications.filter(application => application.status === 'Pending').length
   const activeGates = data.gates.filter(gateItem => gateItem.status === 'Online').length
   const recent = data.recognitionLogs.slice(0, 5)
+  const visitorApps = data.visitorApplications || []
+  const totalVisitorApps = visitorApps.length
+  const pendingVisitorApps = visitorApps.filter(a => a.status === 'Pending' || a.status === 'Under Review').length
+  const approvedVisitors = visitorApps.filter(a => a.status === 'Approved').length
+  const visitorsInside = visitorApps.filter(a => a.currentlyInside).length
+  const recentVisitorApps = [...visitorApps].sort((a, b) => +new Date(b.submittedAt) - +new Date(a.submittedAt)).slice(0, 5)
 
   return (
     <div className="space-y-4">
@@ -235,8 +243,66 @@ export function Dashboard() {
               </div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Visitor Applications</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-2 gap-2">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-2.5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-600">Total</p>
+                <p className="mt-1 font-display text-xl font-extrabold text-slate-900">{totalVisitorApps}</p>
+              </div>
+              <div className="rounded-lg border border-amber-100 bg-amber-50 p-2.5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-amber-700">Pending</p>
+                <p className="mt-1 font-display text-xl font-extrabold text-amber-900">{pendingVisitorApps}</p>
+              </div>
+              <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-2.5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700">Approved</p>
+                <p className="mt-1 font-display text-xl font-extrabold text-emerald-900">{approvedVisitors}</p>
+              </div>
+              <div className="rounded-lg border border-blue-100 bg-blue-50 p-2.5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-blue-700">Inside Now</p>
+                <p className="mt-1 font-display text-xl font-extrabold text-blue-900">{visitorsInside}</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Visitor Applications</CardTitle>
+          <button type="button" onClick={() => navigate('/visitor-applications')} className="text-sm font-medium text-blue-600 hover:text-blue-700">View all</button>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-slate-200 bg-slate-50/60 text-xs uppercase tracking-wide text-slate-500">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Reference</th>
+                  <th className="px-4 py-3 font-medium">Visitor</th>
+                  <th className="px-4 py-3 font-medium">Requested By</th>
+                  <th className="px-4 py-3 font-medium">Schedule</th>
+                  <th className="px-4 py-3 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentVisitorApps.map(app => (
+                  <tr key={app.id} className="cursor-pointer border-b border-slate-100 last:border-0 hover:bg-slate-50/70" onClick={() => navigate(`/visitor-applications/${app.id}`)}>
+                    <td className="px-4 py-3 font-mono font-semibold text-slate-900">{app.reference}</td>
+                    <td className="px-4 py-3 text-slate-700">{app.visitorName}</td>
+                    <td className="px-4 py-3 text-slate-500">{app.requestedByName}</td>
+                    <td className="px-4 py-3 text-slate-500">{new Date(app.visitStart).toLocaleString('en-PH', { timeZone: 'Asia/Manila', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
+                    <td className="px-4 py-3"><Badge value={app.status} /></td>
+                  </tr>
+                ))}
+                {recentVisitorApps.length === 0 && (
+                  <tr><td colSpan={5} className="px-4 py-8 text-center text-sm text-slate-500">No visitor applications yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

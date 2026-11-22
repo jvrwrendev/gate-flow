@@ -9,6 +9,8 @@ import { Input } from '@/src/components/ui/input';
 import { Select } from '@/src/components/ui/select';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
+import { ImageUploadField } from '@/src/components/shared/image-upload-field';
 import { useAuth } from '@/src/context/AuthContext';
 import { vehicleSchema, type VehicleSchema } from '@/src/lib/schemas';
 import { VEHICLE_TYPES } from '@/src/lib/constants';
@@ -30,6 +32,7 @@ export default function NewVehicleScreen() {
     resolver: zodResolver(vehicleSchema),
     defaultValues: {
       type: 'Car',
+      photoUrl: '',
     },
   });
 
@@ -44,7 +47,17 @@ export default function NewVehicleScreen() {
   };
 
   return (
-    <Screen scroll keyboardShouldPersistTaps="handled">
+    <Screen
+      scroll
+      keyboardShouldPersistTaps="handled"
+      footer={
+        <BottomActionBar bottomOffset={74}>
+          <Button className="w-full" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+            Submit registration
+          </Button>
+        </BottomActionBar>
+      }
+    >
       <StyledView className="px-4 pt-6">
         <StyledPressable
           onPress={() => router.back()}
@@ -93,13 +106,23 @@ export default function NewVehicleScreen() {
             <ControlledInput control={control} name="color" placeholder="Silver" />
           </FormField>
 
+          <FormField label="Vehicle image" error={errors.photoUrl?.message}>
+            <Controller
+              control={control}
+              name="photoUrl"
+              render={({ field: { onChange, value } }) => (
+                <ImageUploadField
+                  value={value || undefined}
+                  onChange={(uri) => onChange(uri ?? '')}
+                  error={errors.photoUrl?.message}
+                />
+              )}
+            />
+          </FormField>
+
           {error ? (
             <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
           ) : null}
-
-          <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-            Submit registration
-          </Button>
         </StyledView>
       </StyledView>
     </Screen>

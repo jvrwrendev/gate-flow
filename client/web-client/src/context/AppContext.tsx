@@ -15,6 +15,20 @@ function loadData(): AppData {
     if (!parsed.vehicles || !parsed.settings || !parsed.gates) return cloneSeed()
     if (!parsed.rolePermissions) {
       parsed.rolePermissions = structuredClone(DEFAULT_ROLE_PERMISSIONS)
+    } else {
+      // Merge newly added default permissions for upgrades without overwriting explicit removals beyond defaults.
+      for (const role of Object.keys(DEFAULT_ROLE_PERMISSIONS) as (keyof typeof DEFAULT_ROLE_PERMISSIONS)[]) {
+        const defaults = DEFAULT_ROLE_PERMISSIONS[role]
+        const current = parsed.rolePermissions[role] || []
+        const merged = new Set(current)
+        for (const perm of defaults) {
+          if (perm.startsWith('visitorApplications:')) merged.add(perm)
+        }
+        parsed.rolePermissions[role] = Array.from(merged) as any
+      }
+    }
+    if (!Array.isArray(parsed.visitorApplications) || parsed.visitorApplications.length === 0) {
+      parsed.visitorApplications = structuredClone(mockData.visitorApplications)
     }
     if (parsed.admins) {
       parsed.admins = parsed.admins.map(a => ({

@@ -11,6 +11,7 @@ const titles: Record<string, string> = {
   '/monitoring': 'Live Monitoring',
   '/vehicles': 'Registered Vehicles',
   '/applications': 'Vehicle Applications',
+  '/visitor-applications': 'Visitor Applications',
   '/owners': 'Vehicle Owners',
   '/gates': 'Barrier Gates',
   '/cameras': 'Camera Management',
@@ -72,6 +73,12 @@ export function Topbar({
             .filter(a => a.reference.toLowerCase().includes(q) || a.plate.toLowerCase().includes(q))
             .slice(0, 3)
             .map(a => ({ label: `${a.reference} · ${a.plate}`, path: '/applications', type: 'Application' }))
+        : []),
+      ...(hasPermission('visitorApplications:view')
+        ? (data.visitorApplications || [])
+            .filter(a => a.reference.toLowerCase().includes(q) || a.visitorName.toLowerCase().includes(q) || a.vehiclePlate.toLowerCase().includes(q))
+            .slice(0, 3)
+            .map(a => ({ label: `${a.reference} · ${a.visitorName}`, path: '/visitor-applications', type: 'Visitor App' }))
         : []),
       ...(hasPermission('gates:view')
         ? data.gates.filter(g => g.name.toLowerCase().includes(q)).slice(0, 3).map(g => ({ label: g.name, path: '/gates', type: 'Gate' }))
@@ -170,13 +177,21 @@ export function Topbar({
             <div className="px-3 py-8 text-center text-sm text-slate-500">No notifications</div>
           ) : (
             data.notifications.map(n => (
-              <div key={n.id} className="rounded-sm px-3 py-2 hover:bg-slate-50">
-                <p className="text-sm font-medium text-slate-900">{n.title}</p>
-                <p className="text-xs text-slate-500">{n.description}</p>
-                <p className="mt-1 text-[11px] text-slate-400">
-                  {new Date(n.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila' })}
-                </p>
-              </div>
+              <button
+                key={n.id}
+                type="button"
+                onClick={() => setData(prev => ({ ...prev, notifications: prev.notifications.map(x => x.id === n.id ? { ...x, read: true } : x) }))}
+                className="flex w-full items-start gap-2 rounded-sm px-3 py-2 text-left hover:bg-slate-50"
+              >
+                <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read ? 'bg-transparent' : 'bg-blue-600'}`} />
+                <div className="min-w-0">
+                  <p className={`text-sm ${n.read ? 'font-medium text-slate-700' : 'font-semibold text-slate-900'}`}>{n.title}</p>
+                  <p className="text-xs text-slate-500">{n.description}</p>
+                  <p className="mt-1 text-[11px] text-slate-400">
+                    {new Date(n.timestamp).toLocaleString('en-PH', { timeZone: 'Asia/Manila' })}
+                  </p>
+                </div>
+              </button>
             ))
           )}
           <DropdownSeparator />

@@ -8,6 +8,7 @@ import { H2, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/src/lib/schemas';
 import * as authService from '@/src/services/auth.mock';
 import { MailCheck } from 'lucide-react-native';
@@ -43,7 +44,23 @@ export default function ForgotPasswordScreen() {
       scroll
       className="px-6"
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingTop: 32, paddingBottom: 40 }}
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingTop: 32, paddingBottom: 24 }}
+      footer={
+        !submitted ? (
+          <BottomActionBar>
+            <Button className="w-full" loading={loading} onPress={() => handleSubmit(onSubmit)()}>
+              Send instructions
+            </Button>
+            <StyledView className="mt-3 items-center">
+              <Link href="/login" asChild>
+                <StyledText className="text-sm font-medium text-primary underline">
+                  Back to sign in
+                </StyledText>
+              </Link>
+            </StyledView>
+          </BottomActionBar>
+        ) : undefined
+      }
     >
       {submitted ? (
         <StyledView className="items-center gap-3">
@@ -90,18 +107,6 @@ export default function ForgotPasswordScreen() {
             {error ? (
               <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
             ) : null}
-
-            <Button loading={loading} onPress={() => handleSubmit(onSubmit)()}>
-              Send instructions
-            </Button>
-          </StyledView>
-
-          <StyledView className="mt-8 items-center">
-            <Link href="/login" asChild>
-              <StyledText className="text-sm font-medium text-primary underline">
-                Back to sign in
-              </StyledText>
-            </Link>
           </StyledView>
         </>
       )}

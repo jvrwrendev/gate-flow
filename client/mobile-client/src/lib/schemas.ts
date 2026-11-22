@@ -38,13 +38,23 @@ export const forgotPasswordSchema = z.object({
 
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
 
+const imageUriSchema = z
+  .string()
+  .refine(
+    (value) => {
+      const v = value.toLowerCase();
+      return /\.(jpg|jpeg|png)(\?.*)?$/.test(v) || /^data:image\/(jpeg|jpg|png);/.test(v) || v.startsWith('file:') || v.startsWith('content:') || v.startsWith('ph://');
+    },
+    { message: 'Only JPG, JPEG, and PNG images are supported.' }
+  );
+
 export const vehicleSchema = z.object({
   plateNumber: z.string().min(3, 'Plate number is required.'),
   type: z.enum(VEHICLE_TYPE_OPTIONS),
   brand: z.string().min(1, 'Brand is required.'),
   model: z.string().min(1, 'Model is required.'),
   color: z.string().min(1, 'Color is required.'),
-  photoUrl: z.string().optional(),
+  photoUrl: imageUriSchema.optional().or(z.literal('')),
 });
 
 export type VehicleSchema = z.infer<typeof vehicleSchema>;
@@ -56,6 +66,7 @@ export const visitorPassSchema = z
     purpose: z.string().min(3, 'Purpose is required.'),
     vehiclePlate: z.string().optional(),
     vehicleType: z.enum(VEHICLE_TYPE_OPTIONS).optional(),
+    vehiclePhotoUrl: imageUriSchema.optional().or(z.literal('')),
     scheduledStart: z.string().min(1, 'Start date/time is required.'),
     scheduledEnd: z.string().min(1, 'End date/time is required.'),
     notes: z.string().optional(),

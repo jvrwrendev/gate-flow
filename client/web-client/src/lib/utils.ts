@@ -29,7 +29,8 @@ export function downloadCSV(filename: string, rows: Record<string, string | numb
 export const statusClass = (status: string) => {
   const s = status.toLowerCase()
   if (['authorized', 'active', 'online', 'approved', 'resolved', 'automatic'].includes(s)) return 'success'
-  if (['denied', 'critical', 'high', 'suspended', 'rejected', 'inactive'].includes(s)) return 'destructive'
-  if (['pending', 'needs review', 'investigating', 'medium', 'manual'].includes(s)) return 'warning'
+  if (['denied', 'critical', 'high', 'suspended', 'rejected', 'inactive', 'expired'].includes(s)) return 'destructive'
+  if (['pending', 'needs review', 'under review', 'investigating', 'medium', 'manual'].includes(s)) return 'warning'
+  if (['completed'].includes(s)) return 'blue'
   return 'secondary'
 }

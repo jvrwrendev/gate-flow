@@ -41,7 +41,7 @@ export async function createVehicle(
     brand: payload.brand.trim(),
     model: payload.model.trim(),
     color: payload.color.trim(),
-    photoUrl: payload.photoUrl,
+    photoUrl: payload.photoUrl || undefined,
     status: 'PENDING_VERIFICATION',
     submittedAt: new Date().toISOString(),
   };

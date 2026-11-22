@@ -10,6 +10,8 @@ import { Input } from '@/src/components/ui/input';
 import { Select } from '@/src/components/ui/select';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
+import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
+import { ImageUploadField } from '@/src/components/shared/image-upload-field';
 import { useAuth } from '@/src/context/AuthContext';
 import { visitorPassSchema, type VisitorPassSchema } from '@/src/lib/schemas';
 import { VEHICLE_TYPES } from '@/src/lib/constants';
@@ -42,6 +44,7 @@ export default function NewVisitorPassScreen() {
       visitorPhone: '',
       purpose: '',
       vehiclePlate: '',
+      vehiclePhotoUrl: '',
       scheduledStart: defaultStart,
       scheduledEnd: defaultEnd,
       notes: '',
@@ -59,7 +62,17 @@ export default function NewVisitorPassScreen() {
   };
 
   return (
-    <Screen scroll keyboardShouldPersistTaps="handled">
+    <Screen
+      scroll
+      keyboardShouldPersistTaps="handled"
+      footer={
+        <BottomActionBar>
+          <Button className="w-full" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+            Request pass
+          </Button>
+        </BottomActionBar>
+      }
+    >
       <StyledView className="px-4 pt-6">
         <StyledPressable
           onPress={() => router.back()}
@@ -121,6 +134,20 @@ export default function NewVisitorPassScreen() {
             />
           </FormField>
 
+          <FormField label="Vehicle image (optional)" error={errors.vehiclePhotoUrl?.message}>
+            <Controller
+              control={control}
+              name="vehiclePhotoUrl"
+              render={({ field: { onChange, value } }) => (
+                <ImageUploadField
+                  value={value || undefined}
+                  onChange={(uri) => onChange(uri ?? '')}
+                  error={errors.vehiclePhotoUrl?.message}
+                />
+              )}
+            />
+          </FormField>
+
           <FormField label="Start" error={errors.scheduledStart?.message}>
             <ControlledInput
               control={control}
@@ -148,10 +175,6 @@ export default function NewVisitorPassScreen() {
           {error ? (
             <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
           ) : null}
-
-          <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-            Request pass
-          </Button>
         </StyledView>
       </StyledView>
     </Screen>
