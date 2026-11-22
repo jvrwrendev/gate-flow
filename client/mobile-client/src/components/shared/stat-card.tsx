@@ -17,9 +17,9 @@ export function StatCard({ label, value, subtext, className }: StatCardProps) {
       )}
     >
       <StyledText className="text-2xl font-semibold text-foreground">{value}</StyledText>
-      <StyledText className="mt-1 text-xs text-muted-foreground">{label}</StyledText>
+      <StyledText className="mt-1 text-[13px] text-muted-foreground">{label}</StyledText>
       {subtext ? (
-        <StyledText className="mt-1 text-xs text-muted-foreground">{subtext}</StyledText>
+        <StyledText className="mt-1 text-[13px] text-muted-foreground">{subtext}</StyledText>
       ) : null}
     </StyledView>
   );

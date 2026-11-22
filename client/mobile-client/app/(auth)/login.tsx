@@ -1,20 +1,18 @@
 import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
-import { useForm, Controller, type Control } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, AlertCircle, ChevronLeft } from 'lucide-react-native';
-import { StyledView, StyledText, StyledPressable, StyledImage } from '@/src/components/ui/core';
-
-const logo = require('@/assets/app-image/logo.png');
+import { AlertCircle, ChevronLeft, Eye, EyeOff } from 'lucide-react-native';
+import { StyledImage, StyledPressable, StyledText, StyledView } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H1, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
-import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { useAuth } from '@/src/context/AuthContext';
 import { loginSchema, type LoginSchema } from '@/src/lib/schemas';
-import { cn } from '@/src/lib/utils';
+
+const logo = require('@/assets/app-image/logo.png');
 
 export default function LoginScreen() {
   const { login, isLoading } = useAuth();
@@ -28,7 +26,7 @@ export default function LoginScreen() {
     formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: 'demo@gateguard.app', password: 'password' },
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = async (data: LoginSchema) => {
@@ -46,40 +44,21 @@ export default function LoginScreen() {
       scroll
       className="bg-background"
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ flexGrow: 1, paddingTop: 24, paddingBottom: 24 }}
-      footer={
-        <BottomActionBar>
-          <Button
-            size="lg"
-            loading={isLoading}
-            onPress={() => handleSubmit(onSubmit)()}
-            className="w-full"
-          >
-            Sign in
-          </Button>
-          <StyledView className="mt-3 flex-row items-center justify-center gap-1.5">
-            <Muted className="text-sm">Don’t have an account?</Muted>
-            <Link href="/register" asChild>
-              <StyledPressable accessibilityRole="link" hitSlop={6}>
-                <StyledText className="text-sm font-medium text-foreground">Sign up</StyledText>
-              </StyledPressable>
-            </Link>
-          </StyledView>
-        </BottomActionBar>
-      }
+      contentContainerStyle={{ flexGrow: 1, paddingTop: 24, paddingBottom: 32 }}
     >
-      <StyledView className="w-full max-w-[420px] flex-1 self-center px-6">
+      <StyledView className="w-full max-w-[440px] flex-1 self-center px-6">
         <StyledPressable
           onPress={() => router.push('/(auth)/welcome')}
-          className="mb-6 flex-row items-center gap-1 self-start"
+          className="mb-8 h-11 flex-row items-center gap-1 self-start pr-2"
           accessibilityRole="button"
           accessibilityLabel="Back to welcome screen"
+          hitSlop={8}
         >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
+          <ChevronLeft size={22} color="#0f766e" />
+          <StyledText className="text-[15px] font-medium text-foreground">Back</StyledText>
         </StyledPressable>
 
-        <StyledView className="flex-1 justify-center pb-8">
+        <StyledView className="flex-1 justify-center">
           <StyledView className="items-center">
             <StyledImage
               source={logo}
@@ -87,19 +66,17 @@ export default function LoginScreen() {
               className="h-16 w-44"
               accessibilityLabel="GATEGUARD logo"
             />
-            <H1 className="mt-5 text-center text-[28px] leading-tight">Welcome back</H1>
-            <Muted className="mt-2 text-center text-[15px] leading-relaxed">
+            <H1 className="mt-6 text-center text-[30px] leading-tight">Welcome back</H1>
+            <Muted className="mt-2 text-center text-[15px] leading-6">
               Sign in to manage your gate access
             </Muted>
           </StyledView>
 
           <StyledView className="mt-10 gap-5">
             {error ? (
-              <StyledView className="flex-row items-start gap-2.5 rounded-lg border border-destructive/20 bg-destructive/5 px-3.5 py-3">
-                <AlertCircle size={18} color="#ef4444" style={{ marginTop: 1 }} />
-                <StyledText className="flex-1 text-sm leading-snug text-foreground">
-                  {error}
-                </StyledText>
+              <StyledView className="flex-row items-start gap-2.5 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3">
+                <AlertCircle size={18} color="#dc2626" style={{ marginTop: 1 }} />
+                <StyledText className="flex-1 text-[14px] leading-5 text-foreground">{error}</StyledText>
               </StyledView>
             ) : null}
 
@@ -153,11 +130,7 @@ export default function LoginScreen() {
                       hitSlop={8}
                       className="absolute right-0 h-14 w-14 items-center justify-center"
                     >
-                      {showPassword ? (
-                        <EyeOff size={18} color="#737373" />
-                      ) : (
-                        <Eye size={18} color="#737373" />
-                      )}
+                      {showPassword ? <EyeOff size={20} color="#5f7a7a" /> : <Eye size={20} color="#5f7a7a" />}
                     </StyledPressable>
                   </StyledView>
                 )}
@@ -167,18 +140,28 @@ export default function LoginScreen() {
             <StyledView className="items-end">
               <Link href="/forgot-password" asChild>
                 <StyledPressable accessibilityRole="link" hitSlop={6}>
-                  <StyledText className="text-sm font-medium text-foreground">
-                    Forgot password?
-                  </StyledText>
+                  <StyledText className="text-[14px] font-medium text-primary">Forgot password?</StyledText>
                 </StyledPressable>
               </Link>
             </StyledView>
-          </StyledView>
 
-          <StyledView className="mt-10 items-center">
-            <StyledText className="text-center text-xs text-muted-foreground">
-              Demo access: <StyledText className="text-xs font-medium text-foreground">demo@gateguard.app</StyledText> · <StyledText className="text-xs font-medium text-foreground">password</StyledText>
-            </StyledText>
+            <Button
+              size="lg"
+              loading={isLoading}
+              onPress={() => handleSubmit(onSubmit)()}
+              className="mt-2 w-full"
+            >
+              Sign in
+            </Button>
+
+            <StyledView className="flex-row items-center justify-center gap-1.5 pt-1">
+              <Muted className="text-[14px]">Don’t have an account?</Muted>
+              <Link href="/register" asChild>
+                <StyledPressable accessibilityRole="link" hitSlop={6}>
+                  <StyledText className="text-[14px] font-semibold text-primary">Sign up</StyledText>
+                </StyledPressable>
+              </Link>
+            </StyledView>
           </StyledView>
         </StyledView>
       </StyledView>

@@ -1,39 +1,27 @@
-
 import { useRouter } from 'expo-router';
-import {
-  ShieldCheck,
-  CarFront,
-  BellRing,
-  UserRoundCheck,
-  ArrowRight,
-  CheckCircle2,
-} from 'lucide-react-native';
-
-import {
-  StyledView,
-  StyledText,
-} from '@/src/components/ui/core';
+import { ArrowRight, BellRing, CarFront, CheckCircle2, ShieldCheck, UserRoundCheck } from 'lucide-react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import { StyledText, StyledView } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { Screen } from '@/src/components/layout/screen';
-import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 
 const PRIMARY = '#0F766E';
 
 const features = [
   {
     icon: CarFront,
-    title: 'Vehicle Management',
-    description: 'Register and manage your vehicles',
+    title: 'Vehicle management',
+    description: 'Register vehicles and track approval status in one place.',
   },
   {
     icon: UserRoundCheck,
-    title: 'Visitor Access',
-    description: 'Request and monitor visitor passes',
+    title: 'Visitor access',
+    description: 'Create and monitor temporary visitor passes with ease.',
   },
   {
     icon: BellRing,
-    title: 'Real-time Updates',
-    description: 'Receive gate alerts and notifications',
+    title: 'Real-time updates',
+    description: 'Receive important gate, approval, and security notifications.',
   },
 ];
 
@@ -43,18 +31,77 @@ export default function WelcomeScreen() {
   return (
     <Screen
       scroll
-      className="bg-[#F8FAF9]"
-      footer={
-        <BottomActionBar className="bg-[#F8FAF9]">
+      className="bg-background"
+      contentContainerStyle={{ flexGrow: 1, paddingTop: 28, paddingBottom: 32 }}
+    >
+      <StyledView className="w-full max-w-[440px] flex-1 self-center px-6">
+        <Animated.View entering={FadeInDown.duration(450)}>
+          <StyledView className="flex-row items-center justify-between">
+            <StyledView className="flex-row items-center gap-3">
+              <StyledView className="h-12 w-12 items-center justify-center rounded-2xl bg-primary">
+                <ShieldCheck size={24} color="#FFFFFF" strokeWidth={2.1} />
+              </StyledView>
+              <StyledView>
+                <StyledText className="text-[18px] font-bold tracking-wide text-foreground">GATEGUARD</StyledText>
+                <StyledText className="text-[12px] font-semibold tracking-widest text-muted-foreground">
+                  SECURE ACCESS
+                </StyledText>
+              </StyledView>
+            </StyledView>
+          </StyledView>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(80).duration(450)} className="mt-10">
+          <StyledView className="items-center justify-center rounded-[28px] border border-border bg-secondary/50 px-6 py-10">
+            <StyledView className="h-28 w-28 items-center justify-center rounded-full border border-primary/10 bg-background">
+              <CarFront size={52} color={PRIMARY} strokeWidth={1.5} />
+            </StyledView>
+            <StyledView className="mt-5 flex-row items-center gap-2 rounded-full border border-primary/10 bg-background px-4 py-2">
+              <CheckCircle2 size={16} color={PRIMARY} />
+              <StyledText className="text-[13px] font-semibold text-primary">Smart vehicle access</StyledText>
+            </StyledView>
+          </StyledView>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(140).duration(450)} className="mt-10">
+          <StyledText className="text-[34px] font-bold leading-[42px] tracking-tight text-foreground">
+            Smarter access.{'\n'}Safer community.
+          </StyledText>
+          <StyledText className="mt-3 text-[16px] leading-7 text-muted-foreground">
+            Manage vehicles, visitor passes, and gate notifications in one secure, easy-to-use app.
+          </StyledText>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(200).duration(450)} className="mt-8 gap-4">
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <StyledView
+                key={feature.title}
+                className="flex-row items-center gap-4 rounded-2xl border border-border bg-background px-4 py-4"
+              >
+                <StyledView className="h-12 w-12 items-center justify-center rounded-2xl bg-secondary">
+                  <Icon size={22} color={PRIMARY} strokeWidth={1.9} />
+                </StyledView>
+                <StyledView className="flex-1">
+                  <StyledText className="text-[15px] font-semibold text-foreground">{feature.title}</StyledText>
+                  <StyledText className="mt-1 text-[14px] leading-6 text-muted-foreground">
+                    {feature.description}
+                  </StyledText>
+                </StyledView>
+              </StyledView>
+            );
+          })}
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(260).duration(450)} className="mt-10 gap-3">
           <Button
             size="lg"
-            className="h-14 w-full rounded-xl bg-[#0F766E]"
+            className="h-14 w-full"
             onPress={() => router.push('/(auth)/login')}
           >
             <StyledView className="flex-row items-center gap-2">
-              <StyledText className="text-[15px] font-semibold text-white">
-                Get Started
-              </StyledText>
+              <StyledText className="text-[15px] font-semibold text-primary-foreground">Get Started</StyledText>
               <ArrowRight size={18} color="#FFFFFF" />
             </StyledView>
           </Button>
@@ -62,106 +109,16 @@ export default function WelcomeScreen() {
           <Button
             variant="outline"
             size="lg"
-            className="mt-3 h-14 w-full rounded-xl border-[#C5D9D3] bg-transparent"
+            className="h-14 w-full"
             onPress={() => router.push('/(auth)/register')}
           >
-            <StyledText className="text-[15px] font-semibold text-[#0F766E]">
-              Create Account
-            </StyledText>
+            <StyledText className="text-[15px] font-semibold text-foreground">Create Account</StyledText>
           </Button>
 
-          <StyledText className="mt-4 text-center text-xs text-slate-400">
+          <StyledText className="pt-2 text-center text-[13px] text-muted-foreground">
             Secure and reliable community access
           </StyledText>
-        </BottomActionBar>
-      }
-    >
-      <StyledView className="min-h-full flex-1 px-6 pb-8 pt-10">
-        <StyledView className="w-full max-w-[420px] flex-1 self-center">
-
-          {/* Brand Header */}
-          <StyledView className="flex-row items-center justify-between">
-            <StyledView className="flex-row items-center gap-2.5">
-              <StyledView className="h-11 w-11 items-center justify-center rounded-xl bg-[#0F766E]">
-                <ShieldCheck
-                  size={24}
-                  color="#FFFFFF"
-                  strokeWidth={2}
-                />
-              </StyledView>
-
-              <StyledText className="text-[17px] font-bold tracking-wide text-[#123F3C]">
-                GATEGUARD
-              </StyledText>
-            </StyledView>
-
-            <StyledText className="text-[10px] font-semibold tracking-widest text-slate-400">
-              SECURE ACCESS
-            </StyledText>
-          </StyledView>
-
-          {/* Hero Illustration */}
-          <StyledView className="mt-10 items-center justify-center rounded-[28px] bg-[#EAF5F2] px-6 py-10">
-            <StyledView className="h-28 w-28 items-center justify-center rounded-full border border-[#D0E8E1] bg-white">
-              <CarFront
-                size={54}
-                color={PRIMARY}
-                strokeWidth={1.5}
-              />
-            </StyledView>
-
-            <StyledView className="mt-5 flex-row items-center gap-2 rounded-full bg-white px-4 py-2">
-              <CheckCircle2 size={15} color={PRIMARY} />
-              <StyledText className="text-xs font-semibold text-[#0F766E]">
-                Smart Vehicle Access
-              </StyledText>
-            </StyledView>
-          </StyledView>
-
-          {/* Introduction */}
-          <StyledView className="mt-9">
-            <StyledText className="text-[30px] font-bold leading-[38px] tracking-tight text-[#122B2A]">
-              Smarter access.{'\n'}Safer community.
-            </StyledText>
-
-            <StyledText className="mt-3 text-[15px] leading-6 text-slate-500">
-              Manage vehicles, visitor passes, and gate
-              notifications—all in one secure place.
-            </StyledText>
-          </StyledView>
-
-          {/* Feature List */}
-          <StyledView className="mt-8 gap-5">
-            {features.map((feature) => {
-              const Icon = feature.icon;
-
-              return (
-                <StyledView
-                  key={feature.title}
-                  className="flex-row items-center gap-4"
-                >
-                  <StyledView className="h-12 w-12 items-center justify-center rounded-2xl bg-[#EAF5F2]">
-                    <Icon
-                      size={22}
-                      color={PRIMARY}
-                      strokeWidth={1.8}
-                    />
-                  </StyledView>
-
-                  <StyledView className="flex-1">
-                    <StyledText className="text-[15px] font-semibold text-[#183D3A]">
-                      {feature.title}
-                    </StyledText>
-
-                    <StyledText className="mt-1 text-[13px] leading-5 text-slate-500">
-                      {feature.description}
-                    </StyledText>
-                  </StyledView>
-                </StyledView>
-              );
-            })}
-          </StyledView>
-        </StyledView>
+        </Animated.View>
       </StyledView>
     </Screen>
   );

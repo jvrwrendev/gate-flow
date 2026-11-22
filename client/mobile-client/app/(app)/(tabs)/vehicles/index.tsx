@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { StyledView, StyledText } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2 } from '@/src/components/ui/typography';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
 import { EmptyState } from '@/src/components/layout/empty-state';
@@ -49,18 +49,16 @@ export default function VehiclesScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledView className="flex-row items-start justify-between">
-          <StyledView className="flex-1 pr-3">
-            <H2>My Vehicles</H2>
-            <StyledText className="mt-1 text-sm text-muted-foreground">
-              Register and manage vehicles for gate access
-            </StyledText>
-          </StyledView>
-          <Button size="sm" onPress={() => router.push('/vehicles/new')}>
-            <Plus size={16} color="#ffffff" />
-            <StyledText className="ml-1 text-sm font-medium text-primary-foreground">Add</StyledText>
-          </Button>
-        </StyledView>
+        <ScreenHeader
+          title="My Vehicles"
+          subtitle="Register and manage vehicles for gate access"
+          rightAction={
+            <Button size="sm" onPress={() => router.push('/vehicles/new')}>
+              <Plus size={16} color="#ffffff" />
+              <StyledText className="ml-1 text-sm font-medium text-primary-foreground">Add</StyledText>
+            </Button>
+          }
+        />
 
         {list.length === 0 ? (
           <EmptyState

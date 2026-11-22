@@ -24,7 +24,7 @@ const sizeMap = {
 };
 
 const textMap = {
-  sm: 'text-xs',
+  sm: 'text-[13px]',
   md: 'text-sm',
   lg: 'text-2xl',
 };

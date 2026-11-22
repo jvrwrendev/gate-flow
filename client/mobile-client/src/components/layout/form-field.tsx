@@ -15,7 +15,7 @@ export function FormField({ label, error, children, className }: FormFieldProps)
     <StyledView className={cn('gap-1.5', className)}>
       {label ? <Label>{label}</Label> : null}
       {children}
-      {error ? <StyledText className="text-xs text-destructive">{error}</StyledText> : null}
+      {error ? <StyledText className="text-[13px] text-destructive">{error}</StyledText> : null}
     </StyledView>
   );
 }

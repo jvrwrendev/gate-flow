@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2, H3 } from '@/src/components/ui/typography';
+import { H3 } from '@/src/components/ui/typography';
 import { Card, CardContent } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
 import { StatusPill } from '@/src/components/shared/status-pill';
@@ -12,7 +13,7 @@ import { useAsyncData } from '@/src/hooks/useAsyncData';
 import * as visitorsService from '@/src/services/visitors.mock';
 import type { VisitorPass } from '@/src/types';
 import { formatDateTime } from '@/src/lib/formatters';
-import { ChevronLeft, Users } from 'lucide-react-native';
+import { Users } from 'lucide-react-native';
 
 export default function VisitorPassDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -46,20 +47,14 @@ export default function VisitorPassDetailScreen() {
 
   return (
     <Screen scroll>
-      <StyledView className="px-4 pt-6">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="mb-4 flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#111827" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
+      <StyledView className="px-5 pt-4">
+        <ScreenHeader title="Visitor pass details" subtitle="Review visitor access information" showBack className="mb-5" />
 
         <StyledView className="mb-6 items-center">
           <StyledView className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-secondary">
             <Users size={36} color="#111827" />
           </StyledView>
-          <H2 className="text-center">{pass.visitorName}</H2>
+          <StyledText className="text-center text-2xl font-semibold tracking-tight text-foreground">{pass.visitorName}</StyledText>
           <StyledView className="mt-2">
             <StatusPill status={pass.status} />
           </StyledView>

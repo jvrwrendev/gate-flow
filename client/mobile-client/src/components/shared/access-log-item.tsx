@@ -32,7 +32,7 @@ export function AccessLogItem({ log, variant = 'row' }: AccessLogItemProps) {
             <StyledText className="text-sm font-semibold text-foreground">
               {log.plateNumber}
             </StyledText>
-            <StyledText className="mt-0.5 text-xs font-medium text-primary">
+            <StyledText className="mt-0.5 text-[13px] font-medium text-primary">
               {isEntry ? 'Vehicle entry' : 'Vehicle exit'}
             </StyledText>
           </StyledView>
@@ -40,12 +40,12 @@ export function AccessLogItem({ log, variant = 'row' }: AccessLogItemProps) {
         </StyledView>
 
         <StyledView className="mt-2 gap-1">
-          <StyledText className="text-xs text-muted-foreground">{log.gate}</StyledText>
-          <StyledText className="text-xs font-medium text-foreground/80">
+          <StyledText className="text-[13px] text-muted-foreground">{log.gate}</StyledText>
+          <StyledText className="text-[13px] font-medium text-foreground/80">
             {formatDateTime(log.timestamp)}
           </StyledText>
           {log.notes ? (
-            <StyledText className="text-xs text-muted-foreground">{log.notes}</StyledText>
+            <StyledText className="text-[13px] text-muted-foreground">{log.notes}</StyledText>
           ) : null}
         </StyledView>
       </StyledView>

@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
-import { ChevronLeft, Bell } from 'lucide-react-native';
-import { StyledView, StyledText, StyledPressable, StyledSwitch } from '@/src/components/ui/core';
-import { H2, Muted } from '@/src/components/ui/typography';
+import { Bell } from 'lucide-react-native';
+import { StyledView, StyledText, StyledSwitch } from '@/src/components/ui/core';
 import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { useAuth } from '@/src/context/AuthContext';
 
 export default function NotificationSettingsScreen() {
@@ -18,23 +18,11 @@ export default function NotificationSettingsScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <StyledView className="flex-row items-center gap-3">
-          <StyledView className="h-11 w-11 items-center justify-center rounded-xl bg-secondary">
-            <Bell size={20} color="#0f766e" />
-          </StyledView>
-          <StyledView className="flex-1">
-            <H2>Notification Settings</H2>
-            <Muted className="mt-0.5">Manage push notifications and access alerts</Muted>
-          </StyledView>
-        </StyledView>
+        <ScreenHeader
+          title="Notification settings"
+          subtitle="Manage push notifications and access alerts"
+          showBack
+        />
 
         <StyledView className="gap-2">
           <StyledText className="px-1 text-sm font-semibold text-foreground">Access alerts</StyledText>
@@ -110,7 +98,7 @@ function ToggleRow({
     >
       <StyledView className="flex-1 pr-4">
         <StyledText className="text-sm font-medium text-foreground">{label}</StyledText>
-        <StyledText className="mt-0.5 text-xs text-muted-foreground">{description}</StyledText>
+        <StyledText className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{description}</StyledText>
       </StyledView>
       <StyledSwitch value={value} onValueChange={onValueChange} />
     </StyledView>

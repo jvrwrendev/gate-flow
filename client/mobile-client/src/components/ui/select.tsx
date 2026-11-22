@@ -49,7 +49,7 @@ export function Select({
         </StyledText>
         <ChevronDown size={16} color="#737373" />
       </StyledPressable>
-      {error ? <StyledText className="mt-1 text-xs text-destructive">{error}</StyledText> : null}
+      {error ? <StyledText className="mt-1 text-[13px] text-destructive">{error}</StyledText> : null}
 
       <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)}>
         <StyledView className="flex-1 justify-end bg-black/40">

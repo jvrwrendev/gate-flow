@@ -27,7 +27,7 @@ export interface BadgeProps extends VariantProps<typeof badgeVariants> {
 function Badge({ children, variant = 'default', className }: BadgeProps) {
   return (
     <StyledView className={cn(badgeVariants({ variant }), className)}>
-      <StyledText className="text-xs font-medium">{children}</StyledText>
+      <StyledText className="text-[13px] font-medium">{children}</StyledText>
     </StyledView>
   );
 }

@@ -49,3 +49,45 @@ export async function createVehicle(
   store.vehicles.unshift(vehicle);
   return vehicle;
 }
+
+export async function updateVehicle(
+  id: string,
+  ownerId: string,
+  payload: CreateVehiclePayload
+): Promise<Vehicle> {
+  await delay(700);
+  await simulateError();
+
+  const idx = store.vehicles.findIndex((v) => v.id === id && v.ownerId === ownerId);
+  if (idx === -1) throw new Error('Vehicle not found.');
+
+  const normalizedPlate = payload.plateNumber.trim().toUpperCase();
+  const duplicate = store.vehicles.find(
+    (v) => v.id !== id && v.ownerId === ownerId && v.plateNumber.toUpperCase() === normalizedPlate
+  );
+  if (duplicate) {
+    throw new Error('A vehicle with this plate number is already registered.');
+  }
+
+  const existing = store.vehicles[idx];
+  const nextStatus =
+    existing.status === 'REJECTED' || existing.status === 'PENDING_VERIFICATION'
+      ? 'PENDING_VERIFICATION'
+      : existing.status;
+
+  const updated: Vehicle = {
+    ...existing,
+    plateNumber: normalizedPlate,
+    type: payload.type,
+    brand: payload.brand.trim(),
+    model: payload.model.trim(),
+    color: payload.color.trim(),
+    photoUrl: payload.photoUrl || undefined,
+    status: nextStatus,
+    reviewedAt: nextStatus === 'PENDING_VERIFICATION' ? undefined : existing.reviewedAt,
+    rejectionReason: nextStatus === 'PENDING_VERIFICATION' ? undefined : existing.rejectionReason,
+  };
+
+  store.vehicles[idx] = updated;
+  return updated;
+}

@@ -47,7 +47,7 @@ export function NotificationItem({ notification, onPress, variant = 'row' }: Not
           <StyledText className="mt-1 text-sm leading-snug text-muted-foreground">
             {notification.body}
           </StyledText>
-          <StyledText className="mt-1.5 text-xs font-medium text-foreground/70">
+          <StyledText className="mt-1.5 text-[13px] font-medium text-foreground/70">
             {formatRelative(notification.timestamp)}
           </StyledText>
         </StyledView>

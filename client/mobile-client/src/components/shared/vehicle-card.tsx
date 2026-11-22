@@ -25,7 +25,7 @@ export function VehicleCard({ vehicle, onPress }: VehicleCardProps) {
             <StyledText className="text-sm text-muted-foreground">
               {vehicle.brand} {vehicle.model} · {vehicle.color}
             </StyledText>
-            <StyledText className="text-xs text-muted-foreground">
+            <StyledText className="text-[13px] text-muted-foreground">
               Submitted {formatDate(vehicle.submittedAt)}
             </StyledText>
           </StyledView>

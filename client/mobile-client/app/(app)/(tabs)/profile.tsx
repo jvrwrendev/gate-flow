@@ -14,6 +14,7 @@ import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/cor
 import { H2, Muted } from '@/src/components/ui/typography';
 import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { Avatar } from '@/src/components/shared/avatar';
 import { useAuth } from '@/src/context/AuthContext';
 
@@ -38,7 +39,7 @@ export default function ProfileScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <H2>Profile &amp; Settings</H2>
+        <ScreenHeader title="Profile & Settings" subtitle="Manage your account and preferences" />
 
         <Card className="flex-row items-center gap-4 p-4">
           <Avatar name={user?.name ?? 'User'} size="lg" />
@@ -50,7 +51,7 @@ export default function ProfileScreen() {
             {user?.phone ? <Muted className="mt-0.5">{user.phone}</Muted> : null}
             {user?.unit ? (
               <StyledView className="mt-2 self-start rounded-full border border-border bg-secondary px-2.5 py-1">
-                <StyledText className="text-xs font-medium text-secondary-foreground">
+                <StyledText className="text-[13px] font-medium text-secondary-foreground">
                   Unit {user.unit}
                 </StyledText>
               </StyledView>
@@ -127,7 +128,7 @@ export default function ProfileScreen() {
               </StyledView>
               <StyledView>
                 <StyledText className="text-sm font-semibold text-destructive">Logout</StyledText>
-                <StyledText className="text-xs text-muted-foreground">
+                <StyledText className="text-[13px] text-muted-foreground">
                   Sign out of your account
                 </StyledText>
               </StyledView>
@@ -172,7 +173,7 @@ function MenuItem({
         <StyledView className="flex-1">
           <StyledText className="text-sm font-medium text-foreground">{label}</StyledText>
           {description ? (
-            <StyledText className="mt-0.5 text-xs text-muted-foreground">{description}</StyledText>
+            <StyledText className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{description}</StyledText>
           ) : null}
         </StyledView>
       </StyledView>

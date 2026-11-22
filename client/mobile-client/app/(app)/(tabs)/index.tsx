@@ -163,7 +163,7 @@ export default function DashboardScreen() {
 
             {primaryVehicle ? (
               <StyledView className="mt-4 rounded-2xl bg-white/10 p-3.5">
-                <StyledText className="text-xs font-medium uppercase tracking-wide text-primary-foreground/70">
+                <StyledText className="text-[13px] font-medium uppercase tracking-wide text-primary-foreground/70">
                   Primary vehicle
                 </StyledText>
                 <StyledText className="mt-1 text-base font-semibold text-primary-foreground">
@@ -190,7 +190,7 @@ export default function DashboardScreen() {
               <StyledText className="text-sm font-semibold text-foreground">
                 {pendingCount} vehicle{pendingCount > 1 ? 's' : ''} pending approval
               </StyledText>
-              <Muted className="mt-0.5 text-xs">We’ll notify you once security reviews your request.</Muted>
+              <Muted className="mt-0.5 text-[13px]">We’ll notify you once security reviews your request.</Muted>
             </StyledView>
           </StyledView>
         ) : null}
@@ -198,7 +198,7 @@ export default function DashboardScreen() {
         <StyledView>
           <StyledView className="mb-3 flex-row items-center justify-between">
             <StyledText className="text-base font-semibold text-foreground">Quick access</StyledText>
-            <Muted className="text-xs">{vehicles.length} vehicles total</Muted>
+            <Muted className="text-[13px]">{vehicles.length} vehicles total</Muted>
           </StyledView>
           <StyledView className="flex-row flex-wrap gap-3">
             <FeatureCard
@@ -278,7 +278,7 @@ function HeroStat({ label, value }: { label: string; value: number }) {
   return (
     <StyledView className="flex-1 rounded-xl bg-white/10 px-3 py-2.5">
       <StyledText className="text-lg font-semibold text-primary-foreground">{value}</StyledText>
-      <StyledText className="text-xs text-primary-foreground/75">{label}</StyledText>
+      <StyledText className="text-[13px] text-primary-foreground/75">{label}</StyledText>
     </StyledView>
   );
 }
@@ -311,7 +311,7 @@ function FeatureCard({
         </StyledView>
         <StyledView>
           <StyledText className="text-sm font-semibold text-foreground">{label}</StyledText>
-          <StyledText className="mt-0.5 text-xs text-muted-foreground">{subtext}</StyledText>
+          <StyledText className="mt-0.5 text-[13px] text-muted-foreground">{subtext}</StyledText>
         </StyledView>
       </Card>
     </StyledPressable>

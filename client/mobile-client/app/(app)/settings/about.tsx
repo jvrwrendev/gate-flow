@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
-import { ChevronLeft, Info, ShieldCheck, Car, Bell } from 'lucide-react-native';
-import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
-import { H2, Muted } from '@/src/components/ui/typography';
+import { Info, ShieldCheck, Car, Bell } from 'lucide-react-native';
+import { StyledView, StyledText } from '@/src/components/ui/core';
+import { Muted } from '@/src/components/ui/typography';
 import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 
 export default function AboutScreen() {
   const router = useRouter();
@@ -13,23 +14,7 @@ export default function AboutScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <StyledView className="flex-row items-center gap-3">
-          <StyledView className="h-11 w-11 items-center justify-center rounded-xl bg-secondary">
-            <Info size={20} color="#0f766e" />
-          </StyledView>
-          <StyledView className="flex-1">
-            <H2>About GATEGUARD</H2>
-            <Muted className="mt-0.5">Application information</Muted>
-          </StyledView>
-        </StyledView>
+        <ScreenHeader title="About GATEGUARD" subtitle="Application information" showBack />
 
         <Card className="items-center gap-2 p-5">
           <StyledView className="h-14 w-14 items-center justify-center rounded-2xl bg-primary">
@@ -38,7 +23,7 @@ export default function AboutScreen() {
           <StyledText className="mt-1 text-lg font-semibold text-foreground">{appName}</StyledText>
           <StyledText className="text-sm text-muted-foreground">Version {version}</StyledText>
           <StyledView className="mt-1 rounded-full border border-border bg-secondary px-3 py-1">
-            <StyledText className="text-xs font-medium text-secondary-foreground">
+            <StyledText className="text-[13px] font-medium text-secondary-foreground">
               Mock prototype
             </StyledText>
           </StyledView>
@@ -59,7 +44,7 @@ export default function AboutScreen() {
           <InfoRow icon={<Bell size={18} color="#0f766e" />} label="Alerts & notifications" last />
         </Card>
 
-        <Muted className="text-center text-xs">© 2026 GATEGUARD. All rights reserved.</Muted>
+        <Muted className="text-center text-[13px]">© 2026 GATEGUARD. All rights reserved.</Muted>
       </StyledView>
     </Screen>
   );

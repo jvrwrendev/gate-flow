@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
-import { ChevronLeft, Shield } from 'lucide-react-native';
-import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
-import { H2, Muted } from '@/src/components/ui/typography';
+import { Shield } from 'lucide-react-native';
+import { StyledView, StyledText } from '@/src/components/ui/core';
+import { Muted } from '@/src/components/ui/typography';
 import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 
 const sections = [
   {
@@ -34,23 +35,7 @@ export default function PrivacyPolicyScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <StyledView className="flex-row items-center gap-3">
-          <StyledView className="h-11 w-11 items-center justify-center rounded-xl bg-secondary">
-            <Shield size={20} color="#0f766e" />
-          </StyledView>
-          <StyledView className="flex-1">
-            <H2>Privacy Policy</H2>
-            <Muted className="mt-0.5">Last updated: November 2026</Muted>
-          </StyledView>
-        </StyledView>
+        <ScreenHeader title="Privacy Policy" subtitle="Last updated: November 2026" showBack />
 
         <Card className="gap-4 p-4">
           {sections.map((section) => (
@@ -65,7 +50,7 @@ export default function PrivacyPolicyScreen() {
           ))}
         </Card>
 
-        <Muted className="text-xs leading-relaxed">
+        <Muted className="text-[13px] leading-relaxed">
           This policy is provided for demonstration purposes within the GATEGUARD prototype and does
           not constitute legal advice.
         </Muted>

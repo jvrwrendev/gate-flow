@@ -3,14 +3,15 @@ import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, ChevronLeft, CheckCircle2 } from 'lucide-react-native';
+import { Eye, EyeOff, CheckCircle2 } from 'lucide-react-native';
 import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2, Muted } from '@/src/components/ui/typography';
+import { Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
 import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { Card } from '@/src/components/ui/card';
 
 const schema = z
@@ -74,18 +75,11 @@ export default function ChangePasswordScreen() {
       }
     >
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <StyledView>
-          <H2>Change password</H2>
-          <Muted className="mt-1">Update your password to keep your account secure.</Muted>
-        </StyledView>
+        <ScreenHeader
+          title="Change password"
+          subtitle="Update your password to keep your account secure"
+          showBack
+        />
 
         {saved ? (
           <StyledView className="flex-row items-center gap-2 rounded-2xl border border-success/20 bg-success/10 p-4">
@@ -130,7 +124,7 @@ export default function ChangePasswordScreen() {
             />
           </FormField>
 
-          <Muted className="text-xs">
+          <Muted className="text-[13px] leading-5">
             Use at least 8 characters, including an uppercase letter and a number.
           </Muted>
         </Card>

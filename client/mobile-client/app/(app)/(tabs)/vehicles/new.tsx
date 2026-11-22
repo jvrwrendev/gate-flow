@@ -2,20 +2,20 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2 } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { Select } from '@/src/components/ui/select';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
 import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { ImageUploadField } from '@/src/components/shared/image-upload-field';
 import { useAuth } from '@/src/context/AuthContext';
 import { vehicleSchema, type VehicleSchema } from '@/src/lib/schemas';
 import { VEHICLE_TYPES } from '@/src/lib/constants';
 import * as vehiclesService from '@/src/services/vehicles.mock';
-import { ChevronLeft } from 'lucide-react-native';
+
 
 const typeOptions = VEHICLE_TYPES.map((t) => ({ label: t, value: t }));
 
@@ -58,16 +58,8 @@ export default function NewVehicleScreen() {
         </BottomActionBar>
       }
     >
-      <StyledView className="px-4 pt-6">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="mb-4 flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#111827" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <H2 className="mb-6">Register vehicle</H2>
+      <StyledView className="px-5 pt-4">
+        <ScreenHeader title="Register vehicle" subtitle="Add a vehicle for gate access approval" showBack className="mb-6" />
 
         <StyledView className="gap-4">
           <FormField label="Plate number" error={errors.plateNumber?.message}>

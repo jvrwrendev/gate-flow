@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
-import { H2 } from '@/src/components/ui/typography';
 import { Card } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
 import { EmptyState } from '@/src/components/layout/empty-state';
@@ -57,12 +57,7 @@ export default function HistoryScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledView>
-          <H2>Access History</H2>
-          <StyledText className="mt-1 text-sm text-muted-foreground">
-            Track vehicle entries and exits
-          </StyledText>
-        </StyledView>
+        <ScreenHeader title="Access History" subtitle="Track vehicle entries and exits" />
 
         <StyledView className="flex-row gap-2">
           {filters.map((f) => {

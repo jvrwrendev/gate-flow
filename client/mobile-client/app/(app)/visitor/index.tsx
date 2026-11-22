@@ -2,9 +2,10 @@ import { useCallback } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2 } from '@/src/components/ui/typography';
+
 import { Card, CardContent } from '@/src/components/ui/card';
 import { Screen } from '@/src/components/layout/screen';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
 import { EmptyState } from '@/src/components/layout/empty-state';
@@ -14,7 +15,7 @@ import { useAsyncData } from '@/src/hooks/useAsyncData';
 import * as visitorsService from '@/src/services/visitors.mock';
 import type { VisitorPass } from '@/src/types';
 import { formatDateTime } from '@/src/lib/formatters';
-import { Plus, Users, ChevronRight, ChevronLeft } from 'lucide-react-native';
+import { Plus, Users, ChevronRight } from 'lucide-react-native';
 
 export default function VisitorPassesScreen() {
   const { user } = useAuth();
@@ -51,30 +52,17 @@ export default function VisitorPassesScreen() {
   return (
     <Screen scroll>
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="flex-row items-center gap-1 self-start"
-          accessibilityRole="button"
-          accessibilityLabel="Go back"
-        >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <StyledView className="flex-row items-start justify-between">
-          <StyledView className="flex-1 pr-3">
-            <H2>Visitor Access</H2>
-            <StyledText className="mt-1 text-sm text-muted-foreground">
-              Request and manage temporary visitor passes
-            </StyledText>
-          </StyledView>
-          <Button size="sm" onPress={() => router.push('/visitor/new')}>
-            <Plus size={16} color="#ffffff" />
-            <StyledText className="ml-1 text-sm font-medium text-primary-foreground">
-              New
-            </StyledText>
-          </Button>
-        </StyledView>
+        <ScreenHeader
+          title="Visitor Access"
+          subtitle="Request and manage temporary visitor passes"
+          showBack
+          rightAction={
+            <Button size="sm" onPress={() => router.push('/visitor/new')}>
+              <Plus size={16} color="#ffffff" />
+              <StyledText className="ml-1 text-sm font-medium text-primary-foreground">New</StyledText>
+            </Button>
+          }
+        />
 
         {list.length === 0 ? (
           <EmptyState
@@ -100,7 +88,7 @@ export default function VisitorPassesScreen() {
                       <StyledText className="text-sm text-muted-foreground">
                         {pass.purpose}
                       </StyledText>
-                      <StyledText className="text-xs text-muted-foreground">
+                      <StyledText className="text-[13px] text-muted-foreground">
                         {formatDateTime(pass.scheduledStart)} –{' '}
                         {formatDateTime(pass.scheduledEnd)}
                       </StyledText>

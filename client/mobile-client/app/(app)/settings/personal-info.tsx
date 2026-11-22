@@ -3,15 +3,15 @@ import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
-import { H2 } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
 import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
+import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { useAuth } from '@/src/context/AuthContext';
-import { ChevronLeft, Check } from 'lucide-react-native';
+import { Check } from 'lucide-react-native';
 import { Card } from '@/src/components/ui/card';
 
 const schema = z.object({
@@ -59,20 +59,11 @@ export default function PersonalInfoScreen() {
       }
     >
       <StyledView className="gap-5 px-5 pt-4">
-        <StyledPressable
-          onPress={() => router.back()}
-          className="flex-row items-center gap-1 self-start"
-        >
-          <ChevronLeft size={20} color="#0f766e" />
-          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-        </StyledPressable>
-
-        <StyledView>
-          <H2>Personal information</H2>
-          <StyledText className="mt-1 text-sm text-muted-foreground">
-            View and update your profile details.
-          </StyledText>
-        </StyledView>
+        <ScreenHeader
+          title="Personal information"
+          subtitle="View and update your profile details"
+          showBack
+        />
 
         <Card className="gap-4 p-4">
           <FormField label="Full name" error={errors.name?.message}>

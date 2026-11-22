@@ -99,7 +99,7 @@ export function ImageUploadField({ label, value, onChange, error, helperText, cl
               <ImageIcon size={22} color="#0f766e" />
             </StyledView>
             <StyledText className="text-sm font-medium text-foreground">Upload vehicle image</StyledText>
-            <StyledText className="text-center text-xs text-muted-foreground">
+            <StyledText className="text-center text-[13px] leading-5 text-muted-foreground">
               JPG, JPEG, or PNG. You can choose from gallery or take a photo.
             </StyledText>
           </StyledView>
@@ -116,8 +116,8 @@ export function ImageUploadField({ label, value, onChange, error, helperText, cl
         </StyledView>
       )}
 
-      {error ? <StyledText className="text-xs text-destructive">{error}</StyledText> : null}
-      {!error && helperText ? <StyledText className="text-xs text-muted-foreground">{helperText}</StyledText> : null}
+      {error ? <StyledText className="text-[13px] text-destructive">{error}</StyledText> : null}
+      {!error && helperText ? <StyledText className="text-[13px] text-muted-foreground">{helperText}</StyledText> : null}
     </StyledView>
   );
 }
