@@ -3,6 +3,10 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { useAuth } from '@/src/context/AuthContext';
 import { StyledView, StyledActivityIndicator } from '@/src/components/ui/core';
 
+export const unstable_settings = {
+  anchor: '(tabs)',
+};
+
 export default function AppLayout() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
@@ -25,6 +29,10 @@ export default function AppLayout() {
         <StyledActivityIndicator size="large" color="#111827" />
       </StyledView>
     );
+  }
+
+  if (!isAuthenticated) {
+    return null;
   }
 
   return (

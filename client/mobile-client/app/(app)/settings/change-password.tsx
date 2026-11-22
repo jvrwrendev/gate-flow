@@ -165,14 +165,14 @@ function PasswordInput({
             autoCapitalize="none"
             autoCorrect={false}
             invalid={invalid}
-            className="pr-11"
+            className="pr-14"
           />
           <StyledPressable
             onPress={onToggle}
             accessibilityRole="button"
             accessibilityLabel={visible ? 'Hide password' : 'Show password'}
             hitSlop={8}
-            className="absolute right-0 h-11 w-11 items-center justify-center"
+            className="absolute right-0 h-14 w-14 items-center justify-center"
           >
             {visible ? <EyeOff size={18} color="#5f7a7a" /> : <Eye size={18} color="#5f7a7a" />}
           </StyledPressable>

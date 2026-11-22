@@ -1,5 +1,9 @@
 import { Stack } from 'expo-router';
 
+export const unstable_settings = {
+  anchor: 'personal-info',
+};
+
 export default function SettingsLayout() {
   return (
     <Stack

@@ -13,7 +13,7 @@ export function Input({ className, invalid, onFocus, onBlur, ...props }: InputPr
   return (
     <StyledTextInput
       className={cn(
-        'h-11 rounded-md border bg-background px-3.5 text-[15px] leading-tight text-foreground',
+        'h-14 rounded-xl border bg-background px-4 text-[15px] leading-tight text-foreground',
         'placeholder:text-muted-foreground',
         invalid ? 'border-destructive' : focused ? 'border-ring' : 'border-input',
         props.editable === false && 'opacity-50',

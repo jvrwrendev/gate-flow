@@ -3,6 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '@/src/context/AuthContext';
 import '@/global.css';
 
+export const unstable_settings = {
+  anchor: 'index',
+};
+
 export default function RootLayout() {
   return (
     <AuthProvider>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { StyledView, StyledText, StyledScrollView, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H2 } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
@@ -44,70 +44,64 @@ export default function NewVehicleScreen() {
   };
 
   return (
-    <Screen scroll>
-      <StyledScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingBottom: 32 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <StyledView className="px-4 pt-6">
-          <StyledPressable
-            onPress={() => router.back()}
-            className="mb-4 flex-row items-center gap-1 self-start"
-          >
-            <ChevronLeft size={20} color="#111827" />
-            <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-          </StyledPressable>
+    <Screen scroll keyboardShouldPersistTaps="handled">
+      <StyledView className="px-4 pt-6">
+        <StyledPressable
+          onPress={() => router.back()}
+          className="mb-4 flex-row items-center gap-1 self-start"
+        >
+          <ChevronLeft size={20} color="#111827" />
+          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
+        </StyledPressable>
 
-          <H2 className="mb-6">Register vehicle</H2>
+        <H2 className="mb-6">Register vehicle</H2>
 
-          <StyledView className="gap-4">
-            <FormField label="Plate number" error={errors.plateNumber?.message}>
-              <ControlledInput
-                control={control}
-                name="plateNumber"
-                placeholder="ABC-1234"
-                autoCapitalize="characters"
-              />
-            </FormField>
+        <StyledView className="gap-4">
+          <FormField label="Plate number" error={errors.plateNumber?.message}>
+            <ControlledInput
+              control={control}
+              name="plateNumber"
+              placeholder="ABC-1234"
+              autoCapitalize="characters"
+            />
+          </FormField>
 
-            <FormField label="Vehicle type" error={errors.type?.message}>
-              <Controller
-                control={control}
-                name="type"
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    placeholder="Select type"
-                    value={value}
-                    options={typeOptions}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </FormField>
+          <FormField label="Vehicle type" error={errors.type?.message}>
+            <Controller
+              control={control}
+              name="type"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  placeholder="Select type"
+                  value={value}
+                  options={typeOptions}
+                  onChange={onChange}
+                />
+              )}
+            />
+          </FormField>
 
-            <FormField label="Brand" error={errors.brand?.message}>
-              <ControlledInput control={control} name="brand" placeholder="Toyota" />
-            </FormField>
+          <FormField label="Brand" error={errors.brand?.message}>
+            <ControlledInput control={control} name="brand" placeholder="Toyota" />
+          </FormField>
 
-            <FormField label="Model" error={errors.model?.message}>
-              <ControlledInput control={control} name="model" placeholder="Camry" />
-            </FormField>
+          <FormField label="Model" error={errors.model?.message}>
+            <ControlledInput control={control} name="model" placeholder="Camry" />
+          </FormField>
 
-            <FormField label="Color" error={errors.color?.message}>
-              <ControlledInput control={control} name="color" placeholder="Silver" />
-            </FormField>
+          <FormField label="Color" error={errors.color?.message}>
+            <ControlledInput control={control} name="color" placeholder="Silver" />
+          </FormField>
 
-            {error ? (
-              <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
-            ) : null}
+          {error ? (
+            <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
+          ) : null}
 
-            <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-              Submit registration
-            </Button>
-          </StyledView>
+          <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+            Submit registration
+          </Button>
         </StyledView>
-      </StyledScrollView>
+      </StyledView>
     </Screen>
   );
 }

@@ -1,6 +1,10 @@
 import { Tabs } from 'expo-router';
 import { AnimatedTabBar } from '@/src/components/layout/animated-tab-bar';
 
+export const unstable_settings = {
+  anchor: 'index',
+};
+
 export default function TabsLayout() {
   return (
     <Tabs

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { StyledView, StyledText, StyledScrollView } from '@/src/components/ui/core';
+import { StyledView, StyledText } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H2, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
@@ -36,84 +36,83 @@ export default function RegisterScreen() {
   };
 
   return (
-    <Screen scroll className="px-6">
-      <StyledScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingVertical: 32 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <StyledView className="items-center gap-2 pt-8">
-          <StyledView className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
-            <UserPlus size={32} color="#111827" />
-          </StyledView>
-          <H2 className="text-center">Create account</H2>
-          <Muted className="text-center">Register to access your community gates</Muted>
+    <Screen
+      scroll
+      className="px-6"
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ paddingTop: 32, paddingBottom: 40 }}
+    >
+      <StyledView className="items-center gap-2 pt-8">
+        <StyledView className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
+          <UserPlus size={32} color="#111827" />
         </StyledView>
+        <H2 className="text-center">Create account</H2>
+        <Muted className="text-center">Register to access your community gates</Muted>
+      </StyledView>
 
-        <StyledView className="mt-8 gap-4">
-          <FormField label="Full name" error={errors.name?.message}>
-            <ControlledInput control={control} name="name" placeholder="Jane Doe" />
-          </FormField>
+      <StyledView className="mt-8 gap-4">
+        <FormField label="Full name" error={errors.name?.message}>
+          <ControlledInput control={control} name="name" placeholder="Jane Doe" />
+        </FormField>
 
-          <FormField label="Email" error={errors.email?.message}>
-            <ControlledInput
-              control={control}
-              name="email"
-              placeholder="you@example.com"
-              autoCapitalize="none"
-              keyboardType="email-address"
-            />
-          </FormField>
+        <FormField label="Email" error={errors.email?.message}>
+          <ControlledInput
+            control={control}
+            name="email"
+            placeholder="you@example.com"
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
+        </FormField>
 
-          <FormField label="Phone" error={errors.phone?.message}>
-            <ControlledInput
-              control={control}
-              name="phone"
-              placeholder="+1 555 0000"
-              keyboardType="phone-pad"
-            />
-          </FormField>
+        <FormField label="Phone" error={errors.phone?.message}>
+          <ControlledInput
+            control={control}
+            name="phone"
+            placeholder="+1 555 0000"
+            keyboardType="phone-pad"
+          />
+        </FormField>
 
-          <FormField label="Unit (optional)" error={errors.unit?.message}>
-            <ControlledInput control={control} name="unit" placeholder="A-101" />
-          </FormField>
+        <FormField label="Unit (optional)" error={errors.unit?.message}>
+          <ControlledInput control={control} name="unit" placeholder="A-101" />
+        </FormField>
 
-          <FormField label="Password" error={errors.password?.message}>
-            <ControlledInput
-              control={control}
-              name="password"
-              placeholder="••••••••"
-              secureTextEntry
-            />
-          </FormField>
+        <FormField label="Password" error={errors.password?.message}>
+          <ControlledInput
+            control={control}
+            name="password"
+            placeholder="••••••••"
+            secureTextEntry
+          />
+        </FormField>
 
-          <FormField label="Confirm password" error={errors.confirmPassword?.message}>
-            <ControlledInput
-              control={control}
-              name="confirmPassword"
-              placeholder="••••••••"
-              secureTextEntry
-            />
-          </FormField>
+        <FormField label="Confirm password" error={errors.confirmPassword?.message}>
+          <ControlledInput
+            control={control}
+            name="confirmPassword"
+            placeholder="••••••••"
+            secureTextEntry
+          />
+        </FormField>
 
-          {error ? (
-            <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
-          ) : null}
+        {error ? (
+          <StyledText className="text-center text-sm text-destructive">{error}</StyledText>
+        ) : null}
 
-          <Button loading={isLoading} onPress={() => handleSubmit(onSubmit)()}>
-            Sign up
-          </Button>
-        </StyledView>
+        <Button loading={isLoading} onPress={() => handleSubmit(onSubmit)()}>
+          Sign up
+        </Button>
+      </StyledView>
 
-        <StyledView className="mt-8 flex-row justify-center gap-1">
-          <Muted>Already have an account?</Muted>
-          <Link href="/login" asChild>
-            <StyledText className="text-sm font-medium text-primary underline">
-              Sign in
-            </StyledText>
-          </Link>
-        </StyledView>
-      </StyledScrollView>
+      <StyledView className="mt-8 flex-row justify-center gap-1">
+        <Muted>Already have an account?</Muted>
+        <Link href="/login" asChild>
+          <StyledText className="text-sm font-medium text-primary underline">
+            Sign in
+          </StyledText>
+        </Link>
+      </StyledView>
     </Screen>
   );
 }

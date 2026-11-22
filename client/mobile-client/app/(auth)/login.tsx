@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { useForm, Controller, type Control } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Shield, AlertCircle, ChevronLeft } from 'lucide-react-native';
-import { StyledView, StyledText, StyledScrollView, StyledPressable } from '@/src/components/ui/core';
+import { Eye, EyeOff, AlertCircle, ChevronLeft } from 'lucide-react-native';
+import { StyledView, StyledText, StyledPressable, StyledImage } from '@/src/components/ui/core';
+
+const logo = require('@/assets/app-image/logo.png');
 import { Button } from '@/src/components/ui/button';
 import { H1, Muted } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
@@ -39,34 +41,36 @@ export default function LoginScreen() {
   };
 
   return (
-    <Screen scroll className="bg-background">
-      <StyledScrollView
-        className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, paddingVertical: 24 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <StyledView className="w-full max-w-[420px] flex-1 self-center px-6">
-          <StyledPressable
-            onPress={() => router.push('/(auth)/welcome')}
-            className="mb-6 flex-row items-center gap-1 self-start"
-            accessibilityRole="button"
-            accessibilityLabel="Back to welcome screen"
-          >
-            <ChevronLeft size={20} color="#0f766e" />
-            <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-          </StyledPressable>
+    <Screen
+      scroll
+      className="bg-background"
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1, paddingTop: 24, paddingBottom: 40 }}
+    >
+      <StyledView className="w-full max-w-[420px] flex-1 self-center px-6">
+        <StyledPressable
+          onPress={() => router.push('/(auth)/welcome')}
+          className="mb-6 flex-row items-center gap-1 self-start"
+          accessibilityRole="button"
+          accessibilityLabel="Back to welcome screen"
+        >
+          <ChevronLeft size={20} color="#0f766e" />
+          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
+        </StyledPressable>
 
-          <StyledView className="flex-1 justify-center pb-8">
-            <StyledView className="items-center">
-              <StyledView className="h-14 w-14 items-center justify-center rounded-2xl border border-border bg-secondary">
-                <Shield size={26} color="#0f766e" strokeWidth={1.75} />
-              </StyledView>
-              <H1 className="mt-6 text-center text-[28px] leading-tight">Welcome back</H1>
-              <Muted className="mt-2 text-center text-[15px] leading-relaxed">
-                Sign in to manage your gate access
-              </Muted>
-            </StyledView>
+        <StyledView className="flex-1 justify-center pb-8">
+          <StyledView className="items-center">
+            <StyledImage
+              source={logo}
+              resizeMode="contain"
+              className="h-16 w-44"
+              accessibilityLabel="GATEGUARD logo"
+            />
+            <H1 className="mt-5 text-center text-[28px] leading-tight">Welcome back</H1>
+            <Muted className="mt-2 text-center text-[15px] leading-relaxed">
+              Sign in to manage your gate access
+            </Muted>
+          </StyledView>
 
           <StyledView className="mt-10 gap-5">
             {error ? (
@@ -119,14 +123,14 @@ export default function LoginScreen() {
                       invalid={!!errors.password}
                       returnKeyType="done"
                       onSubmitEditing={() => handleSubmit(onSubmit)()}
-                      className="pr-11"
+                      className="pr-14"
                     />
                     <StyledPressable
                       onPress={() => setShowPassword((v) => !v)}
                       accessibilityRole="button"
                       accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
                       hitSlop={8}
-                      className="absolute right-0 h-11 w-11 items-center justify-center"
+                      className="absolute right-0 h-14 w-14 items-center justify-center"
                     >
                       {showPassword ? (
                         <EyeOff size={18} color="#737373" />
@@ -173,9 +177,8 @@ export default function LoginScreen() {
               Demo access: <StyledText className="text-xs font-medium text-foreground">demo@gateguard.app</StyledText> · <StyledText className="text-xs font-medium text-foreground">password</StyledText>
             </StyledText>
           </StyledView>
-          </StyledView>
         </StyledView>
-      </StyledScrollView>
+      </StyledView>
     </Screen>
   );
 }

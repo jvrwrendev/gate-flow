@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { StyledView, StyledText, StyledScrollView, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H2 } from '@/src/components/ui/typography';
 import { Input } from '@/src/components/ui/input';
@@ -46,54 +46,48 @@ export default function PersonalInfoScreen() {
   };
 
   return (
-    <Screen scroll>
-      <StyledScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingBottom: 32 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <StyledView className="gap-5 px-5 pt-4">
-          <StyledPressable
-            onPress={() => router.back()}
-            className="flex-row items-center gap-1 self-start"
-          >
-            <ChevronLeft size={20} color="#0f766e" />
-            <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-          </StyledPressable>
+    <Screen scroll keyboardShouldPersistTaps="handled">
+      <StyledView className="gap-5 px-5 pt-4">
+        <StyledPressable
+          onPress={() => router.back()}
+          className="flex-row items-center gap-1 self-start"
+        >
+          <ChevronLeft size={20} color="#0f766e" />
+          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
+        </StyledPressable>
 
-          <StyledView>
-            <H2>Personal information</H2>
-            <StyledText className="mt-1 text-sm text-muted-foreground">
-              View and update your profile details.
-            </StyledText>
-          </StyledView>
-
-          <Card className="gap-4 p-4">
-            <FormField label="Full name" error={errors.name?.message}>
-              <ControlledInput control={control} name="name" invalid={!!errors.name} />
-            </FormField>
-
-            <FormField label="Phone" error={errors.phone?.message}>
-              <ControlledInput control={control} name="phone" keyboardType="phone-pad" invalid={!!errors.phone} />
-            </FormField>
-
-            <FormField label="Unit (optional)" error={errors.unit?.message}>
-              <ControlledInput control={control} name="unit" invalid={!!errors.unit} />
-            </FormField>
-
-            {saved ? (
-              <StyledView className="flex-row items-center justify-center gap-2 rounded-xl border border-success/20 bg-success/10 py-2.5">
-                <Check size={16} color="#16a34a" />
-                <StyledText className="text-sm font-medium text-foreground">Saved successfully</StyledText>
-              </StyledView>
-            ) : null}
-
-            <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-              Save changes
-            </Button>
-          </Card>
+        <StyledView>
+          <H2>Personal information</H2>
+          <StyledText className="mt-1 text-sm text-muted-foreground">
+            View and update your profile details.
+          </StyledText>
         </StyledView>
-      </StyledScrollView>
+
+        <Card className="gap-4 p-4">
+          <FormField label="Full name" error={errors.name?.message}>
+            <ControlledInput control={control} name="name" invalid={!!errors.name} />
+          </FormField>
+
+          <FormField label="Phone" error={errors.phone?.message}>
+            <ControlledInput control={control} name="phone" keyboardType="phone-pad" invalid={!!errors.phone} />
+          </FormField>
+
+          <FormField label="Unit (optional)" error={errors.unit?.message}>
+            <ControlledInput control={control} name="unit" invalid={!!errors.unit} />
+          </FormField>
+
+          {saved ? (
+            <StyledView className="flex-row items-center justify-center gap-2 rounded-xl border border-success/20 bg-success/10 py-2.5">
+              <Check size={16} color="#16a34a" />
+              <StyledText className="text-sm font-medium text-foreground">Saved successfully</StyledText>
+            </StyledView>
+          ) : null}
+
+          <Button loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+            Save changes
+          </Button>
+        </Card>
+      </StyledView>
     </Screen>
   );
 }

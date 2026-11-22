@@ -38,12 +38,12 @@ export function Select({
       <StyledPressable
         onPress={() => setOpen(true)}
         className={cn(
-          'h-11 flex-row items-center justify-between rounded-md border border-input bg-background px-3',
+          'h-14 flex-row items-center justify-between rounded-xl border border-input bg-background px-4',
           error ? 'border-destructive' : ''
         )}
       >
         <StyledText
-          className={cn('text-sm', selected ? 'text-foreground' : 'text-muted-foreground')}
+          className={cn('text-[15px]', selected ? 'text-foreground' : 'text-muted-foreground')}
         >
           {selected?.label ?? placeholder}
         </StyledText>

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { StyledView, StyledText, StyledScrollView, StyledPressable } from '@/src/components/ui/core';
+import { StyledView, StyledText, StyledPressable } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H2, H3 } from '@/src/components/ui/typography';
 import { Card, CardContent } from '@/src/components/ui/card';
@@ -46,53 +46,51 @@ export default function VisitorPassDetailScreen() {
 
   return (
     <Screen scroll>
-      <StyledScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-        <StyledView className="px-4 pt-6">
-          <StyledPressable
-            onPress={() => router.back()}
-            className="mb-4 flex-row items-center gap-1 self-start"
-          >
-            <ChevronLeft size={20} color="#111827" />
-            <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
-          </StyledPressable>
+      <StyledView className="px-4 pt-6">
+        <StyledPressable
+          onPress={() => router.back()}
+          className="mb-4 flex-row items-center gap-1 self-start"
+        >
+          <ChevronLeft size={20} color="#111827" />
+          <StyledText className="text-sm font-medium text-foreground">Back</StyledText>
+        </StyledPressable>
 
-          <StyledView className="mb-6 items-center">
-            <StyledView className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-secondary">
-              <Users size={36} color="#111827" />
-            </StyledView>
-            <H2 className="text-center">{pass.visitorName}</H2>
-            <StyledView className="mt-2">
-              <StatusPill status={pass.status} />
-            </StyledView>
+        <StyledView className="mb-6 items-center">
+          <StyledView className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-secondary">
+            <Users size={36} color="#111827" />
           </StyledView>
-
-          <Card className="mb-4">
-            <CardContent className="gap-3">
-              <DetailRow label="Purpose" value={pass.purpose} />
-              {pass.visitorPhone ? (
-                <DetailRow label="Phone" value={pass.visitorPhone} />
-              ) : null}
-              {pass.vehiclePlate ? (
-                <DetailRow label="Vehicle plate" value={pass.vehiclePlate} />
-              ) : null}
-              {pass.vehicleType ? (
-                <DetailRow label="Vehicle type" value={pass.vehicleType} />
-              ) : null}
-              <DetailRow label="Start" value={formatDateTime(pass.scheduledStart)} />
-              <DetailRow label="End" value={formatDateTime(pass.scheduledEnd)} />
-              <DetailRow label="Requested" value={formatDateTime(pass.requestedAt)} />
-              {pass.reviewedAt ? (
-                <DetailRow label="Reviewed" value={formatDateTime(pass.reviewedAt)} />
-              ) : null}
-              {pass.notes ? <DetailRow label="Notes" value={pass.notes} /> : null}
-            </CardContent>
-          </Card>
-
-          <Button variant="outline" onPress={() => router.push('/visitor')}>
-            Back to visitor passes
-          </Button>
+          <H2 className="text-center">{pass.visitorName}</H2>
+          <StyledView className="mt-2">
+            <StatusPill status={pass.status} />
+          </StyledView>
         </StyledView>
-      </StyledScrollView>
+
+        <Card className="mb-4">
+          <CardContent className="gap-3">
+            <DetailRow label="Purpose" value={pass.purpose} />
+            {pass.visitorPhone ? (
+              <DetailRow label="Phone" value={pass.visitorPhone} />
+            ) : null}
+            {pass.vehiclePlate ? (
+              <DetailRow label="Vehicle plate" value={pass.vehiclePlate} />
+            ) : null}
+            {pass.vehicleType ? (
+              <DetailRow label="Vehicle type" value={pass.vehicleType} />
+            ) : null}
+            <DetailRow label="Start" value={formatDateTime(pass.scheduledStart)} />
+            <DetailRow label="End" value={formatDateTime(pass.scheduledEnd)} />
+            <DetailRow label="Requested" value={formatDateTime(pass.requestedAt)} />
+            {pass.reviewedAt ? (
+              <DetailRow label="Reviewed" value={formatDateTime(pass.reviewedAt)} />
+            ) : null}
+            {pass.notes ? <DetailRow label="Notes" value={pass.notes} /> : null}
+          </CardContent>
+        </Card>
+
+        <Button variant="outline" onPress={() => router.push('/visitor')}>
+          Back to visitor passes
+        </Button>
+      </StyledView>
     </Screen>
   );
 }
