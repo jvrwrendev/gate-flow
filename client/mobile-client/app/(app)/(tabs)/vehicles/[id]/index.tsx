@@ -14,7 +14,6 @@ import { H2, H3, Muted } from '@/src/components/ui/typography';
 import { Card, CardContent } from '@/src/components/ui/card';
 import { Button } from '@/src/components/ui/button';
 import { Screen } from '@/src/components/layout/screen';
-import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
@@ -64,24 +63,21 @@ export default function VehicleDetailScreen() {
   const statusInfo = getStatusInfo(vehicle);
 
   return (
-    <Screen
-      scroll
-      footer={
-        <BottomActionBar bottomOffset={74}>
-          {canEdit ? (
-            <Button className="w-full" onPress={() => router.push(`/vehicles/${vehicle.id}/edit`)}>
-              Edit Vehicle
-            </Button>
-          ) : (
-            <Button variant="outline" className="w-full" onPress={() => router.back()}>
-              Back to vehicles
-            </Button>
-          )}
-        </BottomActionBar>
-      }
-    >
+    <Screen scroll>
       <StyledView className="px-5 pt-4">
-        <ScreenHeader title="Vehicle details" subtitle="Review registration information and status" showBack className="mb-5" />
+        <ScreenHeader
+          title="Vehicle details"
+          subtitle="Review registration information and status"
+          showBack
+          className="mb-5"
+          rightAction={
+            canEdit ? (
+              <Button size="sm" className="px-4" onPress={() => router.push(`/vehicles/${vehicle.id}/edit`)}>
+                Edit Vehicle
+              </Button>
+            ) : undefined
+          }
+        />
 
         <StyledView className="mb-6 overflow-hidden rounded-2xl border border-border bg-muted/20">
           {vehicle.photoUrl ? (

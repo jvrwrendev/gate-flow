@@ -49,13 +49,13 @@ export default function LoginScreen() {
       <StyledView className="w-full max-w-[440px] flex-1 self-center px-6">
         <StyledPressable
           onPress={() => router.push('/(auth)/welcome')}
-          className="mb-8 h-11 flex-row items-center gap-1 self-start pr-2"
+          className="mb-8 h-11 min-w-11 flex-row items-center gap-1.5 self-start pr-2"
           accessibilityRole="button"
           accessibilityLabel="Back to welcome screen"
           hitSlop={8}
         >
-          <ChevronLeft size={22} color="#0f766e" />
-          <StyledText className="text-[15px] font-medium text-foreground">Back</StyledText>
+          <ChevronLeft size={24} color="#0f766e" />
+          <StyledText className="text-base font-semibold text-foreground">Back</StyledText>
         </StyledPressable>
 
         <StyledView className="flex-1 justify-center">

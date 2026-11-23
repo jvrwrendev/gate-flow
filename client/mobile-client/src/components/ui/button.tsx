@@ -39,10 +39,10 @@ const buttonTextVariants = cva('font-medium', {
       link: 'text-primary underline',
     },
     size: {
-      default: 'text-[15px]',
-      sm: 'text-[15px]',
-      lg: 'text-[15px]',
-      icon: 'text-[15px]',
+      default: 'text-base',
+      sm: 'text-base',
+      lg: 'text-base',
+      icon: 'text-base',
     },
   },
   defaultVariants: {

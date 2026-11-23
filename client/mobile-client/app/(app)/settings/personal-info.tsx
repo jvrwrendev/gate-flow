@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +11,6 @@ import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { useAuth } from '@/src/context/AuthContext';
 import { Check } from 'lucide-react-native';
-import { Card } from '@/src/components/ui/card';
 
 const schema = z.object({
   name: z.string().min(2, 'Name is required.'),
@@ -24,7 +22,6 @@ type FormData = z.infer<typeof schema>;
 
 export default function PersonalInfoScreen() {
   const { user, updateUser } = useAuth();
-  const router = useRouter();
   const [saved, setSaved] = useState(false);
 
   const {
@@ -65,7 +62,11 @@ export default function PersonalInfoScreen() {
           showBack
         />
 
-        <Card className="gap-4 p-4">
+        <StyledView className="gap-5">
+          <FormField label="Email">
+            <Input value={user?.email ?? ''} editable={false} className="bg-muted/30 text-muted-foreground" />
+          </FormField>
+
           <FormField label="Full name" error={errors.name?.message}>
             <ControlledInput control={control} name="name" invalid={!!errors.name} />
           </FormField>
@@ -84,7 +85,7 @@ export default function PersonalInfoScreen() {
               <StyledText className="text-sm font-medium text-foreground">Saved successfully</StyledText>
             </StyledView>
           ) : null}
-        </Card>
+        </StyledView>
       </StyledView>
     </Screen>
   );

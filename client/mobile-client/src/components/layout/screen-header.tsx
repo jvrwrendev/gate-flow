@@ -36,22 +36,22 @@ export function ScreenHeader({
               accessibilityRole="button"
               accessibilityLabel="Go back"
               hitSlop={8}
-              className="h-11 min-w-11 flex-row items-center gap-1 self-start pr-2"
+              className="h-11 min-w-11 flex-row items-center gap-1.5 self-start pr-2"
             >
-              <ChevronLeft size={22} color="#0f766e" />
-              <StyledText className="text-[15px] font-medium text-foreground">Back</StyledText>
+              <ChevronLeft size={24} color="#0f766e" />
+              <StyledText className="text-base font-semibold text-foreground">Back</StyledText>
             </StyledPressable>
           ) : (
             <StyledView />
           )}
-          {rightAction ? <StyledView>{rightAction}</StyledView> : <StyledView />}
+          {rightAction ? <StyledView className="ml-3 shrink-0">{rightAction}</StyledView> : <StyledView />}
         </StyledView>
       )}
 
       <StyledView className={cn('gap-1', align === 'center' && 'items-center')}>
         <StyledText
           className={cn(
-            'text-[28px] font-semibold tracking-tight text-foreground',
+            'text-[30px] font-semibold tracking-tight text-foreground',
             align === 'center' && 'text-center'
           )}
         >

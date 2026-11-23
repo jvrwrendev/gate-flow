@@ -9,7 +9,6 @@ import { Input } from '@/src/components/ui/input';
 import { Select } from '@/src/components/ui/select';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
-import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { LoadingSkeleton } from '@/src/components/layout/loading-skeleton';
 import { ErrorState } from '@/src/components/layout/error-state';
@@ -93,21 +92,21 @@ export default function EditVehicleScreen() {
   const canEdit = vehicle.ownerId === user?.id && EDITABLE_STATUSES.has(vehicle.status);
 
   return (
-    <Screen
-      scroll
-      keyboardShouldPersistTaps="handled"
-      footer={
-        canEdit ? (
-          <BottomActionBar bottomOffset={74}>
-            <Button className="w-full" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-              Save changes
-            </Button>
-          </BottomActionBar>
-        ) : undefined
-      }
-    >
+    <Screen scroll keyboardShouldPersistTaps="handled">
       <StyledView className="px-5 pt-4">
-        <ScreenHeader title="Edit vehicle" subtitle="Update your vehicle details and image" showBack className="mb-6" />
+        <ScreenHeader
+          title="Edit vehicle"
+          subtitle="Update your vehicle details and image"
+          showBack
+          className="mb-6"
+          rightAction={
+            canEdit ? (
+              <Button size="sm" className="px-4" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+                Save
+              </Button>
+            ) : undefined
+          }
+        />
 
         {!canEdit ? (
           <StyledView className="rounded-xl border border-border bg-muted/20 p-4">

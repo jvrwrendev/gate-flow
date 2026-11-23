@@ -6,7 +6,35 @@ import { DEFAULT_ROLE_PERMISSIONS } from '@/auth/permissions'
 
 const STORAGE_KEY = 'gatevision.dashboard.v2'
 const LEGACY_KEY = 'gatevision.dashboard.v1'
+const ALLOWED_GATE_IDS = new Set(['GT-01', 'GT-02'])
+
 const cloneSeed = () => structuredClone(mockData)
+
+function normalizeData(data: AppData): AppData {
+  const seedGates = mockData.gates.filter(g => ALLOWED_GATE_IDS.has(g.id))
+  const gates = (data.gates || []).filter(g => ALLOWED_GATE_IDS.has(g.id))
+  data.gates = gates.length === seedGates.length ? gates : structuredClone(seedGates)
+
+  const allowedGateIds = new Set(data.gates.map(g => g.id))
+  const seedCameras = mockData.cameras.filter(c => allowedGateIds.has(c.gateId))
+  const cameras = (data.cameras || []).filter(c => allowedGateIds.has(c.gateId))
+  data.cameras = cameras.length > 0 ? cameras : structuredClone(seedCameras)
+
+  const allowedCameraIds = new Set(data.cameras.map(c => c.id))
+  data.recognitionLogs = (data.recognitionLogs || []).filter(l => allowedGateIds.has(l.gateId) && allowedCameraIds.has(l.cameraId))
+  data.accessRules = (data.accessRules || []).filter(r => allowedGateIds.has(r.gateId))
+  data.incidents = (data.incidents || []).filter(i => allowedGateIds.has(i.gateId))
+
+  const removedGatePattern = /\b(GT-0[3-9]\d*|GT-[1-9]\d{2,}|CAM-0[3-9]\d*|CAM-[1-9]\d{2,}|Staff Parking|Service Gate)\b/i
+  data.notifications = (data.notifications || []).filter(n => !removedGatePattern.test(`${n.title} ${n.description}`))
+  data.auditLogs = (data.auditLogs || []).filter(l => {
+    if (l.targetId && /^GT-|^CAM-/.test(l.targetId) && !allowedGateIds.has(l.targetId) && !allowedCameraIds.has(l.targetId)) return false
+    return !removedGatePattern.test(`${l.details} ${l.action}`)
+  })
+
+  return data
+}
+
 function loadData(): AppData {
   try {
     const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY)
@@ -37,7 +65,7 @@ function loadData(): AppData {
         createdAt: a.createdAt || new Date().toISOString(),
       }))
     }
-    return parsed
+    return normalizeData(parsed)
   } catch { return cloneSeed() }
 }
 interface AppContextValue {

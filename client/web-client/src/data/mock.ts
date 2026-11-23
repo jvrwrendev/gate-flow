@@ -30,14 +30,10 @@ const owners = names.map((name, i) => ({ id: `OW-${String(i + 1).padStart(3, '0'
 const gates = [
   { id: 'GT-01', name: 'Main Entrance', location: 'North Wing · Visitor & Resident Entry', cameraId: 'CAM-01', controllerId: 'ESP32-G01', status: 'Online' as const, barrier: 'CLOSED' as const, mode: 'AUTOMATIC' as const, entriesToday: 428, lastActivity: ago(.08) },
   { id: 'GT-02', name: 'Main Exit', location: 'North Wing · All Vehicle Exit', cameraId: 'CAM-02', controllerId: 'ESP32-G02', status: 'Online' as const, barrier: 'CLOSED' as const, mode: 'AUTOMATIC' as const, entriesToday: 391, lastActivity: ago(.16) },
-  { id: 'GT-03', name: 'Staff Parking', location: 'East Wing · Employees Only', cameraId: 'CAM-03', controllerId: 'ESP32-G03', status: 'Online' as const, barrier: 'OPEN' as const, mode: 'MANUAL' as const, entriesToday: 146, lastActivity: ago(.35) },
-  { id: 'GT-04', name: 'Service Gate', location: 'South Wing · Deliveries & Contractors', cameraId: 'CAM-04', controllerId: 'ESP32-G04', status: 'Offline' as const, barrier: 'CLOSED' as const, mode: 'MANUAL' as const, entriesToday: 57, lastActivity: ago(5.2) },
 ]
 const cameras = [
   { id: 'CAM-01', name: 'Entrance LPR Camera', location: 'Main Entrance · Pole A', model: 'TP-Link Tapo C320WS', type: 'Bullet' as const, status: 'Online' as const, gateId: 'GT-01', protocol: 'RTSP' as const, lastConnection: ago(0), ipAddress: '192.168.10.41' },
   { id: 'CAM-02', name: 'Exit LPR Camera', location: 'Main Exit · Pole B', model: 'TP-Link Tapo C320WS', type: 'Bullet' as const, status: 'Online' as const, gateId: 'GT-02', protocol: 'RTSP' as const, lastConnection: ago(0), ipAddress: '192.168.10.42' },
-  { id: 'CAM-03', name: 'Staff Parking Overview', location: 'East Wing · Pole C', model: 'TP-Link Tapo C520WS', type: 'PTZ' as const, status: 'Online' as const, gateId: 'GT-03', protocol: 'ONVIF' as const, lastConnection: ago(.02), ipAddress: '192.168.10.43' },
-  { id: 'CAM-04', name: 'Service Gate Camera', location: 'South Wing · Wall Mount', model: 'Generic ONVIF IP Camera', type: 'Dome' as const, status: 'Offline' as const, gateId: 'GT-04', protocol: 'ONVIF' as const, lastConnection: ago(5.2), ipAddress: '192.168.10.44' },
 ]
 const types: VehicleType[] = ['Sedan', 'SUV', 'Pickup', 'Van', 'Motorcycle', 'Tricycle', 'Bus', 'Truck']
 const colors: VehicleColor[] = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Brown']
@@ -45,7 +41,7 @@ const recognitionLogs: RecognitionLog[] = Array.from({ length: 68 }, (_, i) => {
   const v = allVehicles[(i * 7) % allVehicles.length]
   const denied = i % 11 === 0
   const review = !denied && i % 13 === 0
-  return { id: `REC-${String(9182 - i)}`, timestamp: ago(i * .37), plate: denied ? ['XYZ 8891', 'UNKNOWN', 'NAA 0912'][i % 3] : v.plate, type: types[i % types.length], color: colors[i % colors.length], confidence: denied ? 68 + (i % 12) : 88 + (i % 12) * .8, cameraId: `CAM-0${i % 4 + 1}`, gateId: `GT-0${i % 4 + 1}`, decision: denied ? 'DENIED' : review ? 'NEEDS REVIEW' : 'AUTHORIZED', reason: denied ? 'Plate is not registered in the vehicle directory' : review ? 'Confidence below automatic approval threshold' : 'Active vehicle registration and access rule verified' }
+  return { id: `REC-${String(9182 - i)}`, timestamp: ago(i * .37), plate: denied ? ['XYZ 8891', 'UNKNOWN', 'NAA 0912'][i % 3] : v.plate, type: types[i % types.length], color: colors[i % colors.length], confidence: denied ? 68 + (i % 12) : 88 + (i % 12) * .8, cameraId: `CAM-0${i % 2 + 1}`, gateId: `GT-0${i % 2 + 1}`, decision: denied ? 'DENIED' : review ? 'NEEDS REVIEW' : 'AUTHORIZED', reason: denied ? 'Plate is not registered in the vehicle directory' : review ? 'Confidence below automatic approval threshold' : 'Active vehicle registration and access rule verified' }
 })
 const models: AIModel[] = [
   { id: 'MDL-01', category: 'Vehicle Detection', name: 'YOLOv8 Vehicle Detector', version: 'v8.2.1', status: 'Active', accuracy: 96.8, lastUpdated: '2026-10-28', size: '52.4 MB', description: 'Detects and localizes vehicles in configured camera frames.', metricLabel: 'mAP@50' },
@@ -55,12 +51,9 @@ const models: AIModel[] = [
   { id: 'MDL-05', category: 'Vehicle Detection', name: 'YOLOv5 Detector (Legacy)', version: 'v5.7.0', status: 'Inactive', accuracy: 91.3, lastUpdated: '2025-12-02', size: '46.2 MB', description: 'Previous vehicle detector retained for comparison.', metricLabel: 'mAP@50' },
 ]
 const incidents = [
-  { id: 'INC-2041', type: 'Camera disconnection', severity: 'High' as const, timestamp: ago(5.2), gateId: 'GT-04', description: 'Service Gate Camera stopped responding. Last heartbeat was received 5 hours ago.', status: 'Investigating' as const, remarks: 'Facilities team notified for power and network inspection.' },
   { id: 'INC-2040', type: 'Unauthorized vehicle attempt', severity: 'Critical' as const, timestamp: ago(1.15), gateId: 'GT-01', description: 'Unregistered plate XYZ 8891 attempted entry three consecutive times.', status: 'Open' as const, remarks: '' },
-  { id: 'INC-2039', type: 'Manual barrier opening', severity: 'Medium' as const, timestamp: ago(2.4), gateId: 'GT-03', description: 'Barrier opened manually by Gate Operator during scheduled maintenance.', status: 'Resolved' as const, remarks: 'Verified with maintenance work order MW-2208.' },
   { id: 'INC-2038', type: 'Repeated recognition failure', severity: 'Medium' as const, timestamp: ago(3.8), gateId: 'GT-02', description: 'License plate OCR failed for five recognition attempts.', status: 'Open' as const, remarks: '' },
   { id: 'INC-2037', type: 'Obstruction detected', severity: 'High' as const, timestamp: ago(26), gateId: 'GT-01', description: 'Barrier close operation interrupted by an obstruction.', status: 'Resolved' as const, remarks: 'Obstruction cleared. Normal operation restored.' },
-  { id: 'INC-2036', type: 'Failed barrier operation', severity: 'High' as const, timestamp: ago(49), gateId: 'GT-04', description: 'Controller did not acknowledge the close command.', status: 'Resolved' as const, remarks: 'Controller restarted and limit switch tested.' },
 ]
 const applications = [
   { id: 'APP-1082', reference: 'VA-2026-1082', ownerId: 'OW-009', ownerName: 'Katrina Lim', email: 'katrina.lim@email.ph', phone: '+63 917 330 1801', plate: 'NEB 3478', type: 'Sedan' as const, model: 'Toyota Vios 2024', color: 'Silver' as const, submitted: ago(2), status: 'Pending' as const, remarks: '', purpose: 'Resident vehicle registration' },
@@ -227,14 +220,11 @@ export const mockData: AppData = {
   vehicles: allVehicles, owners, applications, visitorApplications, gates, cameras,
   accessRules: [
     { id: 'AR-001', name: 'Main entrance resident access', vehicleId: 'VH-001', gateId: 'GT-01', days: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], startTime: '00:00', endTime: '23:59', expires: day(210), active: true, autoApproval: true },
-    { id: 'AR-002', name: 'Employee weekday schedule', vehicleId: 'VH-002', gateId: 'GT-03', days: ['Mon','Tue','Wed','Thu','Fri'], startTime: '06:00', endTime: '20:00', expires: day(95), active: true, autoApproval: true },
-    { id: 'AR-003', name: 'Logistics delivery window', vehicleId: 'VH-008', gateId: 'GT-04', days: ['Mon','Wed','Fri'], startTime: '08:00', endTime: '16:00', expires: day(-3), active: true, autoApproval: false },
     { id: 'AR-004', name: 'Suspended motorcycle access', vehicleId: 'VH-005', gateId: 'GT-01', days: ['Sat','Sun'], startTime: '07:00', endTime: '18:00', expires: day(40), active: false, autoApproval: false },
   ],
   recognitionLogs, models, incidents, admins, auditLogs,
   notifications: [
     { id: 'NTF-01', title: 'Unauthorized entry attempt', description: 'XYZ 8891 at Main Entrance', timestamp: ago(1.15), read: false, severity: 'critical' },
-    { id: 'NTF-02', title: 'Camera disconnected', description: 'Service Gate Camera is offline', timestamp: ago(5.2), read: false, severity: 'warning' },
     { id: 'NTF-03', title: 'New vehicle application', description: 'Katrina Lim submitted NEB 3478', timestamp: ago(2), read: true, severity: 'info' },
     { id: 'NTF-04', title: 'New visitor application', description: 'Carlo Mendoza requested visitor access (VIS-2026-1006)', timestamp: ago(5), read: false, severity: 'info' },
   ],

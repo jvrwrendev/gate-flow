@@ -8,7 +8,6 @@ import { Input } from '@/src/components/ui/input';
 import { Select } from '@/src/components/ui/select';
 import { FormField } from '@/src/components/layout/form-field';
 import { Screen } from '@/src/components/layout/screen';
-import { BottomActionBar } from '@/src/components/layout/bottom-action-bar';
 import { ScreenHeader } from '@/src/components/layout/screen-header';
 import { ImageUploadField } from '@/src/components/shared/image-upload-field';
 import { useAuth } from '@/src/context/AuthContext';
@@ -47,19 +46,19 @@ export default function NewVehicleScreen() {
   };
 
   return (
-    <Screen
-      scroll
-      keyboardShouldPersistTaps="handled"
-      footer={
-        <BottomActionBar bottomOffset={74}>
-          <Button className="w-full" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
-            Submit registration
-          </Button>
-        </BottomActionBar>
-      }
-    >
+    <Screen scroll keyboardShouldPersistTaps="handled">
       <StyledView className="px-5 pt-4">
-        <ScreenHeader title="Register vehicle" subtitle="Add a vehicle for gate access approval" showBack className="mb-6" />
+        <ScreenHeader
+          title="Register vehicle"
+          subtitle="Add a vehicle for gate access approval"
+          showBack
+          className="mb-6"
+          rightAction={
+            <Button size="sm" className="px-4" loading={isSubmitting} onPress={() => handleSubmit(onSubmit)()}>
+              Submit
+            </Button>
+          }
+        />
 
         <StyledView className="gap-4">
           <FormField label="Plate number" error={errors.plateNumber?.message}>
