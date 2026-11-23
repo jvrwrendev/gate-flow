@@ -45,8 +45,8 @@ export function AppShell() {
         onLogoutRequest={() => setLogoutOpen(true)}
       />
       <div
-        className={cn('transition-all lg:pl-72', collapsed && 'lg:pl-20')}
-        style={{ ['--sidebar-offset' as string]: collapsed ? '5rem' : '18rem' }}
+        className={cn('transition-[padding-left] duration-300 ease-in-out lg:pl-[280px]', collapsed && 'lg:pl-[76px]')}
+        style={{ ['--sidebar-offset' as string]: collapsed ? '4.75rem' : '17.5rem' }}
       >
         <Topbar
           onMenu={() => setMobileOpen(true)}
