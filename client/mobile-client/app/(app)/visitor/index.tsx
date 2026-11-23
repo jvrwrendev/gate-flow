@@ -66,7 +66,7 @@ export default function VisitorPassesScreen() {
 
         {list.length === 0 ? (
           <EmptyState
-            icon={<Users size={24} color="#5f7a7a" />}
+            icon={<Users size={24} color="#64748B" />}
             title="No visitor passes"
             description="Request a temporary pass for guests and deliveries."
             actionLabel="Request pass"
@@ -93,7 +93,7 @@ export default function VisitorPassesScreen() {
                         {formatDateTime(pass.scheduledEnd)}
                       </StyledText>
                     </StyledView>
-                    <ChevronRight size={20} color="#5f7a7a" />
+                    <ChevronRight size={20} color="#64748B" />
                   </CardContent>
                 </StyledPressable>
               </Card>

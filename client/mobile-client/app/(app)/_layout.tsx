@@ -26,7 +26,7 @@ export default function AppLayout() {
   if (isLoading) {
     return (
       <StyledView className="flex-1 items-center justify-center bg-background">
-        <StyledActivityIndicator size="large" color="#111827" />
+        <StyledActivityIndicator size="large" color="#0B2348" />
       </StyledView>
     );
   }

@@ -9,12 +9,12 @@ export default function Index() {
 
   useEffect(() => {
     if (isLoading) return;
-    router.replace(isAuthenticated ? '/(app)/(tabs)' : '/(auth)/welcome');
+    router.replace(isAuthenticated ? '/(app)/(tabs)' : '/(auth)/login');
   }, [isAuthenticated, isLoading, router]);
 
   return (
     <StyledView className="flex-1 items-center justify-center bg-background">
-      <StyledActivityIndicator size="large" color="#0f766e" />
+      <StyledActivityIndicator size="large" color="#087FE8" />
     </StyledView>
   );
 }

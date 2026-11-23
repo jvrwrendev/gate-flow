@@ -83,7 +83,7 @@ export function ImageUploadField({ label, value, onChange, error, helperText, cl
           <Image source={{ uri: value }} style={{ width: '100%', height: 180 }} resizeMode="cover" />
           <StyledView className="flex-row gap-2 border-t border-border p-3">
             <Button variant="outline" size="sm" className="flex-1" onPress={() => handlePick('library')} disabled={busy}>
-              <Upload size={16} color="#102a2d" />
+              <Upload size={16} color="#0B2348" />
               <StyledText className="ml-2 text-[15px] font-medium text-foreground">Replace</StyledText>
             </Button>
             <Button variant="outline" size="sm" className="flex-1" onPress={() => onChange(undefined)} disabled={busy}>
@@ -95,8 +95,8 @@ export function ImageUploadField({ label, value, onChange, error, helperText, cl
       ) : (
         <StyledView className="rounded-xl border border-dashed border-input bg-muted/20 px-4 py-5">
           <StyledView className="items-center gap-2">
-            <StyledView className="h-12 w-12 items-center justify-center rounded-full bg-secondary">
-              <ImageIcon size={22} color="#0f766e" />
+            <StyledView className="h-12 w-12 items-center justify-center rounded-full bg-accent">
+              <ImageIcon size={22} color="#087FE8" />
             </StyledView>
             <StyledText className="text-sm font-medium text-foreground">Upload vehicle image</StyledText>
             <StyledText className="text-center text-[13px] leading-5 text-muted-foreground">
@@ -105,11 +105,11 @@ export function ImageUploadField({ label, value, onChange, error, helperText, cl
           </StyledView>
           <StyledView className={cn('mt-4 gap-2', Platform.OS === 'web' ? '' : 'sm:flex-row')}>
             <Button variant="outline" className="flex-1" onPress={() => handlePick('library')} disabled={busy}>
-              <Upload size={16} color="#102a2d" />
+              <Upload size={16} color="#0B2348" />
               <StyledText className="ml-2 text-[15px] font-medium text-foreground">Choose from gallery</StyledText>
             </Button>
             <Button variant="outline" className="flex-1" onPress={() => handlePick('camera')} disabled={busy}>
-              <Camera size={16} color="#102a2d" />
+              <Camera size={16} color="#0B2348" />
               <StyledText className="ml-2 text-[15px] font-medium text-foreground">Take photo</StyledText>
             </Button>
           </StyledView>

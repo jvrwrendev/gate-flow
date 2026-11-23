@@ -51,8 +51,8 @@ export default function VisitorPassDetailScreen() {
         <ScreenHeader title="Visitor pass details" subtitle="Review visitor access information" showBack className="mb-5" />
 
         <StyledView className="mb-6 items-center">
-          <StyledView className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-secondary">
-            <Users size={36} color="#111827" />
+          <StyledView className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-accent">
+            <Users size={36} color="#0B2348" />
           </StyledView>
           <StyledText className="text-center text-2xl font-semibold tracking-tight text-foreground">{pass.visitorName}</StyledText>
           <StyledView className="mt-2">

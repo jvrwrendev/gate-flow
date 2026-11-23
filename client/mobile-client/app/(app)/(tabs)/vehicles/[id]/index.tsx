@@ -89,8 +89,8 @@ export default function VehicleDetailScreen() {
             </Pressable>
           ) : (
             <StyledView className="h-[220px] items-center justify-center gap-3 px-6">
-              <StyledView className="h-16 w-16 items-center justify-center rounded-full bg-secondary">
-                <CarFront size={30} color="#0f766e" />
+              <StyledView className="h-16 w-16 items-center justify-center rounded-full bg-accent">
+                <CarFront size={30} color="#087FE8" />
               </StyledView>
               <StyledText className="text-sm font-medium text-foreground">No vehicle image</StyledText>
               <Muted className="text-center text-[13px] leading-5">Add an image when registering or editing this vehicle.</Muted>
@@ -114,22 +114,22 @@ export default function VehicleDetailScreen() {
         <StyledView className="gap-4">
           <Card>
             <CardContent className="gap-4 p-4">
-              <SectionTitle icon={<CarFront size={18} color="#0f766e" />} title="Vehicle information" />
-              <DetailRow icon={<Tag size={16} color="#5f7a7a" />} label="Plate number" value={vehicle.plateNumber} />
-              <DetailRow icon={<CarFront size={16} color="#5f7a7a" />} label="Vehicle type" value={vehicle.type} />
-              <DetailRow icon={<ShieldCheck size={16} color="#5f7a7a" />} label="Brand" value={vehicle.brand} />
-              <DetailRow icon={<Tag size={16} color="#5f7a7a" />} label="Model" value={vehicle.model} />
-              <DetailRow icon={<Palette size={16} color="#5f7a7a" />} label="Color" value={vehicle.color} />
-              <DetailRow icon={<Calendar size={16} color="#5f7a7a" />} label="Registration date" value={formatDate(vehicle.submittedAt)} />
+              <SectionTitle icon={<CarFront size={18} color="#087FE8" />} title="Vehicle information" />
+              <DetailRow icon={<Tag size={16} color="#64748B" />} label="Plate number" value={vehicle.plateNumber} />
+              <DetailRow icon={<CarFront size={16} color="#64748B" />} label="Vehicle type" value={vehicle.type} />
+              <DetailRow icon={<ShieldCheck size={16} color="#64748B" />} label="Brand" value={vehicle.brand} />
+              <DetailRow icon={<Tag size={16} color="#64748B" />} label="Model" value={vehicle.model} />
+              <DetailRow icon={<Palette size={16} color="#64748B" />} label="Color" value={vehicle.color} />
+              <DetailRow icon={<Calendar size={16} color="#64748B" />} label="Registration date" value={formatDate(vehicle.submittedAt)} />
               {vehicle.reviewedAt ? (
-                <DetailRow icon={<Calendar size={16} color="#5f7a7a" />} label="Reviewed date" value={formatDate(vehicle.reviewedAt)} />
+                <DetailRow icon={<Calendar size={16} color="#64748B" />} label="Reviewed date" value={formatDate(vehicle.reviewedAt)} />
               ) : null}
             </CardContent>
           </Card>
 
           <Card>
             <CardContent className="gap-4 p-4">
-              <SectionTitle icon={<ShieldCheck size={18} color="#0f766e" />} title="Registration status" />
+              <SectionTitle icon={<ShieldCheck size={18} color="#087FE8" />} title="Registration status" />
               <StyledView className="rounded-xl border border-border bg-muted/20 p-3">
                 <StyledView className="mb-2 flex-row items-center justify-between gap-3">
                   <StyledText className="text-sm font-medium text-foreground">Current status</StyledText>

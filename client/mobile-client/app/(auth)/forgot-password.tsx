@@ -64,8 +64,8 @@ export default function ForgotPasswordScreen() {
     >
       {submitted ? (
         <StyledView className="items-center gap-3">
-          <StyledView className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
-            <MailCheck size={32} color="#111827" />
+          <StyledView className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-accent">
+            <MailCheck size={32} color="#0B2348" />
           </StyledView>
           <H2 className="text-center">Check your email</H2>
           <Muted className="text-center">

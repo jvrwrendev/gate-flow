@@ -38,7 +38,7 @@ export function ScreenHeader({
               hitSlop={8}
               className="h-11 min-w-11 flex-row items-center gap-1.5 self-start pr-2"
             >
-              <ChevronLeft size={24} color="#0f766e" />
+              <ChevronLeft size={24} color="#087FE8" />
               <StyledText className="text-base font-semibold text-foreground">Back</StyledText>
             </StyledPressable>
           ) : (

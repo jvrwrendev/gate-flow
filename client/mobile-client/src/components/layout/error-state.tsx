@@ -16,7 +16,7 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <StyledView className="flex-1 items-center justify-center px-8 py-12">
-      <AlertCircle size={32} color="#737373" />
+      <AlertCircle size={32} color="#64748B" />
       <StyledText className="mt-4 text-center text-base font-semibold text-foreground">
         {title}
       </StyledText>

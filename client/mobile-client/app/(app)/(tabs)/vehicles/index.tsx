@@ -62,7 +62,7 @@ export default function VehiclesScreen() {
 
         {list.length === 0 ? (
           <EmptyState
-            icon={<Car size={24} color="#5f7a7a" />}
+            icon={<Car size={24} color="#64748B" />}
             title="No vehicles yet"
             description="Register your vehicle to start using gate access."
             actionLabel="Register vehicle"

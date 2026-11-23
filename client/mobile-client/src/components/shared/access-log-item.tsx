@@ -22,8 +22,8 @@ export function AccessLogItem({ log, variant = 'row' }: AccessLogItemProps) {
           : 'flex-row items-start gap-3'
       }
     >
-      <StyledView className="mt-0.5 h-10 w-10 items-center justify-center rounded-xl bg-secondary">
-        <DirectionIcon size={18} color="#0f766e" strokeWidth={2.1} />
+      <StyledView className="mt-0.5 h-10 w-10 items-center justify-center rounded-xl bg-accent">
+        <DirectionIcon size={18} color="#087FE8" strokeWidth={2.1} />
       </StyledView>
 
       <StyledView className="flex-1">

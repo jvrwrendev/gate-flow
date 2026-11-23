@@ -117,7 +117,7 @@ export default function DashboardScreen() {
               accessibilityRole="button"
               accessibilityLabel="Notifications"
             >
-              <Bell size={20} color="#134e4a" />
+              <Bell size={20} color="#003B80" />
               {unreadCount > 0 ? (
                 <StyledView className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-primary" />
               ) : null}
@@ -202,28 +202,28 @@ export default function DashboardScreen() {
           </StyledView>
           <StyledView className="flex-row flex-wrap gap-3">
             <FeatureCard
-              icon={<Car size={20} color="#0f766e" />}
+              icon={<Car size={20} color="#087FE8" />}
               label="My Vehicles"
               value={`${vehicles.length}`}
               subtext={`${approvedVehicles.length} approved`}
               onPress={() => router.push('/vehicles')}
             />
             <FeatureCard
-              icon={<Users size={20} color="#0f766e" />}
+              icon={<Users size={20} color="#087FE8" />}
               label="Visitor Access"
               value={`${passes.length}`}
               subtext={`${activePasses} active`}
               onPress={() => router.push('/visitor')}
             />
             <FeatureCard
-              icon={<History size={20} color="#0f766e" />}
+              icon={<History size={20} color="#087FE8" />}
               label="Access History"
               value={`${logs.length}`}
               subtext="recent records"
               onPress={() => router.push('/history')}
             />
             <FeatureCard
-              icon={<Bell size={20} color="#0f766e" />}
+              icon={<Bell size={20} color="#087FE8" />}
               label="Notifications"
               value={`${unreadCount}`}
               subtext="unread alerts"
@@ -234,12 +234,12 @@ export default function DashboardScreen() {
 
         <StyledView className="flex-row gap-3">
           <CompactAction
-            icon={<Plus size={18} color="#0f766e" />}
+            icon={<Plus size={18} color="#087FE8" />}
             label="Register vehicle"
             onPress={() => router.push('/vehicles/new')}
           />
           <CompactAction
-            icon={<FilePlus2 size={18} color="#0f766e" />}
+            icon={<FilePlus2 size={18} color="#087FE8" />}
             label="New visitor pass"
             onPress={() => router.push('/visitor/new')}
           />
@@ -250,12 +250,12 @@ export default function DashboardScreen() {
             <StyledText className="text-base font-semibold text-foreground">Recent activity</StyledText>
             <StyledPressable onPress={() => router.push('/history')} className="flex-row items-center gap-1">
               <StyledText className="text-sm font-medium text-primary">See all</StyledText>
-              <ChevronRight size={16} color="#0f766e" />
+              <ChevronRight size={16} color="#087FE8" />
             </StyledPressable>
           </StyledView>
           {logs.length === 0 ? (
             <EmptyState
-              icon={<History size={24} color="#5f7a7a" />}
+              icon={<History size={24} color="#64748B" />}
               title="No recent activity"
               description="Vehicle entries and exits will appear here."
             />
@@ -304,7 +304,7 @@ function FeatureCard({
     >
       <Card className="gap-3 p-4">
         <StyledView className="flex-row items-start justify-between">
-          <StyledView className="h-10 w-10 items-center justify-center rounded-xl bg-secondary">
+          <StyledView className="h-10 w-10 items-center justify-center rounded-xl bg-accent">
             {icon}
           </StyledView>
           <StyledText className="text-lg font-semibold text-foreground">{value}</StyledText>
@@ -333,7 +333,7 @@ function CompactAction({
       className="flex-1 flex-row items-center justify-center gap-2 rounded-2xl border border-border bg-white px-3 py-3.5"
       accessibilityRole="button"
     >
-      <StyledView className="h-8 w-8 items-center justify-center rounded-full bg-secondary">
+      <StyledView className="h-8 w-8 items-center justify-center rounded-full bg-accent">
         {icon}
       </StyledView>
       <StyledText className="text-sm font-medium text-foreground">{label}</StyledText>

@@ -47,7 +47,7 @@ export function Select({
         >
           {selected?.label ?? placeholder}
         </StyledText>
-        <ChevronDown size={16} color="#737373" />
+        <ChevronDown size={16} color="#64748B" />
       </StyledPressable>
       {error ? <StyledText className="mt-1 text-[13px] text-destructive">{error}</StyledText> : null}
 
@@ -72,7 +72,7 @@ export function Select({
                 className="flex-row items-center justify-between border-b border-border py-3 last:border-b-0"
               >
                 <StyledText className="text-sm text-foreground">{option.label}</StyledText>
-                {value === option.value ? <Check size={18} color="#111827" /> : null}
+                {value === option.value ? <Check size={18} color="#0B2348" /> : null}
               </StyledPressable>
             ))}
           </StyledView>

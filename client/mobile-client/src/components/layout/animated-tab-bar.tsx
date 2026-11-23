@@ -11,11 +11,12 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { StyledText } from '@/src/components/ui/core';
+import { colors } from '@/src/theme/colors';
 import { LayoutDashboard, CarFront, History, Bell, User } from 'lucide-react-native';
 
-const ACTIVE_BG = '#0f766e';
-const INACTIVE_ICON = '#5f7a7a';
-const ACTIVE_FG = '#ffffff';
+const ACTIVE_BG = colors.primary;
+const INACTIVE_ICON = colors.mutedForeground;
+const ACTIVE_FG = colors.white;
 
 const ICONS: Record<string, typeof LayoutDashboard> = {
   index: LayoutDashboard,
@@ -65,7 +66,7 @@ function TabItem({
 
   const pillStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: interpolateColor(progress.value, [0, 1], ['rgba(15,118,110,0)', ACTIVE_BG]),
+      backgroundColor: interpolateColor(progress.value, [0, 1], ['rgba(8,127,232,0)', ACTIVE_BG]),
       paddingHorizontal: interpolate(progress.value, [0, 1], [0, 14]),
     };
   });

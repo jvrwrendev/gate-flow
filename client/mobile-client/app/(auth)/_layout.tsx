@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 
 export const unstable_settings = {
-  anchor: 'welcome',
+  anchor: 'login',
 };
 
 export default function AuthLayout() {
@@ -12,7 +12,6 @@ export default function AuthLayout() {
         contentStyle: { backgroundColor: '#ffffff' },
       }}
     >
-      <Stack.Screen name="welcome" />
       <Stack.Screen name="login" />
       <Stack.Screen name="register" />
       <Stack.Screen name="forgot-password" />

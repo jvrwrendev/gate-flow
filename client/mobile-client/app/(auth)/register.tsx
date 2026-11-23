@@ -52,14 +52,14 @@ export default function RegisterScreen() {
           accessibilityLabel="Go back"
           hitSlop={8}
         >
-          <ChevronLeft size={24} color="#0f766e" />
+          <ChevronLeft size={24} color="#087FE8" />
           <StyledText className="text-base font-semibold text-foreground">Back</StyledText>
         </StyledPressable>
 
         <StyledView className="flex-1">
           <StyledView className="items-center">
-            <StyledView className="mb-5 h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
-              <UserPlus size={30} color="#0f766e" />
+            <StyledView className="mb-5 h-16 w-16 items-center justify-center rounded-2xl bg-accent">
+              <UserPlus size={30} color="#087FE8" />
             </StyledView>
             <H1 className="text-center text-[30px] leading-tight">Create account</H1>
             <Muted className="mt-2 text-center text-[15px] leading-6">
@@ -132,7 +132,7 @@ export default function RegisterScreen() {
                       hitSlop={8}
                       className="absolute right-0 h-14 w-14 items-center justify-center"
                     >
-                      {showPassword ? <EyeOff size={20} color="#5f7a7a" /> : <Eye size={20} color="#5f7a7a" />}
+                      {showPassword ? <EyeOff size={20} color="#64748B" /> : <Eye size={20} color="#64748B" />}
                     </StyledPressable>
                   </StyledView>
                 )}
@@ -164,7 +164,7 @@ export default function RegisterScreen() {
                       hitSlop={8}
                       className="absolute right-0 h-14 w-14 items-center justify-center"
                     >
-                      {showConfirmPassword ? <EyeOff size={20} color="#5f7a7a" /> : <Eye size={20} color="#5f7a7a" />}
+                      {showConfirmPassword ? <EyeOff size={20} color="#64748B" /> : <Eye size={20} color="#64748B" />}
                     </StyledPressable>
                   </StyledView>
                 )}

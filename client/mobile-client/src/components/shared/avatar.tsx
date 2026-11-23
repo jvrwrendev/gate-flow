@@ -33,12 +33,12 @@ export function Avatar({ name, size = 'md', className }: AvatarProps) {
   return (
     <StyledView
       className={cn(
-        'items-center justify-center rounded-full bg-secondary',
+        'items-center justify-center rounded-full bg-accent',
         sizeMap[size],
         className
       )}
     >
-      <StyledText className={cn('font-semibold text-secondary-foreground', textMap[size])}>
+      <StyledText className={cn('font-semibold text-accent-foreground', textMap[size])}>
         {initials(name)}
       </StyledText>
     </StyledView>
@@ -54,7 +54,7 @@ export function AvatarPlaceholder({ size = 'md', className }: Omit<AvatarProps, 
         className
       )}
     >
-      <User size={size === 'lg' ? 32 : size === 'md' ? 20 : 16} color="#5f7a7a" />
+      <User size={size === 'lg' ? 32 : size === 'md' ? 20 : 16} color="#64748B" />
     </StyledView>
   );
 }

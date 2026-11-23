@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertCircle, ChevronLeft, Eye, EyeOff } from 'lucide-react-native';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react-native';
 import { StyledImage, StyledPressable, StyledText, StyledView } from '@/src/components/ui/core';
 import { Button } from '@/src/components/ui/button';
 import { H1, Muted } from '@/src/components/ui/typography';
@@ -47,17 +47,6 @@ export default function LoginScreen() {
       contentContainerStyle={{ flexGrow: 1, paddingTop: 24, paddingBottom: 32 }}
     >
       <StyledView className="w-full max-w-[440px] flex-1 self-center px-6">
-        <StyledPressable
-          onPress={() => router.push('/(auth)/welcome')}
-          className="mb-8 h-11 min-w-11 flex-row items-center gap-1.5 self-start pr-2"
-          accessibilityRole="button"
-          accessibilityLabel="Back to welcome screen"
-          hitSlop={8}
-        >
-          <ChevronLeft size={24} color="#0f766e" />
-          <StyledText className="text-base font-semibold text-foreground">Back</StyledText>
-        </StyledPressable>
-
         <StyledView className="flex-1 justify-center">
           <StyledView className="items-center">
             <StyledImage
@@ -130,7 +119,7 @@ export default function LoginScreen() {
                       hitSlop={8}
                       className="absolute right-0 h-14 w-14 items-center justify-center"
                     >
-                      {showPassword ? <EyeOff size={20} color="#5f7a7a" /> : <Eye size={20} color="#5f7a7a" />}
+                      {showPassword ? <EyeOff size={20} color="#64748B" /> : <Eye size={20} color="#64748B" />}
                     </StyledPressable>
                   </StyledView>
                 )}

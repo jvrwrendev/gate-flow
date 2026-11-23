@@ -22,8 +22,8 @@ export default function AboutScreen() {
           </StyledView>
           <StyledText className="mt-1 text-lg font-semibold text-foreground">{appName}</StyledText>
           <StyledText className="text-sm text-muted-foreground">Version {version}</StyledText>
-          <StyledView className="mt-1 rounded-full border border-border bg-secondary px-3 py-1">
-            <StyledText className="text-[13px] font-medium text-secondary-foreground">
+          <StyledView className="mt-1 rounded-full border border-border bg-accent px-3 py-1">
+            <StyledText className="text-[13px] font-medium text-accent-foreground">
               Mock prototype
             </StyledText>
           </StyledView>
@@ -39,9 +39,9 @@ export default function AboutScreen() {
         </Card>
 
         <Card className="gap-0 p-0">
-          <InfoRow icon={<Car size={18} color="#0f766e" />} label="Vehicle registration & approvals" />
-          <InfoRow icon={<ShieldCheck size={18} color="#0f766e" />} label="Secure access visibility" />
-          <InfoRow icon={<Bell size={18} color="#0f766e" />} label="Alerts & notifications" last />
+          <InfoRow icon={<Car size={18} color="#087FE8" />} label="Vehicle registration & approvals" />
+          <InfoRow icon={<ShieldCheck size={18} color="#087FE8" />} label="Secure access visibility" />
+          <InfoRow icon={<Bell size={18} color="#087FE8" />} label="Alerts & notifications" last />
         </Card>
 
         <Muted className="text-center text-[13px]">© 2026 GATEGUARD. All rights reserved.</Muted>
@@ -63,7 +63,7 @@ function InfoRow({
     <StyledView
       className={`flex-row items-center gap-3 px-4 py-3.5 ${last ? '' : 'border-b border-border'}`}
     >
-      <StyledView className="h-9 w-9 items-center justify-center rounded-xl bg-secondary">
+      <StyledView className="h-9 w-9 items-center justify-center rounded-xl bg-accent">
         {icon}
       </StyledView>
       <StyledText className="flex-1 text-sm font-medium text-foreground">{label}</StyledText>

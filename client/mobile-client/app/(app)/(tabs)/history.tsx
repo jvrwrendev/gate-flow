@@ -84,7 +84,7 @@ export default function HistoryScreen() {
 
         {filtered.length === 0 ? (
           <EmptyState
-            icon={<History size={24} color="#5f7a7a" />}
+            icon={<History size={24} color="#64748B" />}
             title="No records found"
             description="Access activity matching this filter will appear here."
           />

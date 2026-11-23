@@ -50,8 +50,8 @@ export default function ProfileScreen() {
             <Muted>{user?.email}</Muted>
             {user?.phone ? <Muted className="mt-0.5">{user.phone}</Muted> : null}
             {user?.unit ? (
-              <StyledView className="mt-2 self-start rounded-full border border-border bg-secondary px-2.5 py-1">
-                <StyledText className="text-[13px] font-medium text-secondary-foreground">
+              <StyledView className="mt-2 self-start rounded-full border border-border bg-accent px-2.5 py-1">
+                <StyledText className="text-[13px] font-medium text-accent-foreground">
                   Unit {user.unit}
                 </StyledText>
               </StyledView>
@@ -63,13 +63,13 @@ export default function ProfileScreen() {
           <SectionLabel title="Account" />
           <Card className="p-0">
             <MenuItem
-              icon={<User size={20} color="#0f766e" />}
+              icon={<User size={20} color="#087FE8" />}
               label="Personal Information"
               description="View and edit your profile details"
               onPress={() => router.push('/settings/personal-info')}
             />
             <MenuItem
-              icon={<KeyRound size={20} color="#0f766e" />}
+              icon={<KeyRound size={20} color="#087FE8" />}
               label="Change Password"
               description="Update your account password"
               onPress={() => router.push('/settings/change-password')}
@@ -82,7 +82,7 @@ export default function ProfileScreen() {
           <SectionLabel title="Preferences" />
           <Card className="p-0">
             <MenuItem
-              icon={<Bell size={20} color="#0f766e" />}
+              icon={<Bell size={20} color="#087FE8" />}
               label="Notification Settings"
               description="Manage push notifications and access alerts"
               onPress={() => router.push('/settings/notifications')}
@@ -95,19 +95,19 @@ export default function ProfileScreen() {
           <SectionLabel title="Legal &amp; About" />
           <Card className="p-0">
             <MenuItem
-              icon={<ShieldCheck size={20} color="#0f766e" />}
+              icon={<ShieldCheck size={20} color="#087FE8" />}
               label="Privacy Policy"
               description="How your information is handled"
               onPress={() => router.push('/settings/privacy-policy')}
             />
             <MenuItem
-              icon={<FileText size={20} color="#0f766e" />}
+              icon={<FileText size={20} color="#087FE8" />}
               label="Terms &amp; Conditions"
               description="Application terms of use"
               onPress={() => router.push('/settings/terms')}
             />
             <MenuItem
-              icon={<Info size={20} color="#0f766e" />}
+              icon={<Info size={20} color="#087FE8" />}
               label="About GATEGUARD"
               description="App information and version"
               onPress={() => router.push('/settings/about')}
@@ -133,7 +133,7 @@ export default function ProfileScreen() {
                 </StyledText>
               </StyledView>
             </StyledView>
-            <ChevronRight size={18} color="#5f7a7a" />
+            <ChevronRight size={18} color="#64748B" />
           </StyledPressable>
         </Card>
       </StyledView>
@@ -167,7 +167,7 @@ function MenuItem({
       accessibilityRole="button"
     >
       <StyledView className="flex-1 flex-row items-center gap-3 pr-3">
-        <StyledView className="h-10 w-10 items-center justify-center rounded-xl bg-secondary">
+        <StyledView className="h-10 w-10 items-center justify-center rounded-xl bg-accent">
           {icon}
         </StyledView>
         <StyledView className="flex-1">
@@ -177,7 +177,7 @@ function MenuItem({
           ) : null}
         </StyledView>
       </StyledView>
-      <ChevronRight size={18} color="#5f7a7a" />
+      <ChevronRight size={18} color="#64748B" />
     </StyledPressable>
   );
 }

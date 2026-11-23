@@ -174,7 +174,7 @@ function PasswordInput({
             hitSlop={8}
             className="absolute right-0 h-14 w-14 items-center justify-center"
           >
-            {visible ? <EyeOff size={18} color="#5f7a7a" /> : <Eye size={18} color="#5f7a7a" />}
+            {visible ? <EyeOff size={18} color="#64748B" /> : <Eye size={18} color="#64748B" />}
           </StyledPressable>
         </StyledView>
       )}

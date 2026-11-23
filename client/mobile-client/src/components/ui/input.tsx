@@ -19,7 +19,7 @@ export function Input({ className, invalid, onFocus, onBlur, ...props }: InputPr
         props.editable === false && 'opacity-50',
         className
       )}
-      placeholderTextColor="#737373"
+      placeholderTextColor="#64748B"
       onFocus={(e) => {
         setFocused(true);
         onFocus?.(e);

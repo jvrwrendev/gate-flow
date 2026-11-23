@@ -80,7 +80,7 @@ export default function NotificationsScreen() {
 
         {list.length === 0 ? (
           <EmptyState
-            icon={<Bell size={24} color="#5f7a7a" />}
+            icon={<Bell size={24} color="#64748B" />}
             title="No notifications"
             description="Approval alerts, entry/exit updates, and security notices will appear here."
           />

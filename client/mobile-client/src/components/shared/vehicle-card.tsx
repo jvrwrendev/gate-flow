@@ -29,7 +29,7 @@ export function VehicleCard({ vehicle, onPress }: VehicleCardProps) {
               Submitted {formatDate(vehicle.submittedAt)}
             </StyledText>
           </StyledView>
-          <ChevronRight size={20} color="#5f7a7a" />
+          <ChevronRight size={20} color="#64748B" />
         </CardContent>
       </StyledPressable>
     </Card>
