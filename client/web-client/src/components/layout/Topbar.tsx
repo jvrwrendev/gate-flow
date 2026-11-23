@@ -56,7 +56,7 @@ export function Topbar({
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
-  const crumbs = useMemo(() => titles[location.pathname] || 'GateVision', [location.pathname])
+  const crumbs = useMemo(() => titles[location.pathname] || 'GATEGUARD', [location.pathname])
 
   const searchResults = useMemo(() => {
     if (query.trim().length < 2) return []

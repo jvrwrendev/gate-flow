@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Activity, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
@@ -6,18 +5,13 @@ import { useApp } from '@/context/AppContext'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { MetricCard } from '@/components/shared/MetricCard'
-import { CameraSimulation } from '@/components/shared/CameraSimulation'
+import { LiveCameraMonitor } from '@/components/dashboard/LiveCameraMonitor'
 import { BarrierGateSimulator } from '@/components/dashboard/BarrierGateSimulator'
 import { trafficData, typeData, weeklyData } from '@/data/mock'
 
 export function Dashboard() {
   const { data } = useApp()
   const navigate = useNavigate()
-  const [cameraId, setCameraId] = useState(data.cameras[0]?.id ?? '')
-
-  const currentCameraIndex = data.cameras.findIndex(c => c.id === cameraId)
-  const camera = currentCameraIndex >= 0 ? data.cameras[currentCameraIndex] : data.cameras[0]
-  const isOnline = camera?.status === 'Online'
 
   const todayDenied = data.recognitionLogs.filter(
     log => log.decision === 'DENIED' && new Date(log.timestamp).toDateString() === new Date().toDateString()
@@ -37,45 +31,7 @@ export function Dashboard() {
     <div className="space-y-4">
       <div className="grid gap-4 xl:grid-cols-[7fr_3fr]">
         <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div>
-                <CardTitle>Live Camera Monitoring</CardTitle>
-                <p className="mt-1 text-xs text-slate-500">Surveillance preview and latest detection</p>
-              </div>
-              <Badge value={camera?.status || 'Offline'} variant={isOnline ? 'success' : 'destructive'} />
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {/* Widescreen Live Camera Feed Container */}
-              <div className="relative h-[180px] w-full overflow-hidden rounded-lg border border-slate-200/80 bg-slate-950 shadow-sm xl:h-[200px]">
-                <CameraSimulation
-                  title={camera?.name || 'Camera'}
-                  framed={false}
-                  showCaption={false}
-                  className="h-full w-full"
-                />
-
-                {/* Top-Right HUD Badge: Camera switcher */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!data.cameras.length) return
-                    const nextIndex = (currentCameraIndex + 1) % data.cameras.length
-                    setCameraId(data.cameras[nextIndex].id)
-                  }}
-                  aria-label="Switch camera"
-                  className="pointer-events-auto absolute right-3.5 top-3.5 z-20 inline-flex items-center rounded-md bg-black/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 shadow-md backdrop-blur-sm transition-colors hover:bg-black/90"
-                >
-                  Camera {data.cameras.length > 0 ? `${(currentCameraIndex >= 0 ? currentCameraIndex : 0) + 1}/${data.cameras.length}` : '1/2'}
-                </button>
-
-                {/* Bottom-Right HUD Badge: Location / Camera Name */}
-                <div className="pointer-events-none absolute bottom-3.5 right-3.5 z-10 inline-flex items-center rounded-md bg-black/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 shadow-md backdrop-blur-sm">
-                  {(camera as { location?: string })?.location || camera?.name || 'P6, Valencia / Ph'}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <LiveCameraMonitor />
 
           <Card>
             <CardHeader>

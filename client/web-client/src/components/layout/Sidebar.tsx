@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown, LogOut, Settings, UserCircle } from 'lucide-react'
 import * as Icons from 'lucide-react'
 import { cn } from '@/lib/utils'
+import logo from '@/assets/logo.png'
 import type { Permission } from '@/types'
 import { usePermissions } from '@/hooks/usePermissions'
 import { Dropdown, DropdownItem, DropdownLabel, DropdownSeparator } from '@/components/ui/Dropdown'
@@ -132,11 +133,13 @@ export function Sidebar({
       >
         {/* Header */}
         <div className={cn('flex h-[72px] shrink-0 items-center border-b border-slate-200 px-5', isCollapsedDesktop && 'lg:justify-center lg:px-3')}>
-          <Link to="/dashboard" className={cn('flex items-center gap-3 overflow-hidden', isCollapsedDesktop && 'lg:gap-0')} aria-label="GATEGUARD dashboard">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
-              <Icons.ShieldCheck className="h-[22px] w-[22px]" strokeWidth={2.2} />
-            </div>
-            <div className={cn('min-w-0 transition-opacity duration-200', isCollapsedDesktop && 'lg:hidden')}>
+          <Link to="/dashboard" className={cn('flex min-w-0 items-center gap-3', isCollapsedDesktop && 'lg:justify-center lg:gap-0')} aria-label="GATEGUARD dashboard">
+            <img
+              src={logo}
+              alt="GATEGUARD logo"
+              className={cn('h-10 w-auto max-w-[160px] shrink-0 object-contain', isCollapsedDesktop && 'lg:h-9 lg:max-w-[44px]')}
+            />
+            <div className={cn('min-w-0', isCollapsedDesktop && 'lg:hidden')}>
               <p className="truncate text-[15px] font-bold tracking-tight text-slate-900">GATEGUARD</p>
               <p className="truncate text-xs font-medium text-slate-500">Admin Console</p>
             </div>

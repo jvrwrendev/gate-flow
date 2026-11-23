@@ -228,7 +228,7 @@ export const mockData: AppData = {
     { id: 'NTF-03', title: 'New vehicle application', description: 'Katrina Lim submitted NEB 3478', timestamp: ago(2), read: true, severity: 'info' },
     { id: 'NTF-04', title: 'New visitor application', description: 'Carlo Mendoza requested visitor access (VIS-2026-1006)', timestamp: ago(5), read: false, severity: 'info' },
   ],
-  settings: { platformName: 'GateVision', timezone: 'Asia/Manila', dateFormat: 'MMM dd, yyyy', timeFormat: '12-hour', confidenceThreshold: 85, automaticGates: true, emailNotifications: true, pushNotifications: true, incidentAlerts: true, reviewThreshold: 70 },
+  settings: { platformName: 'GATEGUARD', timezone: 'Asia/Manila', dateFormat: 'MMM dd, yyyy', timeFormat: '12-hour', confidenceThreshold: 85, automaticGates: true, emailNotifications: true, pushNotifications: true, incidentAlerts: true, reviewThreshold: 70 },
 }
 
 export const trafficData = ['6 AM','8 AM','10 AM','12 PM','2 PM','4 PM','6 PM','8 PM'].map((time, i) => ({ time, entries: [28,96,130,118,150,189,142,76][i], exits: [18,71,105,122,137,168,159,68][i] }))

@@ -1,17 +1,17 @@
 import { useState } from 'react'
-import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '@/context/AppContext'
 import { useToast } from '@/components/ui/Toast'
-import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Field, Input } from '@/components/ui/Field'
 import { REMEMBER_KEY, setSession } from '@/auth/session'
+import logo from '@/assets/logo.png'
 
 const schema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -72,134 +72,86 @@ export function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
-        <aside className="relative hidden overflow-hidden bg-slate-900 px-10 py-12 text-white lg:flex lg:flex-col lg:justify-between">
-          <div className="relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10">
-                <ShieldCheck className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="font-display text-xl font-bold tracking-tight">GateVision</p>
-                <p className="text-xs text-slate-300">Barrier Gate Console</p>
-              </div>
-            </div>
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-10 sm:px-6">
+      <div className="w-full max-w-[440px]">
+        <div className="mb-8 text-center">
+          <img src={logo} alt="GATEGUARD logo" className="mx-auto h-12 w-auto object-contain" />
+          <p className="mt-4 text-sm font-medium tracking-wide text-slate-500">GATEGUARD Administration</p>
+        </div>
 
-            <div className="mt-16 max-w-md">
-              <h1 className="font-display text-4xl font-extrabold tracking-tight">
-                Secure access to your barrier gate operations.
-              </h1>
-              <p className="mt-4 text-sm leading-6 text-slate-300">
-                Monitor cameras, review recognition events, manage vehicles, and simulate gate controls from one professional dashboard.
+        <Card className="border-slate-200 shadow-none">
+          <CardContent className="p-6 sm:p-8">
+            <div className="mb-7 text-center">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">Welcome Back</h1>
+              <p className="mt-2 text-sm leading-6 text-slate-500 sm:text-[15px]">
+                Sign in to your GATEGUARD account.
               </p>
             </div>
-          </div>
 
-          <div className="relative z-10 space-y-4">
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-300">Mock authentication</p>
-              <p className="mt-2 text-sm text-slate-300">
-                Sign in with a user account from User Management. Frontend-only RBAC is enabled for this environment.
-              </p>
-            </div>
-            <p className="text-xs text-slate-400">
-              Simulated authentication only. No backend, identity provider, or secure session is used.
-            </p>
-          </div>
-        </aside>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <Field label="Email" error={form.formState.errors.email?.message} htmlFor="login-email">
+                <div className="relative">
+                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Input
+                    {...form.register('email')}
+                    id="login-email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="Enter your email"
+                    className="h-11 pl-10 text-[15px]"
+                  />
+                </div>
+              </Field>
 
-        <main className="flex items-center justify-center px-4 py-8 sm:px-6 lg:px-10">
-          <div className="w-full max-w-md">
-            <div className="mb-8 lg:hidden">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white">
-                  <ShieldCheck className="h-5 w-5" />
+              <Field label="Password" error={form.formState.errors.password?.message} htmlFor="login-password">
+                <div className="relative">
+                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Input
+                    {...form.register('password')}
+                    id="login-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    placeholder="Enter your password"
+                    className="h-11 pl-10 pr-11 text-[15px]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(value => !value)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-0.5 text-slate-400 transition-colors hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
-                <div>
-                  <p className="font-display text-lg font-bold tracking-tight text-slate-950">GateVision</p>
-                  <p className="text-xs text-slate-500">Barrier Gate Console</p>
-                </div>
+              </Field>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <label className="flex items-center gap-2 text-sm text-slate-600">
+                  <Checkbox
+                    checked={Boolean(form.watch('remember'))}
+                    onCheckedChange={(checked) => form.setValue('remember', checked === true)}
+                  />
+                  <span>Remember me</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => toast('Password reset', 'info', 'Contact an administrator to reset your password.')}
+                  className="text-left text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 sm:text-right"
+                >
+                  Forgot password?
+                </button>
               </div>
-            </div>
 
-            <Card>
-              <CardContent className="p-6 sm:p-8">
-                <div className="mb-6">
-                  <h2 className="font-display text-2xl font-extrabold tracking-tight text-slate-950">Sign in</h2>
-                  <p className="mt-1 text-sm text-slate-500">
-                    Enter your administrator credentials to access the dashboard.
-                  </p>
-                </div>
+              <Button type="submit" loading={form.formState.isSubmitting} className="h-11 w-full text-[15px]">
+                Sign In
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <Field label="Email" error={form.formState.errors.email?.message}>
-                    <div className="relative">
-                      <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                      <Input
-                        {...form.register('email')}
-                        type="email"
-                        autoComplete="email"
-                        placeholder="johndoe@gatevision.ph"
-                        className="pl-9"
-                      />
-                    </div>
-                  </Field>
-
-                  <Field label="Password" error={form.formState.errors.password?.message}>
-                    <div className="relative">
-                      <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                      <Input
-                        {...form.register('password')}
-                        type={showPassword ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        placeholder="Enter your password"
-                        className="pl-9 pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(value => !value)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-700"
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </Field>
-
-                  <div className="flex items-center justify-between gap-3">
-                    <label className="flex items-center gap-2 text-sm text-slate-600">
-                      <Checkbox
-                        checked={Boolean(form.watch('remember'))}
-                        onCheckedChange={(checked) => form.setValue('remember', checked === true)}
-                      />
-                      Remember me
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => toast('Password reset simulated', 'info', 'Contact an administrator to reset your password.')}
-                      className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
-
-                  <Button type="submit" loading={form.formState.isSubmitting} className="w-full">
-                    Sign in
-                  </Button>
-                </form>
-
-                <p className="mt-6 text-center text-xs text-slate-500">
-                  Simulated login for the admin dashboard. No real authentication is performed.
-                </p>
-              </CardContent>
-            </Card>
-
-            <div className="mt-4 flex justify-center">
-              <Badge value="Mock RBAC" variant="secondary" />
-            </div>
-          </div>
-        </main>
+        <p className="mt-6 text-center text-sm text-slate-500">
+          © {new Date().getFullYear()} GATEGUARD. All rights reserved.
+        </p>
       </div>
     </div>
   )

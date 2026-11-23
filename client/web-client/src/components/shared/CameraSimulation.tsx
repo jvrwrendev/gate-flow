@@ -7,6 +7,8 @@ interface CameraSimulationProps {
   iframeClassName?: string
   showCaption?: boolean
   framed?: boolean
+  onError?: () => void
+  onLoadedData?: () => void
 }
 
 export function CameraSimulation({
@@ -15,6 +17,8 @@ export function CameraSimulation({
   iframeClassName,
   showCaption = true,
   framed = true,
+  onError,
+  onLoadedData,
 }: CameraSimulationProps) {
   return (
     <div className={cn(framed ? 'overflow-hidden rounded-xl border border-slate-200 bg-slate-950' : 'h-full w-full', className)}>
@@ -27,6 +31,8 @@ export function CameraSimulation({
         playsInline
         preload="metadata"
         aria-label={`${title || 'Camera'} CCTV feed`}
+        onError={onError}
+        onLoadedData={onLoadedData}
         className={cn('block w-full object-cover', showCaption ? 'aspect-video' : 'h-full', iframeClassName)}
       />
       {showCaption && (
