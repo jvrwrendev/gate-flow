@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { StyledSafeAreaView, StyledView, StyledScrollView } from '@/src/components/ui/core';
 import { cn } from '@/src/lib/utils';
 
 interface ScreenProps extends React.ComponentPropsWithoutRef<typeof StyledSafeAreaView> {
   scroll?: boolean;
+  avoidKeyboard?: boolean;
   contentContainerStyle?: StyleProp<ViewStyle>;
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
   footer?: ReactNode;
@@ -13,6 +15,7 @@ interface ScreenProps extends React.ComponentPropsWithoutRef<typeof StyledSafeAr
 export function Screen({
   className,
   scroll,
+  avoidKeyboard,
   children,
   contentContainerStyle,
   keyboardShouldPersistTaps,
@@ -34,13 +37,27 @@ export function Screen({
     <StyledView className={cn('flex-1', !footer && 'pb-24')}>{children}</StyledView>
   );
 
+  const body = avoidKeyboard ? (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      {content}
+      {footer}
+    </KeyboardAvoidingView>
+  ) : (
+    <>
+      {content}
+      {footer}
+    </>
+  );
+
   return (
     <StyledSafeAreaView
       className={cn('flex-1 bg-background', className)}
       {...props}
     >
-      {content}
-      {footer}
+      {body}
     </StyledSafeAreaView>
   );
 }
